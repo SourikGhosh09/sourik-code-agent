@@ -1,0 +1,24 @@
+DATA & STORAGE SPECIFICATION
+============================
+
+STORE SEPARATELY
+- user preferences;
+- hardware profiles;
+- project metadata;
+- task/run state;
+- memory;
+- model metadata;
+- skills/plugins;
+- checkpoints;
+- evaluations;
+- technical logs;
+- PROJECT_LOG.txt.
+
+LOCAL-FIRST
+Core project information remains local unless the user explicitly configures an external service.
+
+FAST VS BULK STORAGE
+Prefer fast SSD for active model files, indexes, caches and current project operations when space permits. Large datasets/checkpoints/archive material may be placed on secondary storage according to user configuration.
+
+DATA VERSIONING
+Training datasets, model checkpoints, evaluation suites and skill packages need explicit versions and provenance.

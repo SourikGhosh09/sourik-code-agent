@@ -1,0 +1,43 @@
+TRAINING & EVALUATION SPECIFICATION
+===================================
+
+RULE
+Evaluate before training, during development and after every model/agent change. Improvement must be measured, not assumed.
+
+DATA PIPELINE
+Acquire -> license/check -> normalize -> clean -> deduplicate -> filter quality/security -> split -> tokenize -> package -> version.
+
+TRAINING OPTIONS
+The system should support progressively:
+- prompt/skill improvements;
+- retrieval/context improvements;
+- supervised fine-tuning;
+- parameter-efficient fine-tuning where appropriate;
+- preference/feedback methods where justified;
+- eventually pretraining experiments from scratch.
+
+EVALUATION CATEGORIES
+- code generation;
+- code editing;
+- bug fixing;
+- repository understanding;
+- tool selection/correctness;
+- build/test success;
+- autonomous task completion;
+- regression rate;
+- security/permission compliance;
+- efficiency under different hardware budgets.
+
+AGENT EVALUATION
+Use reproducible task sandboxes. A task is not successful merely because the model says it is. Check artifacts, tests and expected behavior.
+
+TRAINING UX
+Default workflow should be approachable:
+"Improve my model at X"
+-> system explains required data/resources
+-> prepares/validates dataset
+-> chooses suitable training approach
+-> trains with progress/recovery
+-> evaluates candidate
+-> compares against current model
+-> only promotes it when acceptance rules pass or user explicitly overrides.

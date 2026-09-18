@@ -1,0 +1,28 @@
+PROJECT ROADMAP
+===============
+
+PHASE 0 — FOUNDATION
+Freeze requirements, architecture, schemas and evaluation tasks.
+
+PHASE 1 — V0 AUTONOMOUS LOOP
+Desktop/local prototype; model adapter; filesystem/terminal tools; task loop; basic context; checkpoints; verification; PROJECT_LOG.txt.
+
+PHASE 2 — V1 USABLE LOCAL CODING AGENT
+Improved repository intelligence, memory, resource manager, model profiles, polished non-programmer UI, stronger tests and recovery.
+
+PHASE 3 — SKILLS & PLUGINS
+Package format, registry/install flow, permissions, common development skills and extension SDK.
+
+PHASE 4 — ADVANCED AUTONOMY
+Long-running tasks, better planning, background workers where appropriate, multi-agent capability on stronger hardware, richer verification.
+
+PHASE 5 — MODEL IMPROVEMENT PLATFORM
+Dataset management, fine-tuning, evaluation dashboards, automatic candidate comparison.
+
+PHASE 6 — OWN-MODEL RESEARCH
+Tokenizer/data/model training experiments and increasingly capable user-owned coding models.
+
+PHASE 7 — HARDENING & DISTRIBUTION
+Cross-platform packaging, migration, security audits, recovery, documentation and release channels.
+
+Each phase requires acceptance tests. Do not advance merely because features were coded.

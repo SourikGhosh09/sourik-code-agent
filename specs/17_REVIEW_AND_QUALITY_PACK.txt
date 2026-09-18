@@ -1,0 +1,41 @@
+REVIEW & QUALITY PACK
+=====================
+
+Before accepting a meaningful feature, review:
+
+PRODUCT
+Does it actually help complete the user's coding task?
+Did we avoid unnecessary user work?
+
+CORRECTNESS
+Does it build/run/test?
+Are failure paths handled?
+Did we verify rather than assume?
+
+AGENT
+Did the agent use the correct tools?
+Did it recover from reasonable errors?
+Did it stop safely when blocked?
+
+UX
+Could a non-programmer understand what happened?
+Are required user actions explicit?
+
+RESOURCE USE
+Did it obey the selected resource profile?
+Did it scale useful work upward when more resources were available?
+
+SECURITY
+Were permissions respected?
+Were secrets protected?
+Is rollback possible?
+
+REGRESSION
+Did existing tests/features remain functional?
+
+DOCUMENTATION
+Were relevant specifications updated?
+Was PROJECT_LOG.txt updated in plain language?
+
+RELEASE GATE
+A feature is accepted only when required checks pass or known exceptions are explicitly documented.

@@ -1,0 +1,29 @@
+VISION
+======
+Create a powerful local AI coding system that feels simple to operate but is capable of serious autonomous software engineering.
+
+A user should be able to say things such as:
+"Build me a working inventory application."
+"Fix this project."
+"Add authentication."
+"Make this Android app faster."
+
+The system should then perform as much work as possible itself: inspect the project, plan, code, run tools, debug, test, verify, document, and report the result.
+
+The product is intended to become more than a chat interface. It is an agentic software-development environment with:
+- local AI inference;
+- autonomous planning and execution;
+- filesystem and terminal tools;
+- code intelligence and repository understanding;
+- memory;
+- self-repair;
+- testing and verification;
+- checkpoints and rollback;
+- skills and plugins;
+- adaptive hardware utilization;
+- model training/fine-tuning/evaluation;
+- a simple user interface.
+
+The system must scale with hardware. A low-power machine may run smaller models, shorter contexts, fewer agents and fewer verification passes. A powerful workstation may use larger models, longer context, more parallel workers and deeper verification.
+
+The long-term destination is a system whose underlying model can also be owned/trained by the user.

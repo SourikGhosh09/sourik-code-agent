@@ -1,0 +1,40 @@
+TOOLS, SKILLS & PLUGINS SPECIFICATION
+=====================================
+
+TOOLS
+Initial controlled tool set:
+- list/read/search files;
+- create/write/patch/move/delete files;
+- directory operations;
+- terminal command execution;
+- process start/stop/status;
+- build/test/lint/type-check runners;
+- Git status/diff/checkpoint helpers;
+- package/dependency inspection and controlled installation.
+
+Every tool must have a structured input/output contract, timeouts, error handling and permission classification.
+
+SKILLS
+A skill is reusable know-how. A skill package may include:
+- manifest;
+- human-readable instructions;
+- agent instructions;
+- examples;
+- scripts/templates;
+- required tools;
+- compatibility metadata;
+- tests.
+
+Examples later: Next.js, Python API, PostgreSQL, Android, React Native, deployment workflows.
+
+PLUGINS
+Plugins add capabilities, not merely prompts. They require:
+- manifest and version;
+- permissions;
+- declared actions/schemas;
+- lifecycle hooks;
+- isolation boundary;
+- audit events;
+- install/update/remove flow.
+
+SKILLS/PLUGINS must never silently receive unrestricted machine access.

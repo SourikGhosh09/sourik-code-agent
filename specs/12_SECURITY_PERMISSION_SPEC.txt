@@ -1,0 +1,30 @@
+SECURITY, PERMISSIONS & SANDBOX SPECIFICATION
+=============================================
+
+GOAL
+Give the agent useful autonomy without giving an AI unrestricted accidental control of the user's machine.
+
+PERMISSION CLASSES
+LOW: read project files, search, non-destructive inspection.
+MEDIUM: edit project files, run expected project commands.
+HIGH: delete large sets of files, install system software, change OS settings, access outside project, network credentials, deployment, destructive database operations.
+
+The user can choose permission profiles, but dangerous actions should remain visibly controlled.
+
+SAFETY MECHANISMS
+- project-root boundaries by default;
+- path validation;
+- command allow/deny policies;
+- timeouts;
+- output limits;
+- secret redaction;
+- environment-variable protection;
+- checkpoints;
+- Git/diff review;
+- rollback;
+- audit log;
+- kill/cancel control;
+- network access policy;
+- plugin permissions.
+
+Never expose secrets in PROJECT_LOG.txt.

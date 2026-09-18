@@ -1,0 +1,60 @@
+PRODUCT REQUIREMENTS DOCUMENT (PRD)
+===================================
+
+PRIMARY USER EXPERIENCE
+The default interface must require no programming knowledge. The main workflow is:
+1. User selects/creates a project.
+2. User describes the desired outcome in natural language.
+3. Agent examines available context.
+4. Agent proposes or internally creates a plan according to permission settings.
+5. Agent performs the work.
+6. Agent tests and verifies.
+7. Agent repairs failures where possible.
+8. Agent presents the finished result, proof/checks, and any unavoidable user actions.
+
+CORE FUNCTIONAL REQUIREMENTS
+- Create new software projects from natural-language briefs.
+- Open and understand existing repositories.
+- Read, create, edit, rename, move and delete files through controlled tools.
+- Search code and build a repository map.
+- Run terminal commands through a controlled execution layer.
+- Detect build/test/runtime errors and feed observations back to the agent.
+- Iteratively repair failures.
+- Run tests, linting, type checks and build checks when relevant.
+- Maintain checkpoints and rollback.
+- Keep persistent project-level memory.
+- Support reusable skills.
+- Support plugins/tool integrations through a stable interface.
+- Support multiple local model backends.
+- Later support the user's own model.
+- Provide resource controls and adaptive compute.
+- Maintain PROJECT_LOG.txt automatically.
+
+EASE-OF-USE REQUIREMENTS
+- Plain-English primary interface.
+- Auto mode for almost everything.
+- Advanced/Expert controls remain available but hidden by default.
+- Technical errors should be translated into understandable summaries.
+- If user action is unavoidable, give numbered, exact instructions.
+- Do not ask the user to perform work the agent can safely perform itself.
+
+QUALITY REQUIREMENTS
+The agent should optimize for actually completing the requested task, not merely generating plausible code. Completion must be based on verification evidence wherever possible.
+
+RESOURCE CONTROL
+Provide:
+- Auto / Smart mode.
+- Overall AI Power control.
+- CPU limit/control.
+- RAM limit/control.
+- GPU utilization target where technically enforceable.
+- VRAM budget.
+- Optional disk/cache limits.
+- Quality-versus-speed preference.
+- Thermal/stability safeguards.
+- Per-project overrides.
+
+Higher available resources should be converted into useful capability where possible: larger/better model, longer context, more search, more parallel work, additional test/review passes and faster execution.
+
+NON-GOAL FOR EARLY VERSIONS
+Do not attempt to train a frontier-scale foundation model from zero before proving the agent platform. The architecture must nevertheless keep the model layer replaceable so an independently trained model can be integrated later.

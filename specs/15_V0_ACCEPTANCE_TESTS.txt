@@ -1,0 +1,31 @@
+V0 — THIN VERTICAL SLICE ACCEPTANCE TESTS
+=========================================
+
+V0 PURPOSE
+Prove the autonomous coding loop before building every advanced feature.
+
+REQUIRED DEMO
+From an empty test folder, user gives a natural-language request for a small application.
+
+V0 must:
+1. create a task;
+2. inspect folder;
+3. make a plan;
+4. generate required files;
+5. run appropriate commands;
+6. capture errors;
+7. repair at least common failures;
+8. run verification;
+9. show changed files;
+10. maintain PROJECT_LOG.txt;
+11. preserve a checkpoint/diff;
+12. clearly report completion or unresolved failure.
+
+EXISTING PROJECT TEST
+Open a small intentionally broken repository, locate a known bug, fix it and pass the relevant test/build.
+
+RESOURCE TEST
+Run under at least two resource profiles and confirm the agent respects configured constraints sufficiently for the supported platform.
+
+FAILURE TEST
+Force a tool failure and ensure the system reports/retries safely instead of silently claiming success.

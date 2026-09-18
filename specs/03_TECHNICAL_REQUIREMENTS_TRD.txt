@@ -1,0 +1,53 @@
+TECHNICAL REQUIREMENTS DOCUMENT (TRD)
+=====================================
+
+TARGET
+Desktop-first local application, initially developed/tested on Windows 11, while architecture remains portable to other computers and operating systems.
+
+REFERENCE DEVELOPMENT MACHINE
+- Intel Core i7-12700K class CPU
+- 8 GB DDR5 RAM
+- NVIDIA RTX 3060 with 6 GB dedicated VRAM
+- Samsung 980 500 GB SSD
+- 2 TB secondary HDD
+This is a constrained development/test profile, not the product ceiling.
+
+TECHNICAL PRINCIPLES
+- Modular components with stable interfaces.
+- Model backend must be replaceable.
+- Tool calls use structured schemas, not arbitrary hidden machine access.
+- Streaming events for progress.
+- Cancellation at any time.
+- Crash-safe task state.
+- Checkpoints before destructive/high-risk changes.
+- Local-first storage.
+- Logs separated into technical logs and human-readable PROJECT_LOG.txt.
+
+MAJOR COMPONENTS
+1. UI / desktop shell.
+2. Agent orchestrator.
+3. Model runtime abstraction.
+4. Adaptive Compute & Resource Manager (ACRM).
+5. Context/repository intelligence engine.
+6. Memory subsystem.
+7. Tool runtime.
+8. Sandbox/checkpoint/permission system.
+9. Skills/plugin runtime.
+10. Training/fine-tuning pipeline.
+11. Evaluation harness.
+12. Observability/logging.
+
+MODEL RUNTIME
+Must support quantized local models and hardware-aware loading/offloading. The runtime adapter exposes a common generation/chat/tool-call interface regardless of backend.
+
+RESOURCE MANAGER
+Must inspect CPU, system RAM, GPU, VRAM, disk and relevant runtime capabilities. It should benchmark conservatively, calculate a resource envelope, and continuously adapt within user limits.
+
+PORTABILITY
+Hardware profiles must be discovered at runtime. Never hard-code assumptions based on the reference PC.
+
+DATA
+Use structured local persistence for configuration/tasks/checkpoints/metadata and a suitable index for code/context retrieval. Exact implementation can evolve without changing higher-level contracts.
+
+TESTING
+Unit, integration and end-to-end tests are required for core agent actions. Evaluation tasks must separately measure coding capability and autonomous task completion.

@@ -1,0 +1,28 @@
+AUTONOMOUS AGENT SPECIFICATION
+==============================
+
+PRIMARY LOOP
+UNDERSTAND -> INSPECT -> PLAN -> ACT -> OBSERVE -> VERIFY -> REPAIR -> COMPLETE
+
+BEHAVIOR
+- Clarify only when missing information materially blocks a good result.
+- Prefer inspecting available project evidence over asking the user technical questions.
+- Break large tasks into executable milestones.
+- Keep plans revisable when observations contradict assumptions.
+- Never claim success solely because code was written.
+- Verify using appropriate builds/tests/runtime checks.
+- When verification fails, diagnose and repair automatically within configured limits.
+- Stop infinite loops using attempt/time/token/compute budgets.
+- Preserve user work.
+- Create checkpoints before risky operations.
+- Summarize unavoidable user action in simple language.
+- Update PROJECT_LOG.txt after meaningful work.
+
+TASK STATES
+QUEUED, UNDERSTANDING, PLANNING, EXECUTING, VERIFYING, REPAIRING, WAITING_FOR_USER, COMPLETED, FAILED, CANCELLED.
+
+MULTI-AGENT FUTURE
+Powerful hardware may enable specialized planner, implementer, reviewer/tester or researcher workers. Multi-agent operation is optional and must be resource-aware; more agents are not automatically better.
+
+DEFINITION OF COMPLETE
+Requested behavior is implemented and reasonable verification passes, or limitations are explicitly reported with evidence.

@@ -1,0 +1,30 @@
+MODEL SYSTEM SPECIFICATION
+==========================
+
+DESIGN GOAL
+The coding agent must not be permanently coupled to one vendor or model.
+
+PHASE A — BOOTSTRAP
+Use suitable local open-weight coding/reasoning models so the agent platform can be developed and evaluated without paid inference APIs.
+
+PHASE B — IMPROVEMENT
+Use legal/appropriate datasets, curated examples, synthetic tasks where useful, supervised fine-tuning and/or other practical adaptation methods. Evaluate every candidate against baselines.
+
+PHASE C — USER-OWNED MODEL
+Develop a model pipeline owned by the project: data -> tokenizer -> training sequences -> transformer/model -> loss/backpropagation -> validation -> checkpoint -> inference -> evaluation -> deployment.
+
+IMPORTANT
+Training a strong foundation model entirely from random initialization is compute/data intensive. The system should support this research path without making the usable coding agent wait for it.
+
+MODEL ROUTER
+Given available hardware and user power settings, choose an appropriate model/runtime configuration. Possible scaling dimensions:
+- parameter count;
+- quantization;
+- CPU/GPU offload;
+- context length;
+- KV/cache allocation;
+- reasoning/test passes.
+
+MODEL CONTRACT
+Input: messages/context/tool schemas/config.
+Output: text and/or validated structured tool requests, usage/stop metadata and errors.

@@ -1,0 +1,37 @@
+UI/UX SPECIFICATION
+===================
+
+DESIGN PRINCIPLE
+Powerful underneath, simple on top.
+
+DEFAULT HOME
+- "What do you want to build or change?" input.
+- New Project / Open Project.
+- Recent projects.
+- clear Run/Stop control.
+- visible status: Understanding, Coding, Testing, Fixing, Done.
+
+RESOURCE PANEL
+Simple mode:
+AI Power control + Auto toggle + Quality/Speed preference.
+
+Advanced mode:
+CPU, RAM, GPU/VRAM, context, model, parallelism, test depth, permissions and other expert settings.
+
+TASK VIEW
+Show:
+- current goal;
+- simple plan/progress;
+- files changed;
+- checks/tests;
+- checkpoints;
+- understandable problems;
+- user actions only when needed.
+
+DO NOT make terminal output the primary user experience.
+
+PROJECT LOG
+Provide a friendly "What changed?" view backed by PROJECT_LOG.txt.
+
+ACCESSIBILITY
+Readable typography, keyboard navigation, clear error states and no assumption of coding knowledge.

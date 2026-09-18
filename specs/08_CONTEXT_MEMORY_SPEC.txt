@@ -1,0 +1,22 @@
+CONTEXT & MEMORY SPECIFICATION
+==============================
+
+CONTEXT ENGINE
+- Scan repository without blindly loading every file into model context.
+- Respect ignore rules and sensitive paths.
+- Build project tree.
+- Detect languages/frameworks/configuration.
+- Index files and symbols.
+- Track imports/dependencies/references where possible.
+- Produce task-specific context packs.
+- Refresh changed portions incrementally.
+
+MEMORY TYPES
+1. Working memory — current task state.
+2. Project memory — architecture, conventions, commands, decisions.
+3. Episodic memory — useful prior attempts/results.
+4. Error/fix memory — recurring failure patterns.
+5. Skill memory — procedures learned/installed.
+
+MEMORY QUALITY
+Stored memory should be concise, attributable to evidence when possible, updateable and removable. Do not allow stale memory to override current repository evidence.

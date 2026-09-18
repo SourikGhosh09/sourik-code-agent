@@ -1,0 +1,57 @@
+SYSTEM ARCHITECTURE
+===================
+
+FLOW
+User Goal
+  -> UI
+  -> Agent Orchestrator
+  -> Context + Memory
+  -> Model Runtime
+  -> Structured Tool Request
+  -> Permission/Sandbox Layer
+  -> Tool Execution
+  -> Observation
+  -> Orchestrator
+  -> Verify / Repair Loop
+  -> Final Result
+
+1. AGENT ORCHESTRATOR
+Owns task state and the Understand -> Plan -> Act -> Observe -> Verify -> Repair loop. It decides what context/model/tool is needed but never bypasses tool permissions.
+
+2. MODEL RUNTIME
+Stable adapter around local inference. Allows bootstrap open-weight models and future user-owned models.
+
+3. ADAPTIVE COMPUTE & RESOURCE MANAGER (ACRM)
+Detects resources and assigns a safe compute envelope. It informs model selection/quantization, context length, parallelism, cache size, test depth and review depth.
+
+4. CONTEXT ENGINE
+Creates repository map, file summaries, symbol relationships, search/index data, dependency information and task-specific context packs.
+
+5. MEMORY
+Working memory: current task.
+Project memory: durable project facts/decisions.
+Episodic memory: useful prior actions/outcomes.
+Error memory: known failures/fixes.
+Skill memory: reusable procedures.
+Memory must be inspectable and controllable.
+
+6. TOOL RUNTIME
+Controlled capabilities such as filesystem operations, search, terminal, process execution, test/build runners, package operations, git and later browser/plugin tools.
+
+7. SANDBOX + CHECKPOINTS
+Protects the machine/project. Records modifications, creates recovery points and supports rollback.
+
+8. SKILLS
+Reusable procedural knowledge/instructions. Skills should be installable/versioned and may declare required tools and compatibility.
+
+9. PLUGINS
+Extend real capabilities through explicit interfaces. Plugins are permissioned and isolated as much as practical.
+
+10. TRAINING SYSTEM
+Dataset import/cleaning/deduplication, tokenizer/model configuration, training/fine-tuning, checkpoints, experiment tracking and packaging.
+
+11. EVALUATION
+Measures coding quality, tool use, task completion, regression and efficiency.
+
+12. UI
+Simple default experience plus an Expert Mode for detailed resource/model/tool settings.

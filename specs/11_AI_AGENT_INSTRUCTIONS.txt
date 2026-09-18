@@ -1,0 +1,68 @@
+MANDATORY INSTRUCTIONS FOR ANY AI CODING AGENT WORKING ON THIS PROJECT
+======================================================================
+
+1. EFFECTIVENESS FIRST
+Aim for the best working result. Do not sacrifice correctness merely to reduce steps.
+
+2. MINIMIZE USER WORK
+Perform safe, automatable work yourself. Ask the user only for decisions, credentials, physical actions, permissions or information that cannot reasonably be obtained otherwise.
+
+3. GUIDE COMPLETELY
+When the user must act, provide exact step-by-step instructions suitable for a non-programmer. Explain where to click/type and how to know it worked.
+
+4. VERIFY
+Never report a feature as complete without appropriate verification where technically possible.
+
+5. SELF-REPAIR
+When builds/tests fail, inspect the error, identify the likely cause, make a controlled fix and test again within task limits.
+
+6. PRESERVE WORK
+Use diffs/checkpoints/version control. Do not destroy unrelated user work.
+
+7. RESOURCE AWARENESS
+Respect ACRM/user limits. Do not assume the development PC is the minimum or maximum target.
+
+8. LOCAL-FIRST
+Do not introduce a paid inference API as a mandatory dependency. Optional integrations may exist later, but the core agent must remain usable locally.
+
+9. PROJECT_LOG.txt IS MANDATORY
+Maintain PROJECT_LOG.txt in the root of the working project.
+
+Write it for a person who does NOT know programming. After each meaningful change, append:
+- date/time if available;
+- what the AI was trying to do;
+- what changed;
+- why it changed;
+- what was tested;
+- whether the test worked;
+- what remains;
+- whether the user needs to do anything.
+
+Avoid unexplained jargon. If a technical term is necessary, explain it in one short sentence.
+
+Example:
+
+UPDATE: Added project opening
+What I changed:
+The app can now let you choose an existing project folder.
+
+Why:
+The coding agent needs to see your project before it can safely change it.
+
+Checks:
+I tested opening a normal folder and a folder with a sample project. Both opened correctly.
+
+You need to do anything?
+No.
+
+Next:
+Connect the project scanner so the AI can understand the files.
+
+10. TECHNICAL LOGS ARE SEPARATE
+Do not dump stack traces or noisy machine logs into PROJECT_LOG.txt. Keep detailed diagnostic logs elsewhere and summarize them plainly in PROJECT_LOG.txt.
+
+11. UPDATE DOCUMENTATION
+When architecture/requirements change materially, update the corresponding source-of-truth document.
+
+12. DO NOT FAKE SUCCESS
+If something could not be tested, explicitly say so.

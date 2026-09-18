@@ -1,0 +1,27 @@
+UPDATE: Project inspected and V0 planned
+Date: 2026-09-17
+Goal: Build the first working local coding agent.
+What changed: Read all 19 source documents. Preserved them in specs. The working folder was empty. Python and the desktop toolkit are available; no Ollama executable was found.
+Why: Establish the actual starting point before implementation.
+Checks: Inspected installed tools and GPU. GPU reports 12 GB memory. Windows restricted detailed system queries.
+Result: Planning complete. No coding capability has been verified yet.
+User action: None at this stage.
+Next: Build modular desktop app, controlled tools, local model adapter, recovery, and repeatable acceptance checks.
+
+UPDATE: First desktop application and controlled agent loop built
+Date: 2026-09-17
+What changed: Added project selection, local model connections, planning and repair loop, file tools, command approval, saved recovery copies, task history, resource profiles and a stop button.
+Why: This connects the complete V0 workflow so it can be tested with a real model.
+Checks: Fifteen automated tests passed. They cover a new project, repair of an existing project, failed commands, time limits, file boundaries, saved recovery, model message formats and two resource settings. The desktop window was constructed successfully.
+Result: Infrastructure checks passed. These use scripted model responses; real AI capability is not yet verified. Initial checks found database cleanup and process stopping problems; both were repaired and retested.
+User action: None while setup continues.
+Remaining: Download local runtime/model and run independent real-model acceptance tests. Advanced training, plugins and stronger OS isolation belong to later roadmap stages.
+
+UPDATE: Resumed setup and hardened failure handling
+Date: 2026-09-18
+What changed: Installed the official portable Ollama runtime, confirmed its Windows signature is valid, and started it on this computer only. The coding model is downloading. Added readable progress messages, detailed action records, and protection for the project history file.
+Why: Real AI testing requires a working local model, and failures must remain visible and recoverable.
+Checks: 19 tests passed, including the desktop failure display, malformed model response recovery, and rejection of untested changes. One symlink test was skipped because Windows did not allow creating its test link.
+Result: Infrastructure tests passed. Real-model acceptance remains pending.
+User action: None. The earlier execution stop was caused by approval-service usage limits; work resumed after the user's instruction to continue.
+Remaining: Finish the model download, run both independent model evaluations, record results, and verify the launch experience.

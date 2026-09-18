@@ -1,0 +1,54 @@
+PROJECT_LOG.txt SPECIFICATION
+=============================
+
+PURPOSE
+PROJECT_LOG.txt is the human-readable history of what the AI has done. It is specifically for users who may not know programming.
+
+LOCATION
+<project root>/PROJECT_LOG.txt
+
+WRITING STYLE
+- simple language;
+- short sections;
+- explain jargon;
+- say what happened, not just file names;
+- distinguish completed, failed and untested work;
+- never hide a failure;
+- never include passwords, API keys or secrets.
+
+RECOMMENDED ENTRY TEMPLATE
+
+============================================================
+UPDATE: <short friendly title>
+Date/Time: <when available>
+
+Goal:
+<what the AI was trying to achieve>
+
+What changed:
+<plain-language explanation>
+
+Why:
+<why these changes were needed>
+
+Files affected:
+<optional concise list>
+
+Checks performed:
+<what was actually tested>
+
+Result:
+<Worked / Partly worked / Failed / Not yet tested>
+<short explanation>
+
+Do you need to do anything?
+<No, or exact numbered user instructions>
+
+What remains:
+<remaining work, or "Nothing for this task.">
+============================================================
+
+UPDATE RULE
+Append an entry after each meaningful completed work unit, before asking the user to perform an action, and before declaring a task complete.
+
+The log complements technical Git history and machine logs; it does not replace them.

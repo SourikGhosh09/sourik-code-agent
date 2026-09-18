@@ -1,0 +1,26 @@
+LOCAL AUTONOMOUS CODING AGENT — MASTER PROJECT PACK v1.1
+=========================================================
+
+PROJECT NORTH STAR
+Build a full-fledged autonomous coding agent owned by the user. It must run locally without requiring paid inference APIs, accept natural-language goals, understand projects, plan work, create/edit/delete files, run commands, install dependencies with permission, execute tests, observe failures, repair its own work, verify results, and eventually support installable skills/plugins and a user-trained model.
+
+PRIORITY ORDER
+1. Maximum effectiveness and quality of completed work.
+2. Maximum useful autonomy and self-repair.
+3. Minimum user input and manual work.
+4. Extremely approachable UX for non-programmers.
+5. Scale intelligently from weak computers to powerful workstations.
+6. Maintain safety, checkpoints, permissions, and explainability.
+
+CORE PRINCIPLE
+Do not reduce effectiveness merely to make the product simpler. Hide complexity from the user where possible. When user action is genuinely required, explain exactly what to do in simple step-by-step language.
+
+LOCAL-FIRST
+The production goal must not depend on paid OpenAI/Anthropic/etc. inference APIs. The architecture must permit local open-weight models during bootstrap and later allow the user's own trained model to replace them without rebuilding the agent.
+
+SOURCE OF TRUTH
+All documents in this pack jointly define the project. If documents conflict, use this order:
+MASTER PROJECT PACK -> PRD -> TRD -> ARCHITECTURE -> SECURITY -> AGENT SPEC -> other specifications.
+
+MANDATORY PROJECT LOG
+Every AI/coding agent working on this project must maintain PROJECT_LOG.txt in the project root. It must describe changes in simple non-technical language. See 11_AI_AGENT_INSTRUCTIONS.txt and 18_PROJECT_LOG_SPEC.txt.

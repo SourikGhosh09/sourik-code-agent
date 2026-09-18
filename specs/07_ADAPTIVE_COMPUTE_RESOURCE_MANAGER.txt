@@ -1,0 +1,48 @@
+ADAPTIVE COMPUTE & RESOURCE MANAGER (ACRM)
+==========================================
+
+PURPOSE
+Use the maximum useful amount of hardware the user permits while preserving stability.
+
+MODES
+SMART/AUTO:
+Automatically detects resources and chooses safe settings.
+
+MANUAL:
+User controls overall power plus individual resource caps.
+
+QUALITY-FIRST:
+Spend permitted resources on deeper reasoning/verification even when slower.
+
+SPEED-FIRST:
+Prefer lower latency while maintaining required verification.
+
+USER CONTROLS
+- Overall AI Power: e.g. Eco / Balanced / High / Maximum or percentage-style control.
+- CPU budget.
+- RAM budget.
+- GPU target/budget where supported.
+- VRAM budget.
+- Disk/cache budget.
+- Maximum parallel workers.
+- Optional temperature/thermal guard settings where sensor access is available.
+
+IMPORTANT IMPLEMENTATION NOTE
+Not every operating system/runtime can guarantee an exact GPU/CPU percentage. The UI may present a target or cap while the resource manager enforces the closest technically reliable controls (threads, process priority, model placement, batch size, memory limits, concurrency, etc.). Never falsely claim an exact cap when the platform cannot enforce it.
+
+ADAPTATION
+More resources may increase:
+- model size/quality;
+- context window;
+- retrieval breadth;
+- number of candidate solutions;
+- parallel tasks;
+- verification/review passes;
+- test coverage;
+- cache;
+- execution speed.
+
+Less resources should degrade gracefully instead of failing.
+
+LIVE MONITORING
+Monitor RAM/VRAM pressure, process failures and relevant hardware signals. Back off before out-of-memory crashes where practical.
