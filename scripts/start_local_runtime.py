@@ -2,6 +2,7 @@
 import os
 from pathlib import Path
 import subprocess
+import time
 import urllib.request
 
 root=Path(__file__).resolve().parents[1]
@@ -21,4 +22,15 @@ except OSError:
     with (runtime/'server.log').open('ab') as log:
         proc=subprocess.Popen([str(exe),'serve'],env=env,stdout=log,stderr=log,creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS)
     (runtime/'server.pid').write_text(str(proc.pid))
-    print('Started local model server:',proc.pid)
+    print('Starting local model server...',flush=True)
+    deadline=time.monotonic()+45
+    while time.monotonic()<deadline:
+        try:
+            with opener.open('http://127.0.0.1:11434/api/tags',timeout=2) as response:
+                if response.status==200:
+                    print('Local model server is ready:',proc.pid)
+                    break
+        except OSError:
+            time.sleep(.5)
+    else:
+        raise SystemExit('The local model server did not become ready. See .runtime/server.log for details.')

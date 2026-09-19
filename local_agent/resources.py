@@ -39,11 +39,15 @@ def choose_model(hardware, models, power='Auto'):
 
     Model file size is a placement estimate, not a hard memory guarantee.
     """
-    free_gpu=0
+    free_gpu=total_gpu=0
     try:
-        free_gpu=float(hardware.get('gpu','').splitlines()[0].split(',')[-1].strip().split()[0])*1024**2
+        gpu_parts=hardware.get('gpu','').splitlines()[0].split(',')
+        free_gpu=float(gpu_parts[-1].strip().split()[0])*1024**2
+        total_gpu=float(gpu_parts[-2].strip().split()[0])*1024**2
     except (ValueError,IndexError):
         pass
+    reclaimable=sum(max(0,m.get('loaded_vram',0)) for m in models)
+    free_gpu=min(total_gpu,free_gpu+reclaimable)
     budget=max(free_gpu*.65,(hardware.get('available') or 0)*.45)
     candidates=[m for m in models if isinstance(m.get('size'),(int,float)) and 0<m['size']<=budget and m.get('name')]
     if not candidates:

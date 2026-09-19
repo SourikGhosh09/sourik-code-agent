@@ -1,6 +1,6 @@
-# Local Coding Agent — V0 development build
+# Local Coding Agent — V0 verified development prototype
 
-Double-click **Start Agent.cmd**. Choose or create a project folder, describe a small task, and click **Run task**. The app shows the plan, command results, changed files, and a plain-language project history. **Stop** cancels tools; an outstanding model request can take up to 120 seconds to return.
+Requires Python 3.12 or newer (Python 3.14 is installed on this machine). Double-click **Start Agent.cmd** and leave AI power on **Auto**. Choose or create a project folder, describe a small task, and click **Run task**. The app shows the plan, command results, changed files, and a plain-language project history. **Stop** cancels tools; an outstanding model request can take up to 120 seconds to return.
 
 The model server must be running locally. The default connection is Ollama on port 11434; local OpenAI-compatible runtimes are also supported. No paid inference API is needed. If the workspace-local runtime has been downloaded, the launcher starts it automatically.
 
@@ -25,3 +25,7 @@ Source requirements are preserved in `specs`. See `IMPLEMENTATION_PLAN.md` and `
 Repository scanning is bounded to 2,000 files, context mapping to 100 files, file writes to 200 KB, and individual checkpoint files to 2 MB. Root `.gitignore` patterns are supported conservatively; nested ignore files and negation patterns are not fully implemented. Use V0 on small projects. Secret filtering covers common paths and key/value patterns, not every possible secret format. Stop kills the direct process with best-effort child cleanup on Windows.
 
 Auto model selection considers only already-installed Ollama models. Eco chooses the smallest fitting model; other profiles choose the largest fitting model using conservative file-size and free-memory estimates. Disable Auto model under Model settings to select a model manually. These estimates are not guaranteed memory limits.
+
+## Verified result
+
+The installed 7B model passed new-project generation and existing-project repair, including independent behavior checks. See [V0_STATUS.md](docs/V0_STATUS.md). The smaller 3B model did not reliably pass new-project generation; Auto is the recommended default. The first task may take a minute while model weights load.

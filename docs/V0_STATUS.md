@@ -1,16 +1,27 @@
-# V0 acceptance tracking
+# V0 thin-slice acceptance: passed
 
-| Requirement | Implemented evidence | Gate |
-|---|---|---|
-| Task, inspection, plan, file generation | SQLite task state, repository map, model action protocol | Scripted integration passes; 3B new-project evaluation fails |
-| Commands, errors, repairs | Approval callback, bounded subprocess, observation loop | Real 3B bug repair passes with baseline failure and independent checks |
-| Verification and completion | Successful command required after final edit; failed actions invalidate proof | Regression tests pass; independent task assertions pending |
-| Changed files, history, checkpoint | Unified diffs, PROJECT_LOG.txt, durable snapshots and restore | Tests pass |
-| Existing broken repository | Separate real-model calculator bug fixture | Real 3B repair passes |
-| Two resource profiles | Eco/Balanced/High thread and context targets | Unit test passes; real model pending |
-| Forced failure | Nonzero exit, timeout, denied command, cancellation, invalid JSON | Tests pass |
-| Desktop workflow | Native folder picker, goal, Run/Stop, status, approval, diff/history | Construction and failure-display tests pass |
+Verified on 2026-09-19 with local **qwen2.5-coder:7b**. This passes the documented small-project demonstration, not a broad coding-quality benchmark or production-security certification.
 
-The application is a development prototype, not yet an accepted V0 release. No training or plugin execution is claimed. CPU/context controls are runtime targets; hard memory/GPU limits are not implemented. Command approval is not an OS sandbox. Read README.md before running untrusted projects.
+| Check | Evidence |
+|---|---|
+| Empty project from natural-language request | Created calculator source and five unittest tests; tests and independent behavior assertions passed |
+| Existing broken project | Observed failing baseline, patched arithmetic bug, retained original tests, passed tests and independent assertions |
+| Two resource envelopes | Same 7B model: Eco 5 threads / 4,096 context; Balanced 10 threads / 8,192 context |
+| Failure handling | Failed commands, timeout, denied permissions, cancellation, invalid model output and false completion covered by regression tests |
+| History and recovery | Project log, SQLite events, diffs, durable checkpoints and rollback tested |
+| Desktop | Window construction, task failure display and runtime-readiness waiting tested; Auto selection confirmed against installed models |
+| Regression suite | 28 tests passed; one real symbolic-link fixture skipped because Windows denied link creation; real junction boundary tests passed |
 
-Source: all 19 v1.1 project-pack documents in specs. Their requirements remain unchanged.
+Latest measured task times: 72.82 seconds for new-project creation and 10.96 seconds for repair. These include runtime conditions and are not controlled speed comparisons.
+
+Machine-readable results: [evaluation-v0.json](evaluation-v0.json). Original run: `evaluation-results\20260919-144653`. Model digest and exact agent-code digest are recorded in both reports.
+
+## Recommended use
+
+Double-click `Start Agent.cmd`, leave AI power on **Auto**, choose a small project folder, describe the task and click Run task. The model and runtime are already installed locally. Commands still require explicit approval.
+
+The smaller 3B model passed bug repair but repeatedly failed new-project generation. Eco with automatic model selection chooses that smaller model; use Auto for the verified default, or manually select 7B when testing the Eco resource envelope.
+
+## Remaining roadmap work
+
+V1 and later: stronger OS isolation, richer repository indexing and memory, advanced resource controls/continuous adaptation, executable plugins, model training and polished distribution. Commands run with user OS permissions; V0 is not an OS sandbox. Exact CPU/RAM/VRAM percentage limits are not guaranteed. See README.md for bounded file/context limits.

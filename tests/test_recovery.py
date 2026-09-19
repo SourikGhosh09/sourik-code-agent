@@ -59,6 +59,9 @@ class Recovery(unittest.TestCase):
         models=[{'name':'small','size':2*1024**3},{'name':'medium','size':5*1024**3},{'name':'too-big','size':20*1024**3}]
         self.assertEqual(choose_model(hw,models,'Eco'),'small')
         self.assertEqual(choose_model(hw,models,'Auto'),'medium')
+        hw['gpu']='GPU, 12288 MiB, 4000 MiB'
+        models[1]['loaded_vram']=int(5.5*1024**3)
+        self.assertEqual(choose_model(hw,models,'Auto'),'medium')
         with self.assertRaises(ValueError):
             choose_model({'available':512*1024**2},models)
     def test_redaction(self):

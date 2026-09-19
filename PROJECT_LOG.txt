@@ -61,3 +61,13 @@ Checks: Eleven relevant tests passed, including real Windows junctions pointing 
 Result: Boundary checks passed. Real-model new-project acceptance is still pending the larger model download.
 User action: None.
 Remaining: Complete the 7B model comparison and final acceptance record.
+
+UPDATE: V0 small-project milestone verified with a real local model
+Date: 2026-09-19
+What changed: Installed the stronger 7B coding model and confirmed Auto mode selects it. Fixed the launcher's startup wait and model selection when a model already occupies GPU memory.
+What worked: From an empty folder, the agent created a calculator and five tests. All tests and separate behavior checks passed. In an existing broken project, it observed a failed test, fixed the source, preserved the tests, and passed both original and independent checks.
+Checks: Final real-model tasks passed under two resource settings. The full automated suite passed 28 tests; one symbolic-link fixture was skipped due to Windows permissions. Real Windows junction tests passed. The launcher readiness check passed.
+Result: V0 thin-slice acceptance passed for the documented small calculator tasks. This does not establish broad coding reliability or production-grade isolation.
+Evidence: docs/evaluation-v0.json and evaluation-results\20260919-144653. Latest task times were 72.82 seconds and 10.96 seconds.
+Do you need to do anything? No setup is required. To try it, open Start Agent.cmd, leave AI power on Auto, choose a small project folder and describe the task. Review requested commands before approving them.
+What remains: Later roadmap stages include stronger isolation, richer memory/indexing, plugins, advanced resource controls, model training and distribution. The smaller 3B model remains less reliable; use Auto for the verified 7B default.

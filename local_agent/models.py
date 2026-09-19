@@ -23,7 +23,12 @@ class LocalModel:
     def installed_models(self):
         opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),NoRedirect())
         with opener.open(self.endpoint+'/api/tags',timeout=5) as response:
-            return json.loads(response.read(1_000_000)).get('models',[])
+            models=json.loads(response.read(1_000_000)).get('models',[])
+        with opener.open(self.endpoint+'/api/ps',timeout=5) as response:
+            loaded=json.loads(response.read(1_000_000)).get('models',[])
+        for model in models:
+            model['loaded_vram']=sum(item.get('size_vram',0) for item in loaded if item.get('name')==model.get('name'))
+        return models
 
     def generate(self, messages, config):
         if self.backend == 'ollama':

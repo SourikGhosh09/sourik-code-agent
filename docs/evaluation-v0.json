@@ -1,0 +1,38 @@
+[
+  {
+    "suite_version": "v0-1",
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "8539ce2b3cac187c30178276e398aad423a5749db409fcce46d8f3d1580c8c6a",
+    "case": "empty",
+    "profile": "Eco",
+    "config": {
+      "num_thread": 5,
+      "num_ctx": 4096,
+      "max_steps": 24,
+      "workers": 1
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": false,
+    "seconds": 72.82
+  },
+  {
+    "suite_version": "v0-1",
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "8539ce2b3cac187c30178276e398aad423a5749db409fcce46d8f3d1580c8c6a",
+    "case": "broken",
+    "profile": "Balanced",
+    "config": {
+      "num_thread": 10,
+      "num_ctx": 8192,
+      "max_steps": 40,
+      "workers": 1
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": true,
+    "seconds": 10.96
+  }
+]
