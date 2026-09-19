@@ -14,7 +14,7 @@ EXCLUDED = {'.agent', '.git', 'node_modules', '__pycache__', '.venv', 'venv'}
 
 
 def sensitive(path):
-    return any(p in EXCLUDED or p.startswith('.env') or p.lower() in ('credentials', 'id_rsa', 'id_ed25519') or p.lower().endswith(('.pem', '.key', '.pfx')) for p in Path(path).parts)
+    return any(p.lower() in EXCLUDED or p.lower().startswith('.env') or p.lower() in ('credentials', 'id_rsa', 'id_ed25519') or p.lower().endswith(('.pem', '.key', '.pfx')) for p in Path(path).parts)
 
 
 def redact(text):
@@ -49,6 +49,9 @@ class Tools:
         p = Path(name)
         if p.is_absolute() or '..' in p.parts or sensitive(p) or ':' in name:
             raise PermissionError('Path is outside the permitted project files.')
+        reserved = {'con','prn','aux','nul'} | {f'com{i}' for i in range(1,10)} | {f'lpt{i}' for i in range(1,10)}
+        if any(part.endswith((' ','.')) or part.split('.')[0].lower() in reserved for part in p.parts):
+            raise PermissionError('Ambiguous or reserved Windows path is not allowed.')
         target = self.root / p
         for part in [target, *target.parents]:
             if part == self.root:
@@ -70,7 +73,7 @@ class Tools:
             dirs[:] = [d for d in dirs if not sensitive(Path(directory).relative_to(self.root) / d) and not ignored(Path(directory).relative_to(self.root)/d) and not (Path(directory)/d).is_symlink() and not (hasattr(Path(directory)/d,'is_junction') and (Path(directory)/d).is_junction())]
             for name in files:
                 rel = str((Path(directory)/name).relative_to(self.root))
-                if not sensitive(rel) and not ignored(Path(rel)):
+                if rel.lower() != 'project_log.txt' and not sensitive(rel) and not ignored(Path(rel)):
                     try:
                         self.path(rel)
                         found.append(rel)
@@ -138,7 +141,13 @@ class Tools:
             p = self.path(action['path'])
             if p.stat().st_size > 200_000:
                 raise ValueError('Read a smaller file (limit 200 KB).')
-            return {'content': redact(p.read_text(encoding='utf-8'))}
+            lines = p.read_text(encoding='utf-8').splitlines(keepends=True)
+            start = max(0,int(action.get('start_line',1))-1)
+            count = min(120,max(1,int(action.get('line_count',120))))
+            chosen = lines[start:start+count]
+            content = ''.join(chosen)
+            return {'content':redact(content[:8000]),'start_line':start+1,'total_lines':len(lines),'truncated':start+count<len(lines) or len(content)>8000}
+
         if tool == 'search':
             query = str(action['query'])
             matches = []
@@ -177,8 +186,16 @@ class Tools:
                     if not action.get('old') or original.count(action['old']) != 1:
                         raise ValueError('Patch must match exactly one location.')
                     content = original.replace(action['old'],action['new'],1)
+                # Some local models wrap a whole source file in a Markdown fence.
+                # Remove only an unambiguous whole-file wrapper, never interior text.
+                if isinstance(content,str) and p.suffix in ('.py','.js','.ts','.tsx','.jsx','.json','.html','.css','.sql','.sh','.ps1'):
+                    fenced = re.fullmatch(r'\s*```[\w+-]*\r?\n([\s\S]*?)\r?\n```\s*',content)
+                    if fenced:
+                        content = fenced.group(1)+'\n'
                 if not isinstance(content,str) or len(content.encode()) > 200_000:
                     raise ValueError('Content must be text up to 200 KB.')
+                if p.exists() and p.read_bytes() == content.encode():
+                    return {'unchanged':name,'instruction':'This action made no change. If a check failed, inspect its error and make a different correction.'}
                 p.parent.mkdir(parents=True,exist_ok=True)
                 with tempfile.NamedTemporaryFile(dir=p.parent,delete=False) as f:
                     f.write(content.encode())
@@ -189,6 +206,8 @@ class Tools:
             argv = action.get('argv')
             if not isinstance(argv,list) or not argv or len(argv)>64 or not all(isinstance(x,str) and '\x00' not in x for x in argv):
                 raise ValueError('Command requires a list of arguments.')
+            known_test = len(argv) >= 3 and Path(argv[0]).stem.lower().startswith('python') and argv[1:3] in (['-m','unittest'],['-m','pytest'])
+            verification = action.get('verify') is True or known_test
             if not self.approve(argv):
                 raise PermissionError('Command was not approved. Do not retry the same command.')
             self.verified_revision = -1
@@ -222,7 +241,9 @@ class Tools:
                 if name not in self.backups and name != 'PROJECT_LOG.txt':
                     self.backups[name] = None
             self.save_manifest()
-            if action.get('verify') is True and proc.returncode == 0 and not reason:
+            if known_test and re.search(r'Ran 0 tests|no tests ran',text):
+                reason = 'No tests were discovered. Create runnable test cases before claiming verification.'
+            if verification and proc.returncode == 0 and not reason:
                 self.verified_revision = self.revision
-            return {'exit_code':proc.returncode,'output':text,'error':reason,'verification': action.get('verify') is True}
+            return {'exit_code':proc.returncode,'output':text,'error':reason,'verification': verification}
         raise ValueError('Unknown tool: '+str(tool))

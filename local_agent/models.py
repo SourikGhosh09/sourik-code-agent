@@ -20,10 +20,15 @@ class LocalModel:
             raise ValueError('V0 only connects to a local model server.')
         self.model, self.endpoint, self.backend = model, endpoint.rstrip('/'), backend
 
+    def installed_models(self):
+        opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),NoRedirect())
+        with opener.open(self.endpoint+'/api/tags',timeout=5) as response:
+            return json.loads(response.read(1_000_000)).get('models',[])
+
     def generate(self, messages, config):
         if self.backend == 'ollama':
             path = '/api/chat'
-            payload = dict(model=self.model, messages=messages, stream=False, format='json', options={**{k:v for k,v in config.items() if k in ('num_thread','num_ctx')},'num_predict':4096})
+            payload = dict(model=self.model, messages=messages, stream=False, format=config.get('response_schema','json'), options={**{k:v for k,v in config.items() if k in ('num_thread','num_ctx')},'num_predict':4096,'temperature':0})
         else:
             path = '/v1/chat/completions'
             payload = dict(model=self.model, messages=messages, stream=False, temperature=0.1, max_tokens=4096, response_format={'type':'json_object'})

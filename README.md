@@ -12,7 +12,7 @@ Project history is in `PROJECT_LOG.txt`. Task state, technical events, memory an
 
 ## Resource controls
 
-Eco, Balanced and High change model thread targets, context size and step budget. Available-memory pressure reduces context. Model runtime settings are targets, not guaranteed OS-wide CPU/RAM/VRAM caps. V0 uses one worker. GPU model placement is delegated to Ollama; exact GPU caps, continuous pressure adaptation and automatic model switching remain future work. The OpenAI-compatible adapter cannot enforce Ollama-specific thread/context controls.
+Auto, Eco, Balanced and High change model thread targets, context size and step budget. Available-memory pressure reduces context. Model runtime settings are targets, not guaranteed OS-wide CPU/RAM/VRAM caps. V0 uses one worker. GPU model placement is delegated to Ollama; exact GPU caps, continuous pressure adaptation and continuous model switching remain future work. The OpenAI-compatible adapter cannot enforce Ollama-specific thread/context controls.
 
 ## Verification
 
@@ -23,3 +23,5 @@ Source requirements are preserved in `specs`. See `IMPLEMENTATION_PLAN.md` and `
 ## Development verification limits
 
 Repository scanning is bounded to 2,000 files, context mapping to 100 files, file writes to 200 KB, and individual checkpoint files to 2 MB. Root `.gitignore` patterns are supported conservatively; nested ignore files and negation patterns are not fully implemented. Use V0 on small projects. Secret filtering covers common paths and key/value patterns, not every possible secret format. Stop kills the direct process with best-effort child cleanup on Windows.
+
+Auto model selection considers only already-installed Ollama models. Eco chooses the smallest fitting model; other profiles choose the largest fitting model using conservative file-size and free-memory estimates. Disable Auto model under Model settings to select a model manually. These estimates are not guaranteed memory limits.

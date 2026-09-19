@@ -18,6 +18,7 @@ class Desktop(unittest.TestCase):
             app.goal.insert('1.0','An intentionally incomplete task')
             model=ScriptedModel([{'done':'Not verified'}]*24)
             app.power.set('Eco')
+            app.automodel.set(False)
             with patch('local_agent.ui.LocalModel',return_value=model),patch('local_agent.ui.detect',return_value={'threads':4,'available':4*1024**3}):
                 app.run()
             deadline=time.monotonic()+5

@@ -43,6 +43,24 @@ class Recovery(unittest.TestCase):
             self.assertEqual([r['symbols'] for r in rows if r['path']=='a.py'],[['add']])
             self.assertNotIn('.env',tools.files())
             self.assertNotIn('generated/junk.py',[s.replace('\\','/') for s in tools.files()])
+    def test_bounded_file_context(self):
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d)/'long.txt').write_text('line\n'*300)
+            tools=Tools(d,threading.Event())
+            result=tools.execute({'tool':'read','path':'long.txt'})
+            self.assertTrue(result['truncated'])
+            self.assertEqual(result['content'].count('line'),120)
+            result=tools.execute({'tool':'read','path':'long.txt','start_line':290})
+            self.assertFalse(result['truncated'])
+            self.assertEqual(result['content'].count('line'),11)
+    def test_hardware_model_selection(self):
+        from local_agent.resources import choose_model
+        hw={'available':4*1024**3,'gpu':'GPU, 12288 MiB, 11000 MiB'}
+        models=[{'name':'small','size':2*1024**3},{'name':'medium','size':5*1024**3},{'name':'too-big','size':20*1024**3}]
+        self.assertEqual(choose_model(hw,models,'Eco'),'small')
+        self.assertEqual(choose_model(hw,models,'Auto'),'medium')
+        with self.assertRaises(ValueError):
+            choose_model({'available':512*1024**2},models)
     def test_redaction(self):
         self.assertNotIn('sensitive',redact('password=sensitive'))
     def test_model_http_contracts(self):

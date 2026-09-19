@@ -55,7 +55,7 @@ class Acceptance(unittest.TestCase):
         agent=Agent(self.root,ScriptedModel([{'done':'Done'}]*3),{'max_steps':3})
         self.assertEqual(agent.run('Build an app'),'FAILED')
     def test_boundaries_and_secrets(self):
-        for name in ('../outside','C:/outside','.env','.git/config','x/private.pem','file:stream'):
+        for name in ('../outside','C:/outside','.env','.git/config','x/private.pem','file:stream','.ENV','.GiT/config','.AGENT/state.sqlite','.git./config','NUL.txt','file. '):
             with self.assertRaises((ValueError,PermissionError)):
                 self.tools.execute({'tool':'write','path':name,'content':'bad'})
     def test_permission_denied(self):

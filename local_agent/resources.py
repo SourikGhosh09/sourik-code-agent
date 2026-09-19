@@ -28,7 +28,25 @@ def detect(root):
 
 
 def profile(hardware, power='Balanced', cpu=None, context=None):
-    fraction, window, steps = {'Eco': (.25, 4096, 24), 'Balanced': (.5, 8192, 40), 'High': (.75, 16384, 60)}[power]
+    fraction, window, steps = {'Auto': (.5, 8192, 40), 'Eco': (.25, 4096, 24), 'Balanced': (.5, 8192, 40), 'High': (.75, 16384, 60)}[power]
     if hardware.get('available') and hardware['available'] < 2 * 1024**3:
         window = min(window, 4096)
     return dict(num_thread=max(1, min(cpu or hardware['threads'], int(hardware['threads'] * fraction) or 1)), num_ctx=min(context or window, window), max_steps=steps, workers=1)
+
+
+def choose_model(hardware, models, power='Auto'):
+    """Select only installed models, reserving room for runtime and context.
+
+    Model file size is a placement estimate, not a hard memory guarantee.
+    """
+    free_gpu=0
+    try:
+        free_gpu=float(hardware.get('gpu','').splitlines()[0].split(',')[-1].strip().split()[0])*1024**2
+    except (ValueError,IndexError):
+        pass
+    budget=max(free_gpu*.65,(hardware.get('available') or 0)*.45)
+    candidates=[m for m in models if isinstance(m.get('size'),(int,float)) and 0<m['size']<=budget and m.get('name')]
+    if not candidates:
+        raise ValueError('No installed local model fits the estimated available memory. Close other applications or choose a smaller installed model in Model settings.')
+    candidates.sort(key=lambda m:m['size'])
+    return candidates[0 if power=='Eco' else -1]['name']

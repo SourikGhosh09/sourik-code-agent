@@ -3,6 +3,7 @@
 Not a general sandbox. Only this tiny calculator evaluation is approved here.
 """
 import ast
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -48,6 +49,10 @@ def main():
     base=Path(__file__).resolve().parents[1]/'evaluation-results'/time.strftime('%Y%m%d-%H%M%S')
     base.mkdir(parents=True)
     model=sys.argv[1] if len(sys.argv)>1 else 'qwen2.5-coder:3b'
+    code_root=Path(__file__).resolve().parents[1]/'local_agent'
+    code_digest=hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in sorted(code_root.glob('*.py')))).hexdigest()
+    model_runtime=LocalModel(model)
+    model_digest=next((m.get('digest') for m in model_runtime.installed_models() if m.get('name')==model),None)
     results=[]
     for power,case in [('Eco','empty'),('Balanced','broken')]:
         root=base/case
@@ -62,7 +67,7 @@ def main():
         def emit(event):
             events.append(event)
             print(case,event['kind'],json.dumps(event['data'])[:1200],flush=True)
-        agent=Agent(root,LocalModel(model),config,emit,lambda argv:approve_calculator(root,argv))
+        agent=Agent(root,model_runtime,config,emit,lambda argv:approve_calculator(root,argv))
         start=time.monotonic()
         state=agent.run(goal)
         # Independently inspect source and verify behavior; do not trust model-written tests.
@@ -75,7 +80,7 @@ def main():
             independent=check.returncode==0
             (root/'independent-check.txt').write_text(check.stdout+check.stderr,encoding='utf-8')
         failed_observation=any(e['kind']=='observation' and isinstance(e['data'],dict) and e['data'].get('exit_code',0)!=0 for e in events)
-        result=dict(case=case,profile=power,config=config,state=state,independent_pass=independent,observed_failure=failed_observation,seconds=round(time.monotonic()-start,2))
+        result=dict(suite_version='v0-1',model=model,model_digest=model_digest,code_digest=code_digest,case=case,profile=power,config=config,state=state,independent_pass=independent,observed_failure=failed_observation,seconds=round(time.monotonic()-start,2))
         results.append(result)
         (base/'results.json').write_text(json.dumps(results,indent=2),encoding='utf-8')
         print('RESULT',json.dumps(result),flush=True)

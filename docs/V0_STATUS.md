@@ -2,11 +2,11 @@
 
 | Requirement | Implemented evidence | Gate |
 |---|---|---|
-| Task, inspection, plan, file generation | SQLite task state, repository map, model action protocol | Scripted integration passes; real model pending |
-| Commands, errors, repairs | Approval callback, bounded subprocess, observation loop | Scripted repair passes; real model pending |
+| Task, inspection, plan, file generation | SQLite task state, repository map, model action protocol | Scripted integration passes; 3B new-project evaluation fails |
+| Commands, errors, repairs | Approval callback, bounded subprocess, observation loop | Real 3B bug repair passes with baseline failure and independent checks |
 | Verification and completion | Successful command required after final edit; failed actions invalidate proof | Regression tests pass; independent task assertions pending |
 | Changed files, history, checkpoint | Unified diffs, PROJECT_LOG.txt, durable snapshots and restore | Tests pass |
-| Existing broken repository | Separate real-model calculator bug fixture | Pending |
+| Existing broken repository | Separate real-model calculator bug fixture | Real 3B repair passes |
 | Two resource profiles | Eco/Balanced/High thread and context targets | Unit test passes; real model pending |
 | Forced failure | Nonzero exit, timeout, denied command, cancellation, invalid JSON | Tests pass |
 | Desktop workflow | Native folder picker, goal, Run/Stop, status, approval, diff/history | Construction and failure-display tests pass |

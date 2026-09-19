@@ -25,3 +25,39 @@ Checks: 19 tests passed, including the desktop failure display, malformed model 
 Result: Infrastructure tests passed. Real-model acceptance remains pending.
 User action: None. The earlier execution stop was caused by approval-service usage limits; work resumed after the user's instruction to continue.
 Remaining: Finish the model download, run both independent model evaluations, record results, and verify the launch experience.
+
+UPDATE: First real-model evaluation failed safely
+Date: 2026-09-18
+What changed: Completed local model setup and ran both real-model acceptance tasks.
+Checks: The model produced plans but repeatedly tried to finish before creating or testing code. Both tasks failed; the controller correctly refused to claim success.
+Result: Failed acceptance. No real-model task success is claimed.
+Repair: Added state-dependent structured responses: planning first, then tools, with completion offered only after verification. Added response records to help diagnose model behavior.
+User action: None.
+Remaining: Test this repair and rerun real-model acceptance.
+
+UPDATE: Diagnosed the second real-model run
+Date: 2026-09-19
+Checks: Structured actions let the model fix the existing calculator; independent assertions passed. The task still failed because it omitted a verification flag and repeated actions. The new-project run failed because generated files contained Markdown fences instead of valid Python.
+What changed: Standard Python test commands now count as verification automatically, but a run containing zero tests does not. Added clearer complete-file instructions and approved baseline checks for existing Python tests.
+Result: Repair implemented; real-model rerun pending.
+User action: None.
+Remaining: Confirm actual autonomous completion and self-repair, then update the acceptance record.
+
+UPDATE: Real repair succeeded; new-project capability remains below the acceptance bar
+Date: 2026-09-19
+What worked: The local 3B model observed the existing project's failed test, fixed its arithmetic bug, passed the original tests, and passed independent behavior checks. This is a genuine local-model result.
+What failed: The empty-project task still loops on incorrect test imports. Controller bugs involving verification flags and history visibility were repaired, but this model remains unreliable on the new-project task.
+What changed: Added whole-file code-fence cleanup, zero-test rejection, unchanged-edit detection, refreshed evidence after repeated failures, and hardware-aware selection among installed models. A larger 7B model is downloading for comparison. Evaluation reports now identify the model and exact agent-source hash.
+Checks: Targeted regression tests for these behaviors passed. The OS still does not permit the real symlink test, which remains skipped.
+Result: Partial V0 acceptance only. Do not treat the application as a completed V0 release yet.
+User action: None while the stronger model downloads. The previous documentation write was blocked by the approval service's usage limit and has now been retried.
+Remaining: Pass the empty-project case, repeat both resource profiles on the chosen model, verify the launcher, and record final evidence.
+
+UPDATE: Windows project boundaries strengthened
+Date: 2026-09-19
+What changed: File tools now reject case variants of protected names, ambiguous trailing-dot/space paths, and Windows device names. Project history remains readable but is omitted from the default code map.
+Why: Windows can treat different-looking paths as the same location. These checks prevent bypassing the project's file protections.
+Checks: Eleven relevant tests passed, including real Windows junctions pointing outside the project and a linked metadata folder. The separate symbolic-link test still cannot create its fixture under this OS configuration.
+Result: Boundary checks passed. Real-model new-project acceptance is still pending the larger model download.
+User action: None.
+Remaining: Complete the 7B model comparison and final acceptance record.

@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 from .agent import Agent
 from .models import LocalModel
-from .resources import detect, profile
+from .resources import detect, profile, choose_model
 from .tools import Tools
 
 
@@ -37,8 +37,8 @@ class App:
         controls = ttk.Frame(frame)
         controls.pack(fill='x',pady=12)
         ttk.Label(controls,text='AI power').pack(side='left')
-        self.power = tk.StringVar(value='Balanced')
-        ttk.Combobox(controls,textvariable=self.power,values=['Eco','Balanced','High'],state='readonly',width=12).pack(side='left',padx=8)
+        self.power = tk.StringVar(value='Auto')
+        ttk.Combobox(controls,textvariable=self.power,values=['Auto','Eco','Balanced','High'],state='readonly',width=12).pack(side='left',padx=8)
         self.run_button = ttk.Button(controls,text='Run task',command=self.run)
         self.run_button.pack(side='right')
         ttk.Button(controls,text='Stop',command=self.stop).pack(side='right',padx=8)
@@ -51,6 +51,8 @@ class App:
             else:
                 advanced.pack(fill='x',pady=6)
         ttk.Button(advanced_shell,text='Model settings',command=toggle_settings).pack(anchor='w')
+        self.automodel = tk.BooleanVar(value=True)
+        ttk.Checkbutton(advanced,text='Auto model',variable=self.automodel).pack(side='left')
         self.model = tk.StringVar(value='qwen2.5-coder:3b')
         self.endpoint = tk.StringVar(value='http://127.0.0.1:11434')
         self.backend = tk.StringVar(value='ollama')
@@ -73,7 +75,7 @@ class App:
         if self.settings.exists():
             try:
                 saved = json.loads(self.settings.read_text())
-                for name in ('project','power','model','endpoint','backend'):
+                for name in ('project','power','model','endpoint','backend','automodel'):
                     getattr(self,name).set(saved.get(name,getattr(self,name).get()))
             except (ValueError,OSError):
                 pass
@@ -112,10 +114,15 @@ class App:
         try:
             root.mkdir(parents=True,exist_ok=True)
             model = LocalModel(self.model.get(),self.endpoint.get(),self.backend.get())
-            config = profile(detect(root),self.power.get())
+            hardware = detect(root)
+            config = profile(hardware,self.power.get())
+            if self.automodel.get() and self.backend.get() == 'ollama':
+                model.model = choose_model(hardware,model.installed_models(),self.power.get())
+                self.model.set(model.model)
+            self.append('Progress','Using local model: '+self.model.get())
             self.agent = Agent(root,model,config,self.events.put,self.approve)
             self.settings.parent.mkdir(exist_ok=True)
-            self.settings.write_text(json.dumps({name:getattr(self,name).get() for name in ('project','power','model','endpoint','backend')}))
+            self.settings.write_text(json.dumps({name:getattr(self,name).get() for name in ('project','power','model','endpoint','backend','automodel')}))
             self.append('Progress',f'Using {config["num_thread"]} model CPU threads; {config["num_ctx"]} context budget. These are runtime targets, not hard OS memory limits.')
             self.run_button.configure(state='disabled')
             self.worker = threading.Thread(target=self.agent.run,args=(goal,),daemon=True)
@@ -168,13 +175,16 @@ class App:
                     self.status.set(data.replace('_',' ').title())
                     if data in ('COMPLETED','FAILED','CANCELLED'):
                         self.run_button.configure(state='normal')
-                        self.append('What changed?',(self.agent.root/'PROJECT_LOG.txt').read_text(encoding='utf-8'))
-                        self.append('Changes',self.agent.tools.diff())
+                        try:
+                            self.append('What changed?',self.agent.tools.path('PROJECT_LOG.txt').read_text(encoding='utf-8'))
+                            self.append('Changes',self.agent.tools.diff())
+                        except (OSError,ValueError) as exc:
+                            self.append('Progress','Could not display project history: '+str(exc))
                 elif kind == 'diff':
                     pass
                 elif kind == 'plan':
                     self.append('Progress','Plan\n'+'\n'.join(f'{i+1}. {s}' for i,s in enumerate(data if isinstance(data,list) else [data])))
-                elif kind == 'action':
+                elif kind in ('action','model_response'):
                     self.append('Technical details',json.dumps(data,indent=2))
                 elif kind == 'observation':
                     self.append('Technical details',json.dumps(data,indent=2))
