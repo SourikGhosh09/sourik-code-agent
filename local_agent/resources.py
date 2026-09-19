@@ -54,3 +54,27 @@ def choose_model(hardware, models, power='Auto'):
         raise ValueError('No installed local model fits the estimated available memory. Close other applications or choose a smaller installed model in Model settings.')
     candidates.sort(key=lambda m:m['size'])
     return candidates[0 if power=='Eco' else -1]['name']
+
+
+def preference_profile(hardware, power='Auto', preference='Quality', cpu=None, context=None):
+    if preference not in ('Quality', 'Speed'):
+        raise ValueError('Choose Quality or Speed.')
+    if cpu is not None and not 1 <= cpu <= hardware['threads']:
+        raise ValueError('CPU thread target must fit this computer.')
+    if context is not None and not 2048 <= context <= 16384:
+        raise ValueError('Context target must be between 2048 and 16384.')
+    config = profile(hardware, power, cpu=cpu, context=context)
+    if preference == 'Speed':
+        config['num_ctx'] = min(config['num_ctx'], 4096)
+    config['monitor_resources'] = True
+    return config
+
+
+def pressure_adjust(config, hardware):
+    """Only reduce runtime targets; never silently exceed the user's envelope."""
+    adjusted = dict(config)
+    available = hardware.get('available')
+    if available is not None and available < 2 * 1024**3:
+        adjusted['num_ctx'] = min(adjusted.get('num_ctx',8192), 2048)
+        adjusted['num_thread'] = min(adjusted.get('num_thread',1), 2)
+    return adjusted

@@ -71,3 +71,21 @@ Result: V0 thin-slice acceptance passed for the documented small calculator task
 Evidence: docs/evaluation-v0.json and evaluation-results\20260919-144653. Latest task times were 72.82 seconds and 10.96 seconds.
 Do you need to do anything? No setup is required. To try it, open Start Agent.cmd, leave AI power on Auto, choose a small project folder and describe the task. Review requested commands before approving them.
 What remains: Later roadmap stages include stronger isolation, richer memory/indexing, plugins, advanced resource controls, model training and distribution. The smaller 3B model remains less reliable; use Auto for the verified 7B default.
+
+UPDATE: First V1 preview built, real-model checks running
+Date: 2026-09-19
+Goal: Start V1 while keeping V0 available for comparison.
+What changed: Preserved verified V0 in releases/v0-462a311 with Start V0.cmd. Start V1.cmd opens the new preview. Added task-ranked code summaries, cached repository metadata, inspectable project notes and verified memories, task history, quality/speed controls, memory-pressure backoff and safer recovery warnings.
+Why: Make existing-project work easier and protect later user edits during recovery.
+Checks: 36 automated tests passed; one symbolic-link test skipped because Windows cannot create its fixture. Real-model evaluations are now running, including a repository with unrelated files and a stale memory record.
+Result: Infrastructure verified. V1 real-model acceptance is not yet claimed. The earlier code-write interruption was an approval-service usage limit; it was retried successfully after the user resumed.
+User action: Use separate project copies for V0 and V1. Keep Auto plus Quality for the recommended model.
+Remaining: Finish real-model checks and record their evidence. Broader V1 UI, resource controls and multi-language validation remain later V1 work.
+
+UPDATE: V1 preview passed its first real-model checks
+Date: 2026-09-19
+What worked: The local 7B model created a calculator and tests, repaired a broken calculator, and repaired the calculator among 110 unrelated files with a stale memory fixture present. All three tasks completed and passed independent behavior checks. Both repair cases preserved the original tests.
+Checks: 37 automated tests passed; one symbolic-link fixture remained skipped due to Windows permissions. V0 source files match their release archive. Real-model results include the exact current source hash and model digest in docs/evaluation-v1.json.
+Result: V1 preview is ready for the user's comparison tests. This is not a claim that every V1 roadmap item or broad coding reliability is complete.
+User action: Open Start V0.cmd for the preserved version or Start V1.cmd for the preview. Use separate copies of the same project. Leave V1 on Auto and Quality. Run tasks sequentially for timing comparisons because both versions share the local model server.
+Remaining: Broader repository/language tests, project-specific profiles, nonblocking startup and richer memory/resource features. Commands still use Windows permissions, without OS sandbox isolation. See docs/V1_STATUS.md.

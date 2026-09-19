@@ -1,0 +1,62 @@
+[
+  {
+    "suite_version": "v1-preview-1",
+    "tests_preserved": true,
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "8f91d3e4471627cfab5b3c8f79d2ee7be90d1ffa87abc780ffd476ea6315ca77",
+    "case": "empty",
+    "profile": "Eco",
+    "config": {
+      "num_thread": 5,
+      "num_ctx": 4096,
+      "max_steps": 24,
+      "workers": 1,
+      "monitor_resources": true
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": false,
+    "seconds": 73.21
+  },
+  {
+    "suite_version": "v1-preview-1",
+    "tests_preserved": true,
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "8f91d3e4471627cfab5b3c8f79d2ee7be90d1ffa87abc780ffd476ea6315ca77",
+    "case": "broken",
+    "profile": "Balanced",
+    "config": {
+      "num_thread": 10,
+      "num_ctx": 8192,
+      "max_steps": 40,
+      "workers": 1,
+      "monitor_resources": true
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": true,
+    "seconds": 34.66
+  },
+  {
+    "suite_version": "v1-preview-1",
+    "tests_preserved": true,
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "8f91d3e4471627cfab5b3c8f79d2ee7be90d1ffa87abc780ffd476ea6315ca77",
+    "case": "indexed",
+    "profile": "Balanced",
+    "config": {
+      "num_thread": 10,
+      "num_ctx": 8192,
+      "max_steps": 40,
+      "workers": 1,
+      "monitor_resources": true
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": true,
+    "seconds": 8.27
+  }
+]

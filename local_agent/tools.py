@@ -40,6 +40,7 @@ class Tools:
         self.root = Path(root).resolve()
         self.cancel, self.approve = cancel, approve
         self.backups = {}
+        self.expected = {}
         self.revision = 0
         self.verified_revision = -1
         self.checkpoint = private_folder(self.root) / 'checkpoints' / str(time.time_ns())
@@ -112,6 +113,8 @@ class Tools:
             restored[name] = (folder/key).read_bytes() if key else None
         self.backups = restored
         self.checkpoint = folder
+        after = folder/'after.json'
+        self.expected = json.loads(after.read_text(encoding='utf-8')) if after.exists() else {}
 
     def diff(self):
         changes = []
@@ -121,7 +124,27 @@ class Tools:
             changes.extend(difflib.unified_diff((before or b'').decode('utf-8',errors='replace').splitlines(True), after.decode('utf-8',errors='replace').splitlines(True), fromfile='before/'+name,tofile='after/'+name))
         return ''.join(changes)
 
-    def rollback(self):
+    def track_current(self, names=None):
+        for name in self.backups if names is None else names:
+            p = self.path(name)
+            self.expected[name] = hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
+        temporary = self.checkpoint/'after.tmp'
+        temporary.write_text(json.dumps(self.expected),encoding='utf-8')
+        os.replace(temporary,self.checkpoint/'after.json')
+
+    def rollback_conflicts(self):
+        conflicts = []
+        for name in self.backups:
+            p = self.path(name)
+            current = hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
+            if name not in self.expected or current != self.expected[name]:
+                conflicts.append(name)
+        return conflicts
+
+    def rollback(self, force=False):
+        conflicts = self.rollback_conflicts()
+        if conflicts and not force:
+            raise ValueError('Files changed since this checkpoint, or it has no change fingerprints: '+', '.join(conflicts[:10]))
         for name, before in self.backups.items():
             p = self.path(name)
             if before is None:
@@ -130,6 +153,8 @@ class Tools:
                 p.parent.mkdir(parents=True, exist_ok=True)
                 p.write_bytes(before)
         self.revision += 1
+        self.verified_revision = -1
+        self.track_current()
 
     def execute(self, action):
         if self.cancel.is_set():
@@ -201,6 +226,7 @@ class Tools:
                     f.write(content.encode())
                 os.replace(f.name,p)
             self.revision += 1
+            self.track_current([name,action['destination']] if tool == 'move' else [name])
             return {'changed':name}
         if tool == 'run':
             argv = action.get('argv')
@@ -241,6 +267,7 @@ class Tools:
                 if name not in self.backups and name != 'PROJECT_LOG.txt':
                     self.backups[name] = None
             self.save_manifest()
+            self.track_current()
             if known_test and re.search(r'Ran 0 tests|no tests ran',text):
                 reason = 'No tests were discovered. Create runnable test cases before claiming verification.'
             if verification and proc.returncode == 0 and not reason:

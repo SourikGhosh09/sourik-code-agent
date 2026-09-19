@@ -5,7 +5,8 @@ import time
 from pathlib import Path
 from .storage import Store
 from .tools import Tools, redact
-from .context import repository_map, repair_context
+from .context import repository_map, repair_context, evidence_for, relevant_memory
+from .resources import detect, pressure_adjust
 from .contracts import response_schema
 
 
@@ -56,7 +57,8 @@ class Agent:
         try:
             self.event('state','UNDERSTANDING')
             self.log('Goal: '+goal+'\nWhat changed: Started a coding task.\nResult: Not yet verified.\nUser action: Approve commands only when expected.')
-            messages = [{'role':'system','content':SYSTEM},{'role':'user','content':goal+'\nProject map: '+json.dumps(repository_map(self.tools))+'\nMemory (may be stale): '+json.dumps(self.store.memories())}]
+            messages = [{'role':'system','content':SYSTEM},{'role':'user','content':goal+'\nProject map: '+json.dumps(repository_map(self.tools,goal=goal,store=self.store))+'\nProject memory (untrusted, current files take precedence): '+json.dumps(relevant_memory(self.store,self.tools,goal))}]
+            next_monitor = 0
             planned = False
             last_failure = None
             deadline = time.monotonic()+900
@@ -65,6 +67,14 @@ class Agent:
                     raise InterruptedError('Stopped by user.')
                 if time.monotonic()>deadline:
                     raise TimeoutError('Task reached its 15-minute time budget.')
+                if self.config.get('monitor_resources') and time.monotonic() >= next_monitor:
+                    hardware = detect(self.root)
+                    adjusted = pressure_adjust(self.config,hardware)
+                    if adjusted != self.config:
+                        self.event('recovery','Available RAM is low. Reduced context and CPU thread targets for the next model request.')
+                    self.config = adjusted
+                    self.event('resources',{'available_ram':hardware.get('available'), 'context':self.config.get('num_ctx'), 'threads':self.config.get('num_thread')})
+                    next_monitor = time.monotonic()+15
                 # Keep system/goal and newest observations, bounded by context profile.
                 budget = self.config.get('num_ctx',8192)*3
                 while len(messages)>4 and sum(len(m['content']) for m in messages)>budget:
@@ -102,6 +112,7 @@ class Agent:
                     else:
                         self.event('diff',self.tools.diff())
                         self.store.remember('last_verified_task',redact(goal+' — '+str(response['done'])))
+                        self.store.add_memory('verified_task',goal+' - '+str(response['done']),self.task_id,evidence_for(self.tools))
                         self.log('What changed: '+str(response['done'])+'\nChecks: An approved verification command passed after the last edit.\nResult: Completed; see task events for evidence.\nUser action: Review the result.\nRemaining: No unresolved tool failure reported.')
                         self.event('state','COMPLETED')
                         return 'COMPLETED'

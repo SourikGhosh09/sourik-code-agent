@@ -1,13 +1,14 @@
-# V0 implementation and acceptance
+# V1 preview implementation plan
 
-The original 19 documents in specs are authoritative. This document records implementation decisions, not replacement requirements.
+Source precedence remains specs/00_MASTER_PROJECT_PACK.txt. V0 is preserved at commit 462a311 and in releases/v0-462a311 for side-by-side testing.
 
-1. Python standard-library desktop application (Tk), SQLite task/events/memory persistence.
-2. Model protocol with Ollama and local OpenAI-compatible adapters. No paid service required.
-3. Project-scoped file tools, excluded secrets, checkpoint/diff/rollback, bounded command execution with explicit approval. Commands execute with the user's OS rights: this is a permission boundary, not an OS sandbox.
-4. Bounded understand/inspect/plan/act/verify/repair loop. Completion requires a successful approved verification after the last edit.
-5. Hardware-derived context/thread budgets, Eco/Balanced/High controls; exact memory/GPU caps are not claimed.
-6. Native project picker, progress, stop, permission requests, changed files and recovery.
-7. Unit/integration acceptance: empty project, broken project, failure, two resource profiles, traversal, secrets, rollback, cancellation. Scripted adapters test infrastructure only. Real local-model evaluations are separate release gates.
+The first V1 preview follows phase 2 of specs/16_ROADMAP.txt:
 
-V1 and later: OS process isolation, advanced indexes, richer hardware monitoring, installed plugins, training and distribution. Extension contracts are defined now; no training capability is claimed for V0.
+1. Task-ranked repository intelligence: safe bounded scans, Python symbols/imports, basic JavaScript/TypeScript symbols/imports, dependency manifests, persistent content-hash cache and deleted-file removal.
+2. Inspectable memory: attributable verified results, user notes, stale-evidence exclusion, local add/forget controls. Existing V0 data remains intact.
+3. Resource profiles: quality/speed preference, optional CPU/context targets, periodic available-RAM checks between model turns, conservative backoff.
+4. Usability: recent projects, task history, reuse a previous goal as a fresh inspected task, separate V0 and V1 launchers.
+5. Recovery: durable post-edit fingerprints, warnings for later user changes and legacy checkpoints, explicit overwrite confirmation.
+6. Verification: existing regression suite, dedicated V1 behavior tests, real local-model creation/repair and cluttered-repository evaluation. Scripted tests remain separate from real model evidence.
+
+This is a testable V1 preview, not full phase-2 acceptance. Further V1 work includes broader multi-file/language evaluations, project-specific profile overrides, nonblocking startup, fuller ignore/import semantics, and richer pressure handling. Plugin installation, advanced workers and training belong to subsequent roadmap phases. Exact OS resource caps and OS sandbox isolation are not claimed.
