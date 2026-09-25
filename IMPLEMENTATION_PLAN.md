@@ -12,3 +12,7 @@ The first V1 preview follows phase 2 of specs/16_ROADMAP.txt:
 6. Verification: existing regression suite, dedicated V1 behavior tests, real local-model creation/repair and cluttered-repository evaluation. Scripted tests remain separate from real model evidence.
 
 This is a testable V1 preview, not full phase-2 acceptance. Further V1 work includes broader multi-file/language evaluations, project-specific profile overrides, nonblocking startup, fuller ignore/import semantics, and richer pressure handling. Plugin installation, advanced workers and training belong to subsequent roadmap phases. Exact OS resource caps and OS sandbox isolation are not claimed.
+
+## Minimal-change policy increment
+
+Reuse the existing scanner, guarded tools, checkpoints and event store. Add one deterministic policy module, planning estimates and short justifications for flagged growth/dependencies/abstractions. Supply the task diff to the existing model before completion; preserve verification and command permissions. Validate with focused policy tests, the existing suite and local-model calculator/no-change cases. See docs/SIMPLICITY.md for current-code findings and limitations.

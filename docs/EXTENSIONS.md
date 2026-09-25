@@ -8,4 +8,6 @@ Plugins: planned manifest fields `id`, `version`, `actions`, `input_schema`, `pe
 
 Training: future dataset manifests include license, source, version, content hashes, and train/validation/evaluation split. Candidate promotion requires separate reproducible evaluations against the baseline. No training feature is implemented in V0.
 
-Memory: SQLite stores editable/removable project facts through Store.remember, memories, forget. Current repository observations take precedence. Rich episodic retrieval and memory editing UI are future work.
+Memory: V1 stores project notes and attributable verified results through Store.add_memory, memory_records and delete_memory, with add/inspect/forget controls in the desktop UI. Legacy remember/memories/forget APIs remain compatible. Current repository observations take precedence. Rich error/fix retrieval and in-place note editing remain future work.
+
+Simplicity policy: implemented in local_agent/simplicity.py and called by the existing Agent. It consumes repository metadata and Tools, with no model-specific dependency. Future skills may supply contextual evidence through the existing context boundary; they cannot grant permissions or disable correctness requirements. No policy registry or executable plugin loader is added. See SIMPLICITY.md.

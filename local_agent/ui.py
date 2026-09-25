@@ -297,6 +297,13 @@ class App:
                             self.append('Changes',self.agent.tools.diff())
                         except (OSError,ValueError) as exc:
                             self.append('Progress','Could not display project history: '+str(exc))
+                elif kind == 'simplicity':
+                    self.append('Technical details',json.dumps(data,indent=2))
+                    if data.get('reconsider'):
+                        self.append('Progress','Checking whether a smaller or reused solution meets the task before making this change.')
+                    elif data.get('phase') == 'review':
+                        counts = data['counts']
+                        self.append('Progress',f'Change review: {counts["files"]} files changed, {counts["new_files"]} new files, {counts["dependencies"]} added dependencies. Tests and safety still come first.')
                 elif kind == 'resources':
                     available = data.get('available_ram')
                     self.append('Technical details',f'Resource targets: {data["threads"]} threads, {data["context"]} context tokens; available RAM: '+(f'{available/1024**3:.1f} GB' if available is not None else 'unknown'))

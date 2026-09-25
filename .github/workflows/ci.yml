@@ -1,0 +1,25 @@
+name: Python checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check committed whitespace
+        run: git show --check --oneline HEAD
+      - name: Compile Python sources
+        run: python -m compileall -q local_agent scripts tests
+      - name: Run infrastructure tests
+        run: python -m unittest discover -v
+      # No Python dependencies or configured linter/type checker/installer build.
+      # No model downloads or model-quality acceptance in this workflow.

@@ -89,3 +89,35 @@ Checks: 37 automated tests passed; one symbolic-link fixture remained skipped du
 Result: V1 preview is ready for the user's comparison tests. This is not a claim that every V1 roadmap item or broad coding reliability is complete.
 User action: Open Start V0.cmd for the preserved version or Start V1.cmd for the preview. Use separate copies of the same project. Leave V1 on Auto and Quality. Run tasks sequentially for timing comparisons because both versions share the local model server.
 Remaining: Broader repository/language tests, project-specific profiles, nonblocking startup and richer memory/resource features. Commands still use Windows permissions, without OS sandbox isolation. See docs/V1_STATUS.md.
+
+UPDATE: Added the first minimal-change policy
+Date: 2026-09-24
+Goal: Help the existing local agent reuse working code and avoid unnecessary additions without lowering quality.
+What changed: Added one small policy module and connected it to the existing planner, file tools, progress events and final review. Plans estimate their change size. Questionable dependencies, abstractions and growth need an explanation. Current files and related callers are inspected, and a task diff is supplied before completion.
+Why: Reuse the working architecture instead of adding another model or plugin framework. Nothing was copied or installed from Ponytail.
+Files affected: local_agent/simplicity.py, agent.py, contracts.py, ui.py; tests/test_simplicity.py; scripts/evaluate_local.py.
+Checks: The original 38-test suite was run before changes: 37 passed and one symbolic-link fixture was skipped. After integration, 48 tests passed and the same fixture was skipped. The first real-model run exposed repeated planning when replanning was always offered; the schema was narrowed back to actions after the first plan. A redundant read during repair was also found by regression testing and fixed.
+Result: Infrastructure checks pass. Real-model testing of the corrected version is still pending; earlier recorded V0/V1 results are not proof of this new code.
+User action: None while verification continues.
+Remaining: Finish real-model evaluation, inspect the final Git diff and document the policy's limits.
+
+UPDATE: Minimal-change policy verified with the local model
+Date: 2026-09-25
+What changed: Finished the lightweight Simplicity Engine and its integration with the existing local agent. Added no package, cloud service, extra model, plugin loader or database. The existing architecture, V0 snapshot, permissions, checkpoints and resource controls remain in place.
+Why: Encourage reuse and justified changes while keeping correctness, security, validation, accessibility, data integrity, useful tests and requested functionality more important than code size.
+Files affected: New local_agent/simplicity.py, tests/test_simplicity.py, docs/SIMPLICITY.md and docs/evaluation-simplicity.json. Updated local_agent/agent.py, contracts.py and ui.py; scripts/evaluate_local.py; README.md, IMPLEMENTATION_PLAN.md, docs/EXTENSIONS.md and this log.
+Errors found and fixed: Real-model tests showed that always offering another plan caused repeated planning, optional justification fields were ignored, and review wording sometimes caused unnecessary report files. The action schema and instructions now address those problems. A focused test also caught file-count estimates delaying verification; verification proceeds through ordinary approval regardless of that estimate. A redundant read during repair was removed.
+Checks performed: Ran the original suite before changes, then the expanded suite after repairs. Final result: 50 automated tests passed; one symbolic-link test was skipped because Windows cannot create the fixture. Real Windows junction protections passed. Checked the existing Python entry point and reviewed the actual Git diff and added files. No dependencies were added or removed.
+Real-model result: The local 7B model completed all four evaluation tasks: build a calculator, repair it, repair it among 110 unrelated files, and verify an already-correct calculator without changing code. Independent behavior checks passed. Both repair cases kept the original tests. Source and model hashes are saved in docs/evaluation-simplicity.json and match the tested implementation.
+Limits: These are small controlled tasks, not a broad reliability or efficiency benchmark. The policy finds warning signs, not semantic proof of unnecessary code. It reviews the existing task checkpoint diff, including new files, without requiring Git or silently running commands. Explanations justify scope growth but never grant permissions. Approved commands still run with Windows user rights, without OS sandbox isolation.
+User action: None required. The current Start V1.cmd and Start Agent.cmd use the policy automatically.
+Recommended next step: Evaluate representative multi-file projects and compare correctness, changed files and dependency choices before expanding the policy. Learned scoring, semantic duplicate analysis and a policy-plugin registry should wait for evidence that they are needed.
+
+UPDATE: Organized current project documentation and prepared GitHub publication
+Date: 2026-09-25
+What changed: Created the requested product, features, flows, architecture, data, communication, UI, testing, decisions, operations, security, task and handover documents. Updated README and agent guidance. Added an environment example with no invented settings, a minimal source placeholder and Windows Python CI. Preserved the existing application layout and all 19 original specifications.
+Why: Make the current working project understandable to future sessions and ready for the requested private GitHub repository and source ZIP. Current behavior is separate from planned and untested capabilities.
+Checks: Reran all 51 infrastructure tests: 50 passed, one Windows symlink fixture skipped; junction tests passed. Python compilation, documentation links/fences, file inventory and Git diff whitespace checks passed. Checked current files and Git history for large artifacts and high-confidence credential patterns; none found. This is not an exhaustive security audit. No new model run was needed because application behavior did not change during documentation work; the four previously recorded real-model cases remain the evidence for the current code.
+Errors handled: The default command runner could not initialize; authorized elevated commands worked. A large documentation write exceeded Windows command length before writing files; split writes completed. No dependencies were added or removed.
+Publication: Created private repository https://github.com/SourikGhosh09/sourik-code-agent. Source commit/push and ZIP verification follow. Runtime/models, task metadata, raw evaluations, incoming attachments and local release copies are excluded. CI is configured, but a hosted run is not yet claimed.
+Remaining: Representative multi-file evaluation, fresh-machine setup, responsive discovery and manual accessibility validation. See TASKS.md. No OS sandbox or hard resource caps are claimed.

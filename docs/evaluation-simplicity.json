@@ -1,0 +1,90 @@
+[
+  {
+    "suite_version": "simplicity-1",
+    "minimal_noop": true,
+    "simplicity_reviews": 4,
+    "tests_preserved": true,
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "c7203d46214e5bc45d60a2815a459b8260e2fb5d9af5988e0e6414fa4fcabb42",
+    "case": "empty",
+    "profile": "Eco",
+    "config": {
+      "num_thread": 5,
+      "num_ctx": 4096,
+      "max_steps": 24,
+      "workers": 1,
+      "monitor_resources": true
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": false,
+    "seconds": 14.16
+  },
+  {
+    "suite_version": "simplicity-1",
+    "minimal_noop": true,
+    "simplicity_reviews": 3,
+    "tests_preserved": true,
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "c7203d46214e5bc45d60a2815a459b8260e2fb5d9af5988e0e6414fa4fcabb42",
+    "case": "broken",
+    "profile": "Balanced",
+    "config": {
+      "num_thread": 10,
+      "num_ctx": 8192,
+      "max_steps": 40,
+      "workers": 1,
+      "monitor_resources": true
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": true,
+    "seconds": 9.04
+  },
+  {
+    "suite_version": "simplicity-1",
+    "minimal_noop": true,
+    "simplicity_reviews": 3,
+    "tests_preserved": true,
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "c7203d46214e5bc45d60a2815a459b8260e2fb5d9af5988e0e6414fa4fcabb42",
+    "case": "indexed",
+    "profile": "Balanced",
+    "config": {
+      "num_thread": 10,
+      "num_ctx": 8192,
+      "max_steps": 40,
+      "workers": 1,
+      "monitor_resources": true
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": true,
+    "seconds": 7.4
+  },
+  {
+    "suite_version": "simplicity-1",
+    "minimal_noop": true,
+    "simplicity_reviews": 1,
+    "tests_preserved": true,
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "code_digest": "c7203d46214e5bc45d60a2815a459b8260e2fb5d9af5988e0e6414fa4fcabb42",
+    "case": "satisfied",
+    "profile": "Balanced",
+    "config": {
+      "num_thread": 10,
+      "num_ctx": 8192,
+      "max_steps": 40,
+      "workers": 1,
+      "monitor_resources": true
+    },
+    "state": "COMPLETED",
+    "independent_pass": true,
+    "observed_failure": false,
+    "seconds": 3.0
+  }
+]

@@ -5,3 +5,9 @@ __pycache__/
 evaluation-results/
 
 releases/
+
+.codex-remote-attachments/
+dist/
+.env
+.env.*
+!.env.example

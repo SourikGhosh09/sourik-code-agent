@@ -1,38 +1,62 @@
-# Local Coding Agent - V1 preview
+# Sourik Code Agent
 
-Double-click **Start V1.cmd** for the new preview or **Start V0.cmd** for the preserved, verified V0 build. **Start Agent.cmd** also starts the current V1 code. Both use the installed local Ollama runtime and models; no paid API is required. Python 3.12 or newer is required (3.14 is installed here).
+Repository: https://github.com/SourikGhosh09/sourik-code-agent (private).
 
-For a fair comparison, use two separate copies of the same small project, one per version. Do not let both versions edit the same folder at once. They share the model server, so run tasks one after the other when comparing speed. Keep **Auto + Quality** in V1 for the recommended 7B model. Speed or Eco can select the less reliable 3B model.
+A local-first desktop coding agent that inspects projects, makes bounded changes, runs approved tests, and repairs failures.
 
-## Try V1
+Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
 
-1. Open or create a project folder and describe a small coding task.
-2. Click Run task. Review each command approval; the app shows the project directory and exact arguments.
-3. Review Progress, Changes and What changed? after the task finishes.
-4. In Project memory, add a project note, inspect a saved verified result, or forget an entry.
-5. In Task history, select an earlier request to load it as a new task. It starts with fresh inspection and a new checkpoint.
+## Setup and commands
 
-The first model request may take a minute while weights load. Stop cancels tools; a pending model request can take up to 120 seconds to return. Hardware/model discovery at startup can briefly block the window in this preview.
+1. Install Python 3.12 or newer with Tk; check with `python -m tkinter`.
+2. Install and run a local Ollama server and a suitable coding model. Recorded evaluations used `qwen2.5-coder:7b`; downloads are separate from this repository.
+3. From the checkout run `python -m local_agent`.
+4. Select a small project copy, enter a goal and review every command approval. Auto + Quality selects among installed models according to detected resources.
 
-## What changed from V0
+There are no third-party Python dependencies or required environment variables. The app does not load `.env`; configure it through the UI. No package installation is needed to run from the checkout. A distributable installer/build pipeline is not implemented.
 
-- Repository summaries are ranked against the task, with a persistent hash cache, Python imports/symbols, basic JavaScript/TypeScript symbols/imports, and dependency manifests.
-- Verified task memories include their source task and file fingerprints. Changed evidence prevents automatic reuse. User notes remain visible and removable, and never grant permissions.
-- Quality/Speed preference and optional CPU/context targets sit alongside AI power. RAM pressure is sampled between model requests, at most once per 15 seconds; low available RAM reduces subsequent context/thread targets.
-- Recent projects and task history help return to work. Recovery checks saved fingerprints and asks separately before overwriting later edits.
+```powershell
+python -m local_agent
+python -m unittest discover -v
+python -m compileall -q local_agent scripts tests
+python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity
+```
 
-## Permissions and limits
+The final command needs Ollama and the model. Its calculator-only approval callback must never be reused for arbitrary projects. Compilation checks syntax; it is not an installer build. CI runs infrastructure tests without downloading models and cannot certify model quality.
 
-Commands require explicit approval and execute with your Windows permissions. **Neither version is an OS sandbox.** Approved programs may access files or the network outside the project. Recovery only covers tracked project files.
+`Start V1.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. `Start V0.cmd` additionally needs the generated `releases/v0-462a311` snapshot; see [deployment](docs/operations/DEPLOYMENT.md). Compare versions on separate project copies, sequentially, because they share the model server.
 
-Repository scans are bounded to 2,000 files, the model map to 100 ranked entries / 12,000 characters, source indexing to 100 KB per file, writes to 200 KB, and checkpoint files to 2 MB. Root ignore rules are conservative; full nested/negation semantics are not implemented. JavaScript/TypeScript extraction is heuristic, not a language-server index. Hash caching saves parsing work; files are still read to check their content. Binary and unreadable files may be omitted.
+## Capabilities and limits
 
-Memory is local in the project's .agent/state.sqlite, capped at 100 V1 records. Verified memories compare scanned text-sized files up to 200 KB, not the entire filesystem. V0's legacy memory is preserved but not treated as verified V1 evidence. User notes may become stale; current files take precedence. This is not a guarantee against all secret formats or malicious repository text.
+Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. Latest recorded evidence: 50 automated tests passed, one Windows symlink fixture skipped, and four real-model calculator cases passed. See [testing](docs/TEST_PLAN.md) and [evidence](docs/evaluation-simplicity.json).
 
-Resource settings are targets rather than exact CPU/RAM/VRAM caps. One worker runs per app instance. Speed prefers a smaller fitting installed model; Quality prefers the largest fitting model unless Eco is selected. RAM backoff only affects later requests, does not unload model weights, and is not a hard OOM guard. GPU telemetry is detected, but automatic GPU-pressure control remains unfinished. Ollama supports the thread/context targets; the OpenAI-compatible adapter does not enforce them.
+Commands run with your OS rights: **there is no OS sandbox or network isolation**. Resource settings are targets, not hard CPU/RAM/VRAM caps. Scans/context are bounded; JS/TS indexing and simplicity checks are heuristic. Startup discovery can block the window. Broader multi-file/language reliability, pressure handling, plugins and model training remain unfinished.
 
-## Verification and continuity
+## Stack and layout
 
-Run `python -m unittest discover -v` for infrastructure tests. Run `python scripts/evaluate_local.py qwen2.5-coder:7b` for the restricted calculator evaluations. That fixture's approval callback must never be used for arbitrary projects.
+Confirmed stack: Python standard library, Tkinter, SQLite and local Ollama or OpenAI-compatible model endpoints. No web frontend, hosted backend, accounts or cloud database.
 
-See [V1_STATUS.md](docs/V1_STATUS.md), [V0_STATUS.md](docs/V0_STATUS.md), and PROJECT_LOG.txt for exact evidence and remaining work. V0's source snapshot is generated from commit 462a311; runtime files and release copies remain excluded from Git. V1 is a preview, with broader phase-2 work still pending. Plugins and model training remain later roadmap phases.
+| Location | Purpose |
+|---|---|
+| `local_agent/` | Existing application package |
+| `tests/`, `scripts/` | Regression tests, restricted evaluations, runtime helper |
+| `specs/` | All 19 preserved original documents |
+| `docs/` | Current specifications, decisions, operations, evidence |
+| `src/.gitkeep` | Requested pack placeholder; not another application |
+| `.agent/`, `.runtime/`, `evaluation-results/`, `releases/`, `dist/` | Local/generated data excluded from Git |
+
+## Documentation index
+
+- [PRD](docs/PRD.md), [features](docs/FEATURES.md), [flows](docs/USER_FLOWS.md), [UI](docs/UI_SPEC.md)
+- [Architecture](docs/ARCHITECTURE.md), [data](docs/DATA_MODEL.md), [communication](docs/API_SPEC.md), [tests](docs/TEST_PLAN.md)
+- [Security](SECURITY.md), [deployment](docs/operations/DEPLOYMENT.md), [runbook](docs/operations/RUNBOOK.md)
+- [Desktop decision](docs/DECISIONS/001-local-desktop.md), [simplicity decision](docs/DECISIONS/002-deterministic-simplicity.md)
+- [Tasks](TASKS.md), [handover](HANDOVER.md), [agent instructions](AGENTS.md), [changelog](CHANGELOG.md)
+- [Simplicity details](docs/SIMPLICITY.md), [extension boundaries](docs/EXTENSIONS.md), [plan](IMPLEMENTATION_PLAN.md), [log](PROJECT_LOG.txt)
+- Historical [V0](docs/V0_STATUS.md) and [V1](docs/V1_STATUS.md) reports describe their tested revisions.
+
+## Rules, assumptions and questions
+
+Original precedence remains in [the master pack](specs/00_MASTER_PROJECT_PACK.txt). Inspect current code; prefer the smallest correct change without weakening quality, permissions or tests. Preserve source specs and exclude local data/secrets from Git. Update PROJECT_LOG after meaningful work.
+
+Assumption: Windows remains the primary preview target; other platforms need validation. Future ideas are not delivered features. Open: representative acceptance projects, supported hardware/OS, distribution/license and stronger OS isolation. Next step: evaluate realistic multi-file projects before expanding architecture.
