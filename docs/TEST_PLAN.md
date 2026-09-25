@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: latest recorded 51 tests, 50 passed, one skipped because Windows could not create a symlink fixture. Real junction checks passed.
+- python -m unittest discover -v: latest recorded 54 tests, 53 passed, one skipped because Windows could not create a symlink fixture. Real junction checks passed.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -25,3 +25,11 @@ No account-authentication or API-server tests apply. Authorization covers comman
 Done means: inspect relevant code, implement minimally, run relevant regressions, review Git diff, repair failures and update PROJECT_LOG with evidence and limits. Model-behavior changes need real-model hashes/independent outcomes for acceptance. Keep raw outputs/downloads out of Git. Never reuse the evaluator's fixture-only approval on arbitrary projects.
 
 Pending: multi-file/language cases, repeated controlled comparison, fresh-machine setup, manual accessibility journeys, pressure/OOM and future isolation tests. Measure before expanding architecture.
+
+## Initial multi-file evaluation - 2026-09-26
+
+Run `python scripts/evaluate_local.py qwen2.5-coder:7b --multifile` for two fresh invoice projects. Separate validation, line-item and invoice modules exercise imported behavior and two arithmetic defects. Existing tests/validation/README must remain intact; independent checks cover zero quantities, full discount and invalid inputs.
+
+Result: one run failed at the step limit after repeatedly patching the already-correct invoice function; one completed in 30.96 seconds, changing exactly line_items.py and invoice.py. Both preserved tests/validation; no extra files or dependencies were accepted. [Exact results and hashes](evaluation-multifile.json). The first failure took 76.67 seconds. This is mixed evidence, not reliable multi-file acceptance or a broad benchmark.
+
+Automated approval only permits unittest discovery on AST-identical known buggy/fixed fixture variants. It rejects changed tests/validation, extra executable files and arbitrary commands. This intentionally constrained harness cannot evaluate unrestricted implementations and must never be used on user projects. Production code and its permissions did not change in this stage.

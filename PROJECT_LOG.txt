@@ -125,3 +125,13 @@ Remaining: Representative multi-file evaluation, fresh-machine setup, responsive
 UPDATE: Private GitHub upload verified
 Date: 2026-09-25
 Result: Pushed the project and its preserved history to https://github.com/SourikGhosh09/sourik-code-agent on master. GitHub confirms private visibility and the remote commit matches local source. Hosted CI started; its result was still pending at this check. The source ZIP is generated from committed files with one sourik-code-agent top-level directory and excludes local-only artifacts.
+
+UPDATE: Removed obsolete build and completed initial multi-file evaluation
+Date: 2026-09-26
+User request: Keep only the current version, inspect the repository before changes and implement the smallest correct solution.
+Removed: releases/v0-462a311, releases/v0-462a311.zip and Start V0.cmd after verifying their absolute paths were inside this project. Current V1, runtime/models, original specifications and historical test evidence remain. Updated active setup references.
+What changed: Extended the existing evaluator with a small invoice project across validation, line-item and invoice modules, repeated twice. Added three infrastructure tests for the fixture and its narrow approval boundary. No application architecture changes or dependencies.
+Checks: 54 infrastructure tests ran: 53 passed, one Windows symlink test skipped. The trusted broken fixture has two failing tests; known minimal repairs pass. Modified tests/validation, added executable code and arbitrary commands are rejected. Previous GitHub publication commits completed hosted CI successfully.
+Real-model result: One run failed after 76.67 seconds at the step limit, repeatedly patching an already-correct invoice function while leaving the line-item defect. A second run passed in 30.96 seconds with exactly two source edits and independent edge-case assertions. Both preserved original tests and validation. No extra files/dependencies were accepted. Exact model, agent and evaluator hashes are in docs/evaluation-multifile.json. Raw output remains ignored.
+Interpretation: This is useful mixed evidence, not reliable multi-file acceptance. The fixture permits only known trusted arithmetic variants for automatic execution and is not a general sandbox or arbitrary-project approval policy.
+Next: Focus on incomplete action fields and repeated-patch recovery, then rerun the same cases. Keep production permissions and tests intact. See REPAIR-001 in TASKS.md. No production fix is claimed in this evaluation-only stage.

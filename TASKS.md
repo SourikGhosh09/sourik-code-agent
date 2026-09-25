@@ -11,11 +11,13 @@ Statuses follow code/evidence, not roadmap promises. References: [PRD](docs/PRD.
 
 ## Next V1 work
 
-- [ ] EVAL-001 - One representative multi-file Python repair fixture. Depends: SIM-001. Ref: R02,R06. Acceptance: independent assertions, original tests, source/model hashes and edit/dependency observations. Tests: fixture validation and repeated model runs; no broad claims from one case.
+- [x] EVAL-001 - One representative multi-file Python repair fixture. Depends: SIM-001. Ref: R02,R06. Acceptance: independent assertions, original tests, source/model hashes and edit/dependency observations. Tests: fixture validation and repeated model runs; no broad claims from one case.
 - [ ] UI-001 - Nonblocking startup discovery. Depends: BASE-001. Ref: R07, [UI](docs/UI_SPEC.md). Acceptance: responsive window with slow/failed discovery and safe close. Tests: delayed/failing discovery and manual launch/close.
 - [ ] UI-002 - Keyboard/screen-reader journey validation. Depends: UI-001. Ref: R07,F01-F05. Acceptance: record focus/labels/scaling/approval/recovery and repair demonstrated barriers. Tests: manual matrix and focused regressions.
 - [ ] INDEX-001 - Representative ignore/import fixture. Depends: V1-001. Ref: R01. Acceptance: reproduce limitation, smallest justified fix. Tests: ranking/ignore boundaries without weaker secret protection.
 - [ ] RESOURCE-001 - Repeatable pressure measurement. Depends: V1-001. Ref: R05. Acceptance: record RAM/VRAM behavior before changes; no hard-cap claim. Tests: simulated telemetry and measured run.
+
+- [ ] REPAIR-001 - Improve action-format validation and repeated-patch recovery. Depends: EVAL-001. Ref: R02, [multi-file evidence](docs/evaluation-multifile.json). Acceptance: reject incomplete tool actions clearly, preserve current failure context, rerun the same two invoice trials without weakening fixture/tests/permissions. Tests: focused regression plus repeated real-model evaluation. Initial EVAL-001 result was one pass and one failure; reliability is not accepted.
 
 ## Security and distribution
 

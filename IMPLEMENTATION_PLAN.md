@@ -1,6 +1,6 @@
 # V1 preview implementation plan
 
-Source precedence remains specs/00_MASTER_PROJECT_PACK.txt. V0 is preserved at commit 462a311 and in releases/v0-462a311 for side-by-side testing.
+Source precedence remains specs/00_MASTER_PROJECT_PACK.txt. V0 history remains at commit 462a311; obsolete local release copies and launcher were removed at the user's request. Only current V1 is maintained locally.
 
 The first V1 preview follows phase 2 of specs/16_ROADMAP.txt:
 

@@ -20,15 +20,16 @@ python -m local_agent
 python -m unittest discover -v
 python -m compileall -q local_agent scripts tests
 python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity
+python scripts/evaluate_local.py qwen2.5-coder:7b --multifile
 ```
 
-The final command needs Ollama and the model. Its calculator-only approval callback must never be reused for arbitrary projects. Compilation checks syntax; it is not an installer build. CI runs infrastructure tests without downloading models and cannot certify model quality.
+The evaluation commands need Ollama and the model. Their fixture-only approval callbacks must never be reused for arbitrary projects. Compilation checks syntax; it is not an installer build. CI runs infrastructure tests without downloading models and cannot certify model quality.
 
-`Start V1.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. `Start V0.cmd` additionally needs the generated `releases/v0-462a311` snapshot; see [deployment](docs/operations/DEPLOYMENT.md). Compare versions on separate project copies, sequentially, because they share the model server.
+`Start V1.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
 
 ## Capabilities and limits
 
-Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. Latest recorded evidence: 50 automated tests passed, one Windows symlink fixture skipped, and four real-model calculator cases passed. See [testing](docs/TEST_PLAN.md) and [evidence](docs/evaluation-simplicity.json).
+Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. Latest recorded evidence: 53 automated tests passed, one Windows symlink fixture skipped, and four previously recorded real-model calculator cases passed. The new two-run invoice evaluation had one pass and one failure; multi-file reliability remains unfinished. See [testing](docs/TEST_PLAN.md) and [evidence](docs/evaluation-simplicity.json).
 
 Commands run with your OS rights: **there is no OS sandbox or network isolation**. Resource settings are targets, not hard CPU/RAM/VRAM caps. Scans/context are bounded; JS/TS indexing and simplicity checks are heuristic. Startup discovery can block the window. Broader multi-file/language reliability, pressure handling, plugins and model training remain unfinished.
 

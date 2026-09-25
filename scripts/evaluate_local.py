@@ -1,6 +1,6 @@
 """Real model acceptance tasks, with independent tests and restricted command approval.
 
-Not a general sandbox. Only this tiny calculator evaluation is approved here.
+Not a general sandbox. Approval is limited to the calculator or trusted invoice fixtures.
 """
 import ast
 import hashlib
@@ -47,6 +47,122 @@ def approve_calculator(root,argv):
     return True
 
 
+
+# Fixed trusted fixture variants keep automated approval specific to this task.
+# This deliberately tests arithmetic repair across imports, not arbitrary code generation.
+INVOICE_FILES = {
+    'validation.py': "def validate_quantity(quantity):\n    if not isinstance(quantity, int) or isinstance(quantity, bool) or quantity < 0:\n        raise ValueError('quantity must be a nonnegative integer')\n",
+    'line_items.py': "from validation import validate_quantity\n\ndef line_total(unit_cents, quantity):\n    validate_quantity(quantity)\n    if unit_cents < 0:\n        raise ValueError('price must be nonnegative')\n    return unit_cents + quantity\n",
+    'invoice.py': "from line_items import line_total\n\ndef invoice_total(items, discount_cents=0):\n    subtotal = sum(line_total(price, quantity) for price, quantity in items)\n    if discount_cents < 0 or discount_cents > subtotal:\n        raise ValueError('discount out of range')\n    return subtotal + discount_cents\n",
+    'test_invoice.py': "import unittest\nfrom invoice import invoice_total\nfrom line_items import line_total\n\nclass InvoiceTests(unittest.TestCase):\n    def test_line(self):\n        self.assertEqual(line_total(125, 3), 375)\n    def test_invoice(self):\n        self.assertEqual(invoice_total([(125, 3), (200, 2)], 75), 700)\n    def test_quantity(self):\n        with self.assertRaises(ValueError):\n            line_total(100, -1)\n    def test_discount(self):\n        with self.assertRaises(ValueError):\n            invoice_total([], 1)\n",
+    'README.md': 'Invoice amounts use integer cents. Multiply price by quantity; subtract the invoice discount. Keep validation and public functions. No dependencies are needed.\n',
+}
+INVOICE_FIXED = {
+    **INVOICE_FILES,
+    'line_items.py': INVOICE_FILES['line_items.py'].replace('unit_cents + quantity', 'unit_cents * quantity'),
+    'invoice.py': INVOICE_FILES['invoice.py'].replace('subtotal + discount_cents', 'subtotal - discount_cents'),
+}
+
+
+def approve_invoice(root, argv):
+    if not argv or argv[0] not in ('python', sys.executable):
+        return False
+    if argv[1:] not in (['-m', 'unittest', 'discover'], ['-m', 'unittest', 'discover', '-v']):
+        return False
+    try:
+        for name, original in INVOICE_FILES.items():
+            path = root / name
+            if path.is_symlink() or path.is_junction() or not path.is_file():
+                return False
+            actual = path.read_text(encoding='utf-8')
+            if name in ('line_items.py', 'invoice.py'):
+                # AST identity allows comments/formatting, but no new executable behavior.
+                allowed = {ast.dump(ast.parse(original)), ast.dump(ast.parse(INVOICE_FIXED[name]))}
+                if ast.dump(ast.parse(actual)) not in allowed:
+                    return False
+            elif actual != original:
+                return False
+        for path in root.rglob('*'):
+            relative = path.relative_to(root)
+            if path.is_symlink() or path.is_junction():
+                return False
+            if relative.parts[0] == '.agent':
+                continue
+            if path.is_file() and str(relative) not in INVOICE_FILES and str(relative) != 'PROJECT_LOG.txt':
+                # Reject added modules, bytecode and startup customizations as well.
+                return False
+    except (OSError, UnicodeError, SyntaxError):
+        return False
+    return True
+
+
+def evaluate_multifile(base, model_runtime, model, model_digest, code_digest):
+    results = []
+    for repeat in range(1, 3):
+        root = base / f'invoice-{repeat}'
+        root.mkdir()
+        for name, content in INVOICE_FILES.items():
+            (root / name).write_text(content, encoding='utf-8')
+        events = []
+        def emit(event):
+            events.append(event)
+            print(root.name, event['kind'], json.dumps(event['data'])[:1000], flush=True)
+        config = preference_profile(detect(root), 'Balanced')
+        agent = Agent(root, model_runtime, config, emit, lambda argv: approve_invoice(root, argv))
+        goal = ('Repair this multi-file invoice project. Inspect its modules and run the existing tests first. '
+                'Line totals must multiply integer cents by quantity; invoice totals must subtract the discount. '
+                'Preserve validation, public functions, README and existing tests. Reuse the existing modules; '
+                'add no files or dependencies. Only python -m unittest discover is approved. '
+                'This controlled evaluation accepts only arithmetic-expression repairs to the two existing functions.')
+        started = time.monotonic()
+        state = agent.run(goal)
+        approved = approve_invoice(root, ['python', '-m', 'unittest', 'discover'])
+        independent = False
+        if approved:
+            # Execute only AST-identical trusted fixture variants, independently of model tests.
+            checks = """from invoice import invoice_total
+from line_items import line_total
+assert line_total(125, 3) == 375
+assert line_total(999, 0) == 0
+assert invoice_total([(125, 3), (200, 2)], 75) == 700
+assert invoice_total([], 0) == 0
+assert invoice_total([(25, 4)], 100) == 0
+for quantity in (-1, 1.5, True):
+    try: line_total(100, quantity)
+    except ValueError: pass
+    else: raise AssertionError('invalid quantity accepted')
+for items, discount in (([], 1), ([(100, 1)], -1), ([(100, 1)], 101)):
+    try: invoice_total(items, discount)
+    except ValueError: pass
+    else: raise AssertionError('invalid discount accepted')
+try: line_total(-1, 1)
+except ValueError: pass
+else: raise AssertionError('negative price accepted')
+"""
+            check = subprocess.run([sys.executable, '-I', '-B', '-c',
+                'import sys; sys.path.insert(0, ' + repr(str(root)) + ');\n' + checks],
+                capture_output=True, text=True, timeout=15)
+            independent = check.returncode == 0
+            (base / f'invoice-{repeat}-independent.txt').write_text(check.stdout + check.stderr, encoding='utf-8')
+        changed = [name for name, original in INVOICE_FILES.items()
+                   if not (root / name).exists() or (root / name).read_text(encoding='utf-8') != original]
+        preserved = all((root / name).exists() and (root / name).read_text(encoding='utf-8') == INVOICE_FILES[name]
+                        for name in ('test_invoice.py', 'validation.py', 'README.md'))
+        observed = any(e['kind'] == 'observation' and isinstance(e['data'], dict)
+                       and e['data'].get('exit_code', 0) != 0 for e in events)
+        reviews = sum(e['kind'] == 'simplicity' and e['data'].get('phase') == 'review' for e in events)
+        passed = state == 'COMPLETED' and independent and preserved and observed and reviews > 0 and approved
+        result = dict(suite_version='multifile-1', case=root.name, model=model, model_digest=model_digest,
+                      code_digest=code_digest, evaluator_digest=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                      state=state, passed=passed, independent_pass=independent, tests_and_validation_preserved=preserved,
+                      observed_failure=observed, simplicity_reviews=reviews, changed_files=changed,
+                      trusted_fixture_only=approved, config=config, seconds=round(time.monotonic()-started, 2))
+        results.append(result)
+        (base / 'results.json').write_text(json.dumps(results, indent=2), encoding='utf-8')
+        print('RESULT', json.dumps(result), flush=True)
+    return 0 if all(r['passed'] for r in results) else 1
+
+
 def main():
     base=Path(__file__).resolve().parents[1]/'evaluation-results'/time.strftime('%Y%m%d-%H%M%S')
     base.mkdir(parents=True)
@@ -55,6 +171,8 @@ def main():
     code_digest=hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in sorted(code_root.glob('*.py')))).hexdigest()
     model_runtime=LocalModel(model)
     model_digest=next((m.get('digest') for m in model_runtime.installed_models() if m.get('name')==model),None)
+    if '--multifile' in sys.argv:
+        return evaluate_multifile(base, model_runtime, model, model_digest, code_digest)
     results=[]
     cases = [('Eco','empty'),('Balanced','broken'),('Balanced','indexed')]
     if '--simplicity' in sys.argv:

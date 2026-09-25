@@ -14,11 +14,11 @@ No required environment values or third-party Python dependencies exist. Setting
 
 No packaged application build exists. python -m compileall -q local_agent scripts tests checks syntax only. Wheel/package installation is unvalidated; checkout execution is the supported preview path.
 
-## Windows launchers and V0
+## Windows launchers
 
 Start V1.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
 
-Start V0.cmd needs releases/v0-462a311, also excluded. With full Git history, generate that directory from git archive 462a311 and extract it there. Source ZIP lacks Git history; use the repository for this comparison. Run versions sequentially on separate copies of a project.
+Only current V1 is retained locally. The obsolete V0 launcher and release copies have been removed; historical source and acceptance records remain in Git.
 
 ## Updates, backups and rollback
 
