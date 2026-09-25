@@ -121,3 +121,7 @@ Checks: Reran all 51 infrastructure tests: 50 passed, one Windows symlink fixtur
 Errors handled: The default command runner could not initialize; authorized elevated commands worked. A large documentation write exceeded Windows command length before writing files; split writes completed. No dependencies were added or removed.
 Publication: Created private repository https://github.com/SourikGhosh09/sourik-code-agent. Source commit/push and ZIP verification follow. Runtime/models, task metadata, raw evaluations, incoming attachments and local release copies are excluded. CI is configured, but a hosted run is not yet claimed.
 Remaining: Representative multi-file evaluation, fresh-machine setup, responsive discovery and manual accessibility validation. See TASKS.md. No OS sandbox or hard resource caps are claimed.
+
+UPDATE: Private GitHub upload verified
+Date: 2026-09-25
+Result: Pushed the project and its preserved history to https://github.com/SourikGhosh09/sourik-code-agent on master. GitHub confirms private visibility and the remote commit matches local source. Hosted CI started; its result was still pending at this check. The source ZIP is generated from committed files with one sourik-code-agent top-level directory and excludes local-only artifacts.
