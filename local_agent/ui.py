@@ -1,3 +1,4 @@
+from . import __version__
 import json
 from pathlib import Path
 import queue
@@ -17,7 +18,7 @@ class App:
         self.agent = None
         self.worker = None
         self.events = queue.Queue()
-        window.title('Local Coding Agent - V1 preview')
+        window.title(f'Sourik Code Agent - V{__version__} preview')
         window.geometry('1000x760')
         window.minsize(780,600)
         style = ttk.Style()

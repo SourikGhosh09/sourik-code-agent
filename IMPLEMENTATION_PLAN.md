@@ -16,3 +16,7 @@ This is a testable V1 preview, not full phase-2 acceptance. Further V1 work incl
 ## Minimal-change policy increment
 
 Reuse the existing scanner, guarded tools, checkpoints and event store. Add one deterministic policy module, planning estimates and short justifications for flagged growth/dependencies/abstractions. Supply the task diff to the existing model before completion; preserve verification and command permissions. Validate with focused policy tests, the existing suite and local-model calculator/no-change cases. See docs/SIMPLICITY.md for current-code findings and limitations.
+
+## V1.1.0 preview
+
+Introduce explicit version labels and make the smallest repair to observed action-contract failures: per-tool required arguments, runtime completeness/no-op validation, and preserved failing-command evidence during repeated-error recovery. Keep architecture, permissions, local models and resource controls. Infrastructure tests and repeated real-model outcomes must be reported separately; no broad reliability claim follows from these fixes.

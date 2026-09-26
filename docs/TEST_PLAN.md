@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: latest recorded 54 tests, 53 passed, one skipped because Windows could not create a symlink fixture. Real junction checks passed.
+- python -m unittest discover -v: latest recorded 57 tests, 56 passed, one skipped because Windows could not create a symlink fixture. Real junction checks passed.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -33,3 +33,9 @@ Run `python scripts/evaluate_local.py qwen2.5-coder:7b --multifile` for two fres
 Result: one run failed at the step limit after repeatedly patching the already-correct invoice function; one completed in 30.96 seconds, changing exactly line_items.py and invoice.py. Both preserved tests/validation; no extra files or dependencies were accepted. [Exact results and hashes](evaluation-multifile.json). The first failure took 76.67 seconds. This is mixed evidence, not reliable multi-file acceptance or a broad benchmark.
 
 Automated approval only permits unittest discovery on AST-identical known buggy/fixed fixture variants. It rejects changed tests/validation, extra executable files and arbitrary commands. This intentionally constrained harness cannot evaluate unrestricted implementations and must never be used on user projects. Production code and its permissions did not change in this stage.
+
+## V1.1.0 preview verification
+
+Three new contract regressions verify required per-tool schema arguments, missing-field recovery retaining failed-test evidence, identical-text patch rejection, and package/application version consistency. Full suite: 56 passed, one Windows symlink fixture skipped. Command approval and path protection remain unchanged. Real-model outcomes for this exact version are recorded separately; the older calculator evidence is historical, not proof of the changed version.
+
+Final V1.1.0 real-model result: both invoice trials failed (140.03 and 132.06 seconds). Both arithmetic files were repaired, but the model also changed the required-unchanged README and repeated writes; fixture execution was denied and the step budget exhausted. The combined tests_and_validation_preserved field includes README preservation; the original test and validation files themselves were unchanged. Independent execution was skipped after the fixture failed its trust check. See [versioned evidence](evaluation-v1.1.0.json). No reliability improvement is claimed.

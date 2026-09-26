@@ -7,7 +7,7 @@ from .storage import Store
 from .tools import Tools, redact
 from .context import repository_map, repair_context, evidence_for, relevant_memory
 from .resources import detect, pressure_adjust
-from .contracts import response_schema
+from .contracts import response_schema, validate_action
 from .simplicity import SimplicityEngine, POLICY
 
 
@@ -70,6 +70,7 @@ class Agent:
             planned = False
             simplicity_required = False
             last_failure = None
+            failed_test = None
             deadline = time.monotonic()+900
             for step in range(self.config.get('max_steps',40)):
                 if self.cancel.is_set():
@@ -136,6 +137,7 @@ class Agent:
                     try:
                         if not planned:
                             raise ValueError('Create a plan first.')
+                        validate_action(response)
                         decision = simplicity.before(response)
                         if decision:
                             self.event('simplicity',decision)
@@ -169,9 +171,11 @@ class Agent:
                         self.event('observation',observation)
                 if observation.get('exit_code',0) != 0 or observation.get('error'):
                     failure = str(observation.get('error') or observation.get('output'))
+                    if observation.get('exit_code', 0) != 0:
+                        failed_test = failure[:4000]
                     if failure == last_failure:
-                        evidence = repair_context(self.tools,failure)
-                        messages = messages[:2]+[{'role':'user','content':'The previous attempt repeated the same failure. Change approach. Search existing code/callers, diagnose the root cause using CURRENT files, and apply the smallest correct repair without weakening tests or protections. Error: '+failure+'\nCurrent files: '+json.dumps(evidence)}]
+                        evidence = repair_context(self.tools,(failed_test or failure))
+                        messages = messages[:2]+[{'role':'user','content':'The previous attempt repeated the same failure. Change approach. Search existing code/callers, diagnose the root cause using CURRENT files, and apply the smallest correct repair without weakening tests or protections. Error: '+failure+'\nLast failing command evidence (may be stale; retest current code): '+str(failed_test or 'none')+'\nCurrent files: '+json.dumps(evidence)}]
                         self.event('recovery','Refreshed current file evidence after a repeated failure.')
                     last_failure = failure
                 if self.tools.verified_revision == self.tools.revision:

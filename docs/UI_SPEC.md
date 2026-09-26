@@ -1,6 +1,6 @@
 # Desktop UI specification
 
-Tk desktop, initially 1000x760 with 780x600 minimum. Product name is Sourik Code Agent; the current window title still says Local Coding Agent - V1 preview. No new visual branding or web/mobile interface is specified.
+Tk desktop, initially 1000x760 with 780x600 minimum. Product name is Sourik Code Agent; the window title shows Sourik Code Agent - V1.1.0 preview from the application version. No new visual branding or web/mobile interface is specified.
 
 | Surface/flow | Purpose and controls | States and interactions |
 |---|---|---|

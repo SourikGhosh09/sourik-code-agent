@@ -1,11 +1,11 @@
 # Current handover
 
-2026-09-26: current V1 preview retained. Removed old V0 release directory, release ZIP and Start V0.cmd at user request. Original specs, Git history and historical acceptance evidence remain. Current launchers share the same V1 implementation.
+Current version: V1.1.0 preview, 2026-09-26. Version appears in app title, local_agent.__version__, package metadata and Start V1.1.0.cmd. Start Agent.cmd opens the current version. Use MAJOR.MINOR.PATCH naming from now on; historical evidence retains original labels.
 
-Completed EVAL-001: added a controlled multi-file invoice fixture and three harness tests. Full suite: 53 passed, one skipped Windows symlink fixture. Real local 7B evaluation: one failed run (repeated patch loop after repairing one module), one successful run (two source files repaired, original tests/validation preserved, independent assertions passed). See docs/evaluation-multifile.json. This is not reliable multi-file acceptance. Production application code was unchanged.
+Implemented: tool-specific required response fields, runtime rejection of incomplete/identical-text patches, and retained failing-command evidence during repeated-error recovery. No dependencies, architecture or permission changes. Full suite: 56 passed and one skipped Windows symlink fixture.
 
-Next: REPAIR-001 in TASKS.md, focused action-format validation and repeated-patch recovery, followed by the same local-model trials. Then UI-001 responsive discovery and accessibility checks. Avoid speculative architecture, dependencies or a new model-based policy layer.
+Acceptance warning: both final invoice real-model trials failed. The model repaired arithmetic but edited the protected-by-task README and repeated writes. The fixture correctly refused execution and the step budget stopped work. Tests/validation files remained intact; the combined preservation metric failed because README changed. Independent checks were not executed on untrusted fixture content. Exact evidence: docs/evaluation-v1.1.0.json. Earlier intermediate trial was one pass/one failure; no reliability improvement is established.
 
-Repository: https://github.com/SourikGhosh09/sourik-code-agent (private). Prior publication commits passed hosted CI; check current commit separately. Runtime/models and task outputs remain local-only. Source ZIP is regenerated from committed files.
+Next: continue REPAIR-001, diagnose budget-feedback confusion and repeated no-op writes with a bounded fix and unchanged evaluation. Do not expand architecture or weaken approval/tests to obtain a pass. UI responsiveness work follows reliability diagnosis.
 
-Read current repository before implementing; choose the smallest correct solution. Preserve specs/user work, explicit production command approval and meaningful tests. No OS sandbox or hard resource caps exist. Update PROJECT_LOG and relevant docs; permanent decisions belong in docs/DECISIONS.
+Only current local app is retained; old V0 copies/launcher are removed. Runtime/models/task outputs are excluded from Git. Read repository/log/specs before changes and prefer the smallest correct solution. No OS sandbox or hard resource caps. Keep permanent decisions in docs/DECISIONS.

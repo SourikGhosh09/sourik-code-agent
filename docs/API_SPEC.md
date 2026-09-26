@@ -21,3 +21,5 @@ contracts.response_schema narrows responses by state. Planning returns plan stri
 Tool-specific path/content/patch/query or argv/timeout/verify fields are defined in contracts.py and tools.py. Successful tools produce bounded observations; errors are observations for diagnosis and cannot verify a task. Completion is available only after current-revision verification; later edits invalidate it. Over-budget completion may require justification. No justification bypasses approval or validation.
 
 This internal schema is not a versioned public SDK. Before changing adapters or contracts, validate state/error behavior against [testing](TEST_PLAN.md) and keep the policy independent of model vendors.
+
+V1.1.0: each tool has its own response-schema branch with required arguments. Runtime checks reject missing fields before simplicity checks or file actions. Existing tool-level argument/path/permission validation remains in place.

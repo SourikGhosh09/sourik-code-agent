@@ -1,0 +1,62 @@
+{
+  "version": "1.1.0",
+  "status": "preview - multi-file acceptance failed",
+  "results": [
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "a2522ebfaf4f45eb0a9437fc2c711e9afe6bfaa708db819e73f67ac40e179065",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": false,
+      "observed_failure": true,
+      "simplicity_reviews": 4,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py",
+        "README.md"
+      ],
+      "trusted_fixture_only": false,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 140.03
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "a2522ebfaf4f45eb0a9437fc2c711e9afe6bfaa708db819e73f67ac40e179065",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": false,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py",
+        "README.md"
+      ],
+      "trusted_fixture_only": false,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 132.06
+    }
+  ]
+}
