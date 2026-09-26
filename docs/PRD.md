@@ -26,3 +26,9 @@ Use bounded scans/context, one worker per app instance, explicit errors and reda
 MVP/V0 covers small-project creation/repair with tests, permissions, history and recovery. V1 adds repository evidence, memory, preferences and simplicity checks. Post-MVP work includes broader acceptance, responsive discovery, fuller indexing and isolation. Plugins, advanced workers and trained models are later roadmap phases. Web hosting, accounts and mobile clients are out of current scope.
 
 Success requires meaningful verification of requested behavior without weakened tests or bypassed approval. Four calculator cases establish a narrow slice, not broad reliability/efficiency. Assumption: local Windows desktop is the initial target. Open: benchmark projects, OS/hardware matrix, packaging/license, isolation mechanism and later plugin trust. Documentation templates do not require new application features.
+
+V1.1.1 checkpoint (2026-09-26): R02/R06 gain repeated-unchanged-write recovery and clarified budget handling. Acceptance is still pending real-model trials and desktop validation; infrastructure coverage is not a reliability claim. No scope or architecture expansion.
+
+V1.2.0 checkpoint (2026-09-26): R07 startup hardware/model discovery runs off-thread with cancellation/error handling. Settings snapshot isolation keeps the current request stable. Automated startup coverage is complete; native desktop acceptance and real-model REPAIR-001 evidence are still pending. No paid/cloud service or new dependency was introduced.
+
+V1.3.0 checkpoint (2026-09-26): R01 gains a documented ignore-pattern subset and static local Python import candidate ranking under existing scan/context bounds. INDEX-001's representative fixture acceptance is met. At the user's request, Windows/UI/model acceptance is deferred while independent development continues; release status remains preview.

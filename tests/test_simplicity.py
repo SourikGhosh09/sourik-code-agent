@@ -155,7 +155,10 @@ class SimplicityTests(unittest.TestCase):
                 if 'simplicity' in action:
                     schema = config['response_schema']
                     shapes = schema.get('anyOf',[schema])
-                    case.assertTrue(all('simplicity' in shape['required'] for shape in shapes))
+                    target = next(shape for shape in shapes if
+                                  ('done' in shape['properties'] if 'done' in action else
+                                   shape['properties'].get('tool', {}).get('enum') == [action['tool']]))
+                    case.assertIn('simplicity', target['required'])
                 return action
         actions = [{'plan':['Implement a necessary feature'], 'change_budget':{'files':0,'new_files':0,'dependencies':0,'complexity':'initial estimate'}},
                    {'tool':'write','path':'app.py','content':'value=3'},

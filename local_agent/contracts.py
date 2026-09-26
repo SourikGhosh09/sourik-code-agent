@@ -44,7 +44,7 @@ def response_schema(planned, verified, simplicity_required=False):
         tool_props = {key: props[key] for key in keys}
         tool_props['tool'] = {'type': 'string', 'enum': [tool]}
         actions.append({'type': 'object', 'properties': tool_props,
-                        'required': ['reason', 'tool', *fields] + (['simplicity'] if simplicity_required else []),
+                        'required': ['reason', 'tool', *fields] + (['simplicity'] if simplicity_required and tool in ('write', 'patch', 'move', 'delete') else []),
                         'additionalProperties': False})
     done={'type':'object','properties':{'done':{'type':'string'},'simplicity':{'type':'string'}},'required':['done']+(['simplicity'] if simplicity_required else []),'additionalProperties':False}
     return {'anyOf': actions + ([done] if verified else [])}

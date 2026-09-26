@@ -1,0 +1,185 @@
+{
+  "version": "1.4.0",
+  "status": "preview; baseline diagnostics, not pressure acceptance",
+  "date": "2026-09-26",
+  "infrastructure": {
+    "tests": 85,
+    "passed": 83,
+    "skipped": 2,
+    "skip_reason": "Windows could not create two symlink fixtures; junction and native Tk tests passed",
+    "compilation": "passed"
+  },
+  "imported_archive": "sourik-code-agent-v1.3.0-preview.zip",
+  "archive_sha256": "9fa4eb27aaa6090570a798fbe6cd8a7d56b918fd295cacbc5c4a4dd4242c4cbf",
+  "diagnostic_sha256": "7e316f6c201f0086c50c5b04d381912e831731416b510a44d77bce8dfaf909fc",
+  "resource_baseline": {
+    "version": "1.4.0",
+    "code_digest": "61ca6b58ff9e54294139c93a5838cfe60b9ced0f2b0cbfffcdfb1f37f313ea5b",
+    "power": "Balanced",
+    "measurement": "actual host snapshots without an induced workload",
+    "units": "RAM and disk in bytes; GPU is raw nvidia-smi text (MiB); targets are not utilization",
+    "actual_samples": [
+      {
+        "elapsed_seconds": 0.053,
+        "hardware": {
+          "threads": 20,
+          "ram": 17032921088,
+          "available": 7155761152,
+          "gpu": "NVIDIA GeForce RTX 3060, 12288 MiB, 11618 MiB",
+          "disk_free": 826602582016
+        },
+        "targets_before": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "targets_after": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "backoff": false
+      },
+      {
+        "elapsed_seconds": 1.115,
+        "hardware": {
+          "threads": 20,
+          "ram": 17032921088,
+          "available": 7080275968,
+          "gpu": "NVIDIA GeForce RTX 3060, 12288 MiB, 11620 MiB",
+          "disk_free": 826602582016
+        },
+        "targets_before": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "targets_after": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "backoff": false
+      },
+      {
+        "elapsed_seconds": 2.174,
+        "hardware": {
+          "threads": 20,
+          "ram": 17032921088,
+          "available": 6974156800,
+          "gpu": "NVIDIA GeForce RTX 3060, 12288 MiB, 11607 MiB",
+          "disk_free": 826602582016
+        },
+        "targets_before": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "targets_after": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "backoff": false
+      }
+    ],
+    "simulated_policy_checks": [
+      {
+        "scenario": "normal",
+        "available_ram_bytes": 8589934592,
+        "targets_before": {
+          "num_thread": 4,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "targets_after": {
+          "num_thread": 4,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        }
+      },
+      {
+        "scenario": "low",
+        "available_ram_bytes": 1073741824,
+        "targets_before": {
+          "num_thread": 4,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "targets_after": {
+          "num_thread": 2,
+          "num_ctx": 2048,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        }
+      },
+      {
+        "scenario": "recovered",
+        "available_ram_bytes": 8589934592,
+        "targets_before": {
+          "num_thread": 2,
+          "num_ctx": 2048,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "targets_after": {
+          "num_thread": 2,
+          "num_ctx": 2048,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        }
+      },
+      {
+        "scenario": "unavailable",
+        "available_ram_bytes": null,
+        "targets_before": {
+          "num_thread": 2,
+          "num_ctx": 2048,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "targets_after": {
+          "num_thread": 2,
+          "num_ctx": 2048,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        }
+      }
+    ],
+    "limits": [
+      "No model inference or stress workload was run.",
+      "Missing telemetry is unknown, not zero.",
+      "No CPU utilization, temperature, process memory or hard-cap measurement.",
+      "RAM backoff changes future targets, not loaded model memory."
+    ]
+  },
+  "real_model_evaluation": "not run in this increment",
+  "remaining": [
+    "Repeatable inference-load/pressure measurement",
+    "Native manual startup/accessibility matrix",
+    "Real-model invoice acceptance"
+  ]
+}

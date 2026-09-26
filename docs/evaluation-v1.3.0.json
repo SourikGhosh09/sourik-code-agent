@@ -1,0 +1,57 @@
+{
+  "version": "1.3.0",
+  "date": "2026-09-26",
+  "status": "preview - representative indexing checks passed; user validation deferred",
+  "code_digest": "188ab79b04639033ed7877b6350b098432c5bcdaf50e229f23a4bee719227b60",
+  "evaluator_digest": "a5c75a9b1c3bbe3cba8c6f75a93180a5d52dc5ecbd246d042e93d01cbf97cac5",
+  "environment": {
+    "platform": "Linux without display",
+    "python": "3.12.14"
+  },
+  "infrastructure": {
+    "indexing_tests": {
+      "run": 10,
+      "passed": 10
+    },
+    "focused_suite": {
+      "run": 40,
+      "passed": 40
+    },
+    "full_suite": {
+      "run": 82,
+      "passed": 78,
+      "skipped": 2,
+      "errors": 2,
+      "skip_reasons": [
+        "Windows portable runtime launcher",
+        "Windows junction fixture"
+      ],
+      "error_reason": "Native Tk construction: no display name and no DISPLAY environment variable"
+    },
+    "negative_control": "Both rooted-ignore and integrated relative-import regressions fail on V1.2.0",
+    "git_comparison": {
+      "git_version": "2.51.1",
+      "scenarios": 12,
+      "paths_per_scenario": 17,
+      "all_matched": true,
+      "scope": "documented subset; no runtime Git dependency"
+    },
+    "compileall": "passed"
+  },
+  "real_model": {
+    "status": "deferred; not run",
+    "results": []
+  },
+  "acceptance": {
+    "INDEX-001": "scoped representative fixture accepted",
+    "UI-001": "native acceptance deferred",
+    "UI-002": "deferred",
+    "REPAIR-001": "real-model trials deferred",
+    "next_independent_item": "RESOURCE-001"
+  },
+  "limitations": [
+    "Case-sensitive documented ignore subset only; no backslash escapes or global/info excludes",
+    "Python imports are static existing candidates, not runtime resolution",
+    "No real-model reliability improvement established"
+  ]
+}

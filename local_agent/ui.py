@@ -18,6 +18,9 @@ class App:
         self.agent = None
         self.worker = None
         self.events = queue.Queue()
+        self.preparing = False
+        self.startup_cancel = threading.Event()
+        self.closed = False
         window.title(f'Sourik Code Agent - V{__version__} preview')
         window.geometry('1000x760')
         window.minsize(780,600)
@@ -121,9 +124,9 @@ class App:
                 self.project_picker.configure(values=self.recent_projects)
             except (ValueError,OSError):
                 pass
-        window.after(200,self.refresh_project)
+        self.refresh_timer = window.after(200,self.refresh_project)
         window.protocol('WM_DELETE_WINDOW',self.close)
-        window.after(100,self.poll)
+        self.poll_timer = window.after(100,self.poll)
 
     def choose(self):
         folder = filedialog.askdirectory(mustexist=False,title='Choose or create your project folder')
@@ -148,41 +151,105 @@ class App:
         return bool(result and result[0])
 
     def run(self):
-        if self.worker and self.worker.is_alive():
+        if self.closed or self.preparing or (self.worker and self.worker.is_alive()):
             return
-        root = Path(self.project.get())
         goal = self.goal.get('1.0','end').strip()
-        if not self.project.get() or not goal:
+        if not self.project.get().strip() or not goal:
             messagebox.showinfo('Start a task','Choose a project folder and describe what you want to build.')
             return
         try:
-            root.mkdir(parents=True,exist_ok=True)
-            model = LocalModel(self.model.get(),self.endpoint.get(),self.backend.get())
-            hardware = detect(root)
-            config = preference_profile(hardware,self.power.get(),self.preference.get(),int(self.cpu_target.get()) if self.cpu_target.get().strip() else None,int(self.context_target.get()) if self.context_target.get().strip() else None)
-            if self.automodel.get() and self.backend.get() == 'ollama':
-                model.model = choose_model(hardware,model.installed_models(),'Eco' if self.preference.get()=='Speed' else self.power.get())
-                self.model.set(model.model)
-            self.append('Progress','Using local model: '+self.model.get())
-            self.agent = Agent(root,model,config,self.events.put,self.approve)
-            self.settings.parent.mkdir(exist_ok=True)
-            self.recent_projects = [str(root)]+[p for p in self.recent_projects if p != str(root)][:9]
-            self.project_picker.configure(values=self.recent_projects)
-            self.settings.write_text(json.dumps({**{name:getattr(self,name).get() for name in ('project','power','model','endpoint','backend','automodel','preference','cpu_target','context_target')},'recent_projects':self.recent_projects}))
-            self.append('Progress',f'Using {config["num_thread"]} model CPU threads; {config["num_ctx"]} context budget. These are runtime targets, not hard OS memory limits.')
+            # Tk values are captured on the UI thread. Later edits apply to the next run.
+            options = {name:getattr(self,name).get() for name in
+                       ('project','power','model','endpoint','backend','automodel','preference','cpu_target','context_target')}
+            root = Path(options['project']).expanduser().resolve()
+            cpu = int(options['cpu_target']) if options['cpu_target'].strip() else None
+            context = int(options['context_target']) if options['context_target'].strip() else None
+            model = LocalModel(options['model'],options['endpoint'],options['backend'])
+            self.startup_cancel = threading.Event()
+            self.preparing = True
             self.run_button.configure(state='disabled')
-            self.worker = threading.Thread(target=self.agent.run,args=(goal,),daemon=True)
+            self.status.set('Preparing · Checking hardware and local models')
+            self.append('Progress','Checking this computer and your local model settings. You can stop or close during this check.')
+            self.worker = threading.Thread(target=self.discover,
+                args=(root,goal,options,model,cpu,context,self.startup_cancel),daemon=True)
             self.worker.start()
         except Exception as exc:
+            self.preparing = False
+            self.run_button.configure(state='normal')
+            self.status.set('Could not start · Check your settings and try again')
+            messagebox.showerror('Could not start',str(exc))
+
+    def discover(self, root, goal, options, model, cpu, context, cancel):
+        """Only blocking discovery and queue writes here; never access Tk from a worker."""
+        result = {'root':root,'goal':goal,'options':options,'model':model}
+        try:
+            if cancel.is_set():
+                return
+            root.mkdir(parents=True,exist_ok=True)
+            hardware = detect(root)
+            if cancel.is_set():
+                return
+            result['config'] = preference_profile(hardware,options['power'],options['preference'],cpu,context)
+            if options['automodel'] and options['backend'] == 'ollama':
+                model.model = choose_model(hardware,model.installed_models(),
+                                           'Eco' if options['preference']=='Speed' else options['power'])
+        except Exception as exc:
+            result['error'] = str(exc)
+        finally:
+            self.events.put({'kind':'startup','data':result})
+
+    def finish_startup(self, result):
+        if self.closed or not self.preparing:
+            return
+        self.preparing = False
+        if self.startup_cancel.is_set():
+            self.run_button.configure(state='normal')
+            self.status.set('Cancelled · No task started')
+            self.append('Progress','Startup cancelled. No agent task or command was started.')
+            return
+        if 'error' in result:
+            self.run_button.configure(state='normal')
+            self.status.set('Could not start · Check your settings and try again')
+            self.append('Progress','Could not prepare the local model: '+result['error'])
+            messagebox.showerror('Could not start',result['error'])
+            return
+        root,goal,options,model,config = (result[key] for key in ('root','goal','options','model','config'))
+        previous_agent = self.agent
+        agent = None
+        try:
+            agent = Agent(root,model,config,self.events.put,self.approve)
+            self.settings.parent.mkdir(parents=True,exist_ok=True)
+            self.recent_projects = [str(root)]+[p for p in self.recent_projects if p != str(root)][:9]
+            self.project_picker.configure(values=self.recent_projects)
+            saved = {**options,'project':str(root),'model':model.model,'recent_projects':self.recent_projects}
+            self.settings.write_text(json.dumps(saved),encoding='utf-8')
+            # Don't overwrite settings the user changed while discovery was running.
+            if all(getattr(self,name).get() == options[name] for name in
+                   ('model','endpoint','backend','automodel','power','preference')):
+                self.model.set(model.model)
+            self.append('Progress','Using local model: '+model.model)
+            self.append('Progress',f'Using {config["num_thread"]} model CPU threads; {config["num_ctx"]} context budget. These are runtime targets, not hard OS memory limits.')
+            self.agent = agent
+            self.worker = threading.Thread(target=agent.run,args=(goal,),daemon=True)
+            self.worker.start()
+        except Exception as exc:
+            if agent:
+                agent.store.close()
+            self.agent = previous_agent
+            self.run_button.configure(state='normal')
+            self.status.set('Could not start · Check your settings and try again')
             messagebox.showerror('Could not start',str(exc))
 
     def stop(self):
-        if self.agent:
+        if self.preparing:
+            self.startup_cancel.set()
+            self.status.set('Stopping startup · Waiting for the current check to return')
+        elif self.agent and self.worker and self.worker.is_alive():
             self.agent.cancel.set()
             self.status.set('Stopping · A model request may take up to 120 seconds to return')
 
     def rollback(self):
-        if not self.agent or (self.worker and self.worker.is_alive()):
+        if not self.agent or self.preparing or (self.worker and self.worker.is_alive()):
             return
         if messagebox.askyesno('Restore checkpoint','Restore tracked files to their contents before this task? Later edits to those files will be replaced.'):
             try:
@@ -194,7 +261,7 @@ class App:
                 messagebox.showerror('Recovery failed',str(exc))
 
     def restore_saved(self):
-        if self.worker and self.worker.is_alive():
+        if self.preparing or (self.worker and self.worker.is_alive()):
             return
         root=Path(self.project.get())
         if not root.is_dir():
@@ -217,7 +284,7 @@ class App:
             '\n'.join(conflicts[:15])+'\n\nOverwrite these later edits with the saved versions?')
 
     def refresh_project(self):
-        if self.worker and self.worker.is_alive():
+        if self.preparing or (self.worker and self.worker.is_alive()):
             return
         root = Path(self.project.get())
         if not self.project.get() or not root.is_dir():
@@ -247,7 +314,7 @@ class App:
             self.memory_detail.set(item['value'][:1800]+'\nSource: '+(item['task'] or 'Your project note')+' · Evidence files: '+str(len(item['evidence'])))
 
     def add_note(self):
-        if self.worker and self.worker.is_alive(): return
+        if self.preparing or (self.worker and self.worker.is_alive()): return
         if not self.project.get() or not Path(self.project.get()).is_dir(): return
         value = simpledialog.askstring('Project note','What should the agent remember about this project?',parent=self.window)
         if value and value.strip():
@@ -260,7 +327,7 @@ class App:
         if self.memory_root != str(Path(self.project.get()).resolve()):
             self.refresh_project()
             return
-        if self.worker and self.worker.is_alive(): return
+        if self.preparing or (self.worker and self.worker.is_alive()): return
         selected = self.memory_list.curselection()
         if selected:
             store = Store(self.project.get(),recover=False)
@@ -272,7 +339,7 @@ class App:
         if self.memory_root != str(Path(self.project.get()).resolve()):
             self.refresh_project()
             return
-        if self.worker and self.worker.is_alive(): return
+        if self.preparing or (self.worker and self.worker.is_alive()): return
         selected = self.history_list.curselection()
         if selected:
             self.goal.delete('1.0','end')
@@ -280,11 +347,15 @@ class App:
             self.status.set('Request loaded · Run starts a fresh inspection and checkpoint')
 
     def poll(self):
+        if self.closed:
+            return
         try:
             while True:
                 event = self.events.get_nowait()
                 kind,data = event['kind'],event['data']
-                if kind == 'approval':
+                if kind == 'startup':
+                    self.finish_startup(data)
+                elif kind == 'approval':
                     argv,ready,result = data
                     result.append(False if self.agent.cancel.is_set() else messagebox.askyesno('Approve project command', 'The agent wants to run:\n\n'+repr(argv)+'\n\nIn: '+str(self.agent.root)+'\n\nThis executes code with your Windows permissions and may access files or the network. Allow this command?'))
                     ready.set()
@@ -292,7 +363,7 @@ class App:
                     self.status.set(data.replace('_',' ').title())
                     if data in ('COMPLETED','FAILED','CANCELLED'):
                         self.run_button.configure(state='normal')
-                        self.window.after(100,self.refresh_project)
+                        self.refresh_timer = self.window.after(100,self.refresh_project)
                         try:
                             self.append('What changed?',self.agent.tools.path('PROJECT_LOG.txt').read_text(encoding='utf-8'))
                             self.append('Changes',self.agent.tools.diff())
@@ -326,14 +397,22 @@ class App:
                     self.append('Progress',data if isinstance(data,str) else json.dumps(data,indent=2))
         except queue.Empty:
             pass
-        self.window.after(100,self.poll)
+        self.poll_timer = self.window.after(100,self.poll)
 
     def close(self):
-        if self.worker and self.worker.is_alive():
+        if self.closed:
+            return
+        if self.preparing:
+            # Discovery cannot create an Agent or touch Tk; discard its queued result.
+            self.startup_cancel.set()
+        elif self.worker and self.worker.is_alive():
             self.stop()
             messagebox.showinfo('Stopping task','Please wait for the task to stop, then close the window again.')
-        else:
-            self.window.destroy()
+            return
+        self.closed = True
+        for timer in (self.poll_timer,self.refresh_timer):
+            self.window.after_cancel(timer)
+        self.window.destroy()
 
 
 def main():

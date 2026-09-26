@@ -17,3 +17,9 @@ Diagnose on disposable copies. Do not approve unfamiliar commands merely to clea
 | Secret exposure | Stop sharing artifacts, identify affected credential without posting it, rotate with issuer and inspect history. Redaction is not guaranteed. |
 
 Account authentication, hosted APIs, scheduled jobs and versioned migrations do not exist, so those incident procedures do not apply. Approved commands use OS rights. Backups, private storage and human command review remain needed. See [security](../../SECURITY.md).
+
+## V1.2.0 startup troubleshooting
+
+Preparing means hardware/model discovery is running in the background. Stop discards the result once the current check returns; closing during preparation exits without launching a task later. If discovery fails, inspect the error, confirm the local server/model settings and press Run again. The Windows launcher may wait for its portable server before opening the UI; that separate helper is unchanged. Source ZIPs contain no runtime/models. A frozen project-history/database operation is outside this discovery fix and should be reported separately.
+
+For resource diagnosis, run `python scripts/measure_resources.py --samples 3 --interval 1 --output evaluation-results/resource-baseline.json` with a new output filename. Compare actual snapshots separately from simulated policy checks. No model or stress workload is started; do not infer CPU utilization or hard-cap guarantees from configured targets.

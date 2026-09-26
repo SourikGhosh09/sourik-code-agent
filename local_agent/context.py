@@ -2,7 +2,7 @@
 import ast
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 from .tools import redact
 
@@ -21,7 +21,11 @@ def describe(name, content):
                 if isinstance(node, ast.Import):
                     row['imports'].extend(a.name for a in node.names)
                 elif isinstance(node, ast.ImportFrom):
-                    row['imports'].append(node.module or '')
+                    module = '.'*node.level+(node.module or '')
+                    if node.module:
+                        row['imports'].append(module)
+                    row['imports'].extend(module+('.' if node.module else '')+alias.name
+                                          for alias in node.names if alias.name != '*')
         elif Path(name).suffix in ('.js', '.jsx', '.ts', '.tsx'):
             row['symbols'] = re.findall(r'\b(?:function|class|interface|type|const)\s+(\w+)', content)[:40]
             row['imports'] = re.findall(r'''(?:from\s*|require\(\s*)['"]([^'"]+)''', content)[:20]
@@ -39,6 +43,29 @@ def describe(name, content):
     return row
 
 
+def python_import_paths(row, names):
+    """Resolve existing module/package candidates; never import project code."""
+    parent = PurePosixPath(Path(row['path']).as_posix()).parent.parts
+    related = set()
+    for module in row.get('imports',[]):
+        level = len(module)-len(module.lstrip('.'))
+        if level:
+            if level > len(parent):
+                continue
+            bases = [PurePosixPath(*parent[:len(parent)-level+1])]
+        else:
+            bases = [PurePosixPath('.'), PurePosixPath('src')]
+        suffix = module[level:].replace('.','/')
+        for base in bases:
+            stem = base/suffix
+            candidates = {str(stem)+'.py', str(stem/'__init__.py')}
+            matches = candidates & names
+            related.update(matches)
+            if matches:
+                break
+    return related
+
+
 def repository_map(tools, limit=100, goal='', store=None):
     old = store.index_rows() if store else {}
     rows = {}
@@ -49,7 +76,7 @@ def repository_map(tools, limit=100, goal='', store=None):
                 row, digest = {'path':name, 'language':path.suffix, 'large':True}, ''
             else:
                 raw = path.read_bytes()
-                digest = hashlib.sha256(raw).hexdigest()
+                digest = hashlib.sha256(b'index-v2\0'+raw).hexdigest()
                 row = old[name][1] if name in old and old[name][0] == digest else describe(name, redact(raw.decode('utf-8')))
             rows[name] = (digest, row)
         except (OSError, ValueError, UnicodeError):
@@ -62,8 +89,16 @@ def repository_map(tools, limit=100, goal='', store=None):
         words = tokens(name + ' ' + ' '.join(row.get('symbols', [])))
         return 5*len(query & words) + (2 if Path(name).name in ('pyproject.toml','package.json','README.md') else 0)
     ranked = sorted((row for _, row in rows.values()), key=lambda r: (-score(r), r['path']))
-    imports = {part for row in ranked[:8] if score(row)>0 for imp in row.get('imports',[]) for part in re.split(r'[./]',imp)}
-    ranked.sort(key=lambda r: (-(score(r)+(2 if Path(r['path']).stem in imports else 0)),r['path']))
+    names = {Path(row['path']).as_posix() for row in ranked}
+    related, import_names = set(), set()
+    for row in ranked[:8]:
+        if score(row) <= 0:
+            continue
+        if row['path'].endswith('.py'):
+            related.update(python_import_paths(row,names))
+        else:
+            import_names.update(part for imp in row.get('imports',[]) for part in re.split(r'[./]',imp))
+    ranked.sort(key=lambda r: (-(score(r)+(2 if Path(r['path']).as_posix() in related or Path(r['path']).stem in import_names else 0)),r['path']))
     result, used = [], 0
     for row in ranked[:limit]:
         length = len(json.dumps(row))

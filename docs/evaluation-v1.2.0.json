@@ -1,0 +1,46 @@
+{
+  "version": "1.2.0",
+  "date": "2026-09-26",
+  "status": "preview - automated startup checks passed; native and model acceptance pending",
+  "code_digest": "924c94f0ff1a601a80a01afb36889b8c5712c307a25545c6bc4bd863e090536a",
+  "evaluator_digest": "a5c75a9b1c3bbe3cba8c6f75a93180a5d52dc5ecbd246d042e93d01cbf97cac5",
+  "environment": {
+    "platform": "Linux without display",
+    "python": "3.12.14"
+  },
+  "infrastructure": {
+    "focused_startup_suite": {
+      "run": 11,
+      "passed": 11,
+      "includes_real_tcl_event_loop": true,
+      "native_widgets_tested": false
+    },
+    "full_suite": {
+      "run": 72,
+      "passed": 68,
+      "skipped": 2,
+      "errors": 2,
+      "skipped_checks": [
+        "Windows portable runtime launcher",
+        "Windows junction fixture"
+      ],
+      "error_checks": [
+        "tests.test_ui.Desktop.test_task_failure_display",
+        "tests.test_v1.V1.test_desktop_memory_and_history"
+      ],
+      "error_reason": "No display name and no DISPLAY environment variable"
+    },
+    "compileall": "passed"
+  },
+  "real_model": {
+    "status": "not run - Ollama unavailable",
+    "results": [],
+    "evaluator_changed": false,
+    "agent_loop_changed": false
+  },
+  "acceptance": {
+    "UI-001": "implementation and automated checks complete; native Windows manual checks pending",
+    "REPAIR-001": "open pending unchanged invoice trials",
+    "UI-002": "pending native accessibility journey"
+  }
+}

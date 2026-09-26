@@ -22,3 +22,5 @@ No dedicated security contact or SLA is configured. Report privately to the repo
 ## Before valuable work
 
 Use a backup/disposable copy; confirm local server; inspect approvals; verify tests and diff; retain checkpoints; protect local metadata; avoid concurrent writers. Stronger isolation and signed distribution need separate design/testing.
+
+V1.3.0 scanner clarification: `.gitignore` is a discovery filter, not authorization. Root/nested exceptions cannot reinclude hard-excluded secrets, metadata or linked paths. Direct file tools still apply their existing path guards and approved commands still run with user OS permissions. Static Python import candidates are intersected with admitted scanned paths; no project import is executed. Only the documented ignore subset is supported; do not rely on an arbitrary ignore pattern to protect a secret.

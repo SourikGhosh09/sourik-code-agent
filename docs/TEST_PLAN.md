@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: latest recorded 57 tests, 56 passed, one skipped because Windows could not create a symlink fixture. Real junction checks passed.
+- python -m unittest discover -v: V1.3.0 Linux run has 82 tests: 78 passed, two Windows-only skips, two Tk errors due to no display. Full suite is not green in this environment. Historical V1.1.0 Windows run had 56 passed and one symlink skip.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -39,3 +39,59 @@ Automated approval only permits unittest discovery on AST-identical known buggy/
 Three new contract regressions verify required per-tool schema arguments, missing-field recovery retaining failed-test evidence, identical-text patch rejection, and package/application version consistency. Full suite: 56 passed, one Windows symlink fixture skipped. Command approval and path protection remain unchanged. Real-model outcomes for this exact version are recorded separately; the older calculator evidence is historical, not proof of the changed version.
 
 Final V1.1.0 real-model result: both invoice trials failed (140.03 and 132.06 seconds). Both arithmetic files were repaired, but the model also changed the required-unchanged README and repeated writes; fixture execution was denied and the step budget exhausted. The combined tests_and_validation_preserved field includes README preservation; the original test and validation files themselves were unchanged. Independent execution was skipped after the fixture failed its trust check. See [versioned evidence](evaluation-v1.1.0.json). No reliability improvement is claimed.
+
+## V1.1.1 preview verification — 2026-09-26
+
+- Added four regressions: scripted invoice repair after repeated unchanged writes (existing trusted fixture, original README/tests/validation intact); successful verification clears old failure output and survives an unchanged write; repeated unchanged writes cannot fabricate verification or approval and stop at the step limit; budget reconsideration permits inspection/testing with no unnecessary files.
+- Updated schema assertions to require explanations for mutations/completion while preserving runtime installation gates. Existing approval, zero-test, file-boundary, post-edit verification and fixture tests remain intact.
+- Focused command: `python -m unittest tests.test_contracts tests.test_simplicity tests.test_failures tests.test_evaluation -v` — 32 passed.
+- Full suite: 61 run, 57 passed, two platform skips (Windows runtime launcher and junction), two errors (`test_task_failure_display`, `test_desktop_memory_and_history`) because Tk cannot connect to a display. Baseline ZIP had the same two errors. Tests were not modified to skip the display requirement.
+- `python -m compileall -q local_agent scripts tests` passed. Two new recovery/schema regressions fail on the unchanged original app and pass on V1.1.1.
+- Real-model command attempted unchanged: `python scripts/evaluate_local.py qwen2.5-coder:7b --multifile`. It stopped during `/api/tags` discovery with connection refused. Zero trials ran; no model digest or independent model result is available. The evaluator and all original fixture text are byte-for-byte unchanged.
+
+Rerun the full suite on the Windows desktop and the same two invoice trials with Ollama. Keep REPAIR-001 open until evidence meets its acceptance criteria. See [machine-readable checkpoint](evaluation-v1.1.1.json).
+
+## V1.2.0 preview verification — 2026-09-26
+
+`python -m unittest tests.test_ui.Startup -v`: 11 passed. Tests use real background threads and queues; UI doubles assert main-thread access. One runs the actual display-free Tcl event loop and handles a callback while hardware discovery is paused. Covers delayed hardware, duplicate Run, cancellation during discovery and after the result is queued, close during model discovery, failure/retry, settings snapshots, invalid input, auto model selection, preference-write failure cleanup, and a real Agent with scripted failed-task output. These tests do not certify native Tk rendering, Windows integration or real-model coding quality.
+
+Full suite: 72 run, 68 passed, two skips (Windows portable launcher and junction checks), two errors at Tk construction (no display). These are the same pre-existing environment limits. Compilation passed. The real-model evaluator, original fixtures, agent loop and approval policies are unchanged from V1.1.1; no new Ollama run was possible in this environment. Evidence: [evaluation-v1.2.0.json](evaluation-v1.2.0.json).
+
+### Pending native Windows startup smoke checks
+
+| Check | Expected result | Recorded status |
+|---|---|---|
+| Open Start Agent.cmd with local Ollama running | V1.2.0 preview window opens and controls work | Pending |
+| Run with Auto model enabled | Preparing is visible; window can be moved/edited; task starts with selected model | Pending |
+| Stop while Preparing | No task/command begins from the cancelled discovery; Run becomes available after check returns | Pending |
+| Close while Preparing | Window closes; no task starts later | Pending |
+| Set server to an unused loopback port and Run with Auto model | Window stays available; error appears; restoring correct server permits retry | Pending |
+| Edit goal/model/project while Preparing | Current run uses captured values; edited values stay for the next run | Pending |
+| Start a normal task and close during execution | Existing Stop-and-wait behavior and command approval remain intact | Pending |
+
+Run `python -m unittest discover -v` on the Windows desktop, then the unchanged two-trial invoice evaluation with Ollama. Keep UI-001 and REPAIR-001 acceptance separate. UI-002 keyboard/screen-reader/scaling journeys remain pending.
+
+## V1.3.0 indexing verification — 2026-09-26
+
+Ten new tests in tests/test_indexing.py cover rooted/nested/directory-only patterns, component/recursive globs, ordered negation, pruned parents, hard secret guards, linked ignore/source rejection, relative import metadata, an integrated checkout repair-context fixture with misleading same-name modules, ordinary src/package candidates, legacy cache refresh/removal and map limits. The two focused ignore/import cases fail against V1.2.0 and pass after correction.
+
+`python -m unittest tests.test_indexing tests.test_agent tests.test_recovery tests.test_simplicity -v`: 40 passed. A separate development comparison with local Git 2.51.1 matched 12 supported rule scenarios over 17 paths each; Git is not called by production or required by unit tests. Full suite: 82 run, 78 passed, two Windows-only skips and the same two no-display Tk construction errors. Compilation passed. See [evidence](evaluation-v1.3.0.json). No new real-model run was attempted.
+
+## Deferred user validation — requested 2026-09-26
+
+These are queued for later; do not require the user to run them before further independent development or claim they passed.
+
+- Windows full suite on the eventual combined preview, including native Tk, junctions and launcher behavior.
+- UI-001 native startup/cancel/close/retry matrix above, plus UI-002 keyboard/screen-reader/scaling journey.
+- Both unchanged real-model invoice trials (REPAIR-001), with source/model/evaluator hashes and independent preservation/behavior outcomes.
+- A representative real user project to assess context relevance; passing static fixtures does not establish coding reliability.
+
+INDEX-001's bounded fixture acceptance is complete. RESOURCE-001 can proceed independently; final release acceptance remains contingent on the pending evidence. No immediate testing action is required from the user.
+
+## V1.4.0 Windows and resource baseline
+
+The supplied V1.3.0 source was run on the actual Windows workspace: 82 tests, 80 passed, two symlink-fixture skips. Its previous no-display GUI errors did not occur. V1.4.0 adds three resource-diagnostic tests: separation of host samples/simulations, low-memory then recovery without raising targets, unknown telemetry and invalid sampling rejection. Combined suite: 85 tests, 83 passed, two symlink skips; native Tk/junction checks and compilation passed.
+
+Run `python scripts/measure_resources.py --samples 3 --interval 1 --output evaluation-results/resource-baseline.json` with a new output filename. Recorded real available RAM was approximately 6.50-6.66 GiB; actual backoff did not occur. Simulated 1 GiB availability reduces future targets, but this does not prove behavior under physical pressure. Raw GPU values are nvidia-smi readings, not model-process usage. [Evidence](evaluation-v1.4.0.json).
+
+The Windows automated full-suite item above is now satisfied for this source. Manual startup/accessibility and real-model invoice checks remain pending. RESOURCE-001 still needs a reproducible inference-load measurement; this baseline induces no workload and cannot establish OOM safety or hard caps.

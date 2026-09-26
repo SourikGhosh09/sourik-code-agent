@@ -1,0 +1,44 @@
+{
+  "version": "1.1.1",
+  "date": "2026-09-26",
+  "status": "preview - real-model acceptance pending",
+  "environment": {
+    "platform": "Linux without display",
+    "python": "3.12.14"
+  },
+  "code_digest": "f140e514c196177ed450d3d372fac2f2f979c523471999ce0157e8496ddbb6e9",
+  "evaluator_digest": "a5c75a9b1c3bbe3cba8c6f75a93180a5d52dc5ecbd246d042e93d01cbf97cac5",
+  "infrastructure": {
+    "full_suite": {
+      "run": 61,
+      "passed": 57,
+      "skipped": 2,
+      "errors": 2,
+      "skip_reasons": [
+        "Windows portable runtime launcher",
+        "Windows junction fixture"
+      ],
+      "error_reason": "Tk GUI tests: no display name and no DISPLAY environment variable",
+      "baseline_same_gui_errors": true
+    },
+    "focused_suite": {
+      "run": 32,
+      "passed": 32
+    },
+    "compileall": "passed",
+    "regression_negative_control": "Two new recovery/schema tests fail against original V1.1.0 app and pass against V1.1.1"
+  },
+  "real_model": {
+    "status": "blocked before trials",
+    "command": "python scripts/evaluate_local.py qwen2.5-coder:7b --multifile",
+    "reason": "Ollama model discovery: loopback connection refused",
+    "model_requested": "qwen2.5-coder:7b",
+    "model_digest": null,
+    "results": []
+  },
+  "acceptance": {
+    "REPAIR-001": "open",
+    "reliability_improvement_established": false,
+    "next": "Windows full suite and unchanged two-trial invoice evaluation"
+  }
+}

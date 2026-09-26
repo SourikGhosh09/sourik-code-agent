@@ -1,11 +1,11 @@
 # Current handover
 
-Current version: V1.1.0 preview, 2026-09-26. Version appears in app title, local_agent.__version__, package metadata and Start V1.1.0.cmd. Start Agent.cmd opens the current version. Use MAJOR.MINOR.PATCH naming from now on; historical evidence retains original labels.
+Current version: V1.4.0 preview. Imported the user-supplied V1.3.0 archive into the existing Git checkout, preserving its improvements. The unfinished earlier local V1.1.1 diff is retained in ignored .runtime/before-v1.3.0-import.patch. Only the current version launcher is retained; Start Agent.cmd opens Start V1.4.0.cmd.
 
-Implemented: tool-specific required response fields, runtime rejection of incomplete/identical-text patches, and retained failing-command evidence during repeated-error recovery. No dependencies, architecture or permission changes. Full suite: 56 passed and one skipped Windows symlink fixture.
+New work: scripts/measure_resources.py provides bounded read-only snapshots using existing telemetry/backoff functions, with a separate deterministic low-memory/recovery sequence. It needs no model, induces no stress, refuses output overwrite and changes no production policy. No dependencies or migrations.
 
-Acceptance warning: both final invoice real-model trials failed. The model repaired arithmetic but edited the protected-by-task README and repeated writes. The fixture correctly refused execution and the step budget stopped work. Tests/validation files remained intact; the combined preservation metric failed because README changed. Independent checks were not executed on untrusted fixture content. Exact evidence: docs/evaluation-v1.1.0.json. Earlier intermediate trial was one pass/one failure; no reliability improvement is established.
+Validation: imported V1.3.0 Windows baseline: 80 passed, two symlink skips. Final V1.4.0: 83 passed, two symlink skips (85 total); native Tk/startup and junction checks passed. Compilation passed. Three actual host snapshots recorded available RAM around 6.50-6.66 GiB and NVIDIA GPU readings; no actual low-memory backoff. See docs/evaluation-v1.4.0.json. Simulated pressure is not real workload evidence.
 
-Next: continue REPAIR-001, diagnose budget-feedback confusion and repeated no-op writes with a bounded fix and unchanged evaluation. Do not expand architecture or weaken approval/tests to obtain a pass. UI responsiveness work follows reliability diagnosis.
+Next: RESOURCE-001 remains open for repeatable inference-load/physical-pressure measurement; manual startup/accessibility and real-model invoice acceptance remain pending. Historical failures are preserved. No full release, OOM safety, hard CPU/RAM/VRAM cap or model-quality improvement is claimed.
 
-Only current local app is retained; old V0 copies/launcher are removed. Runtime/models/task outputs are excluded from Git. Read repository/log/specs before changes and prefer the smallest correct solution. No OS sandbox or hard resource caps. Keep permanent decisions in docs/DECISIONS.
+Read current source, PROJECT_LOG and original specs before changes; use the smallest correct solution. Preserve command approvals, local data and source specs. Runtime/models/raw outputs remain excluded from Git. Permanent decisions go in docs/DECISIONS. Publication target is the existing private GitHub repository.

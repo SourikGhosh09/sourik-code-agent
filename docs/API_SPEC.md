@@ -23,3 +23,9 @@ Tool-specific path/content/patch/query or argv/timeout/verify fields are defined
 This internal schema is not a versioned public SDK. Before changing adapters or contracts, validate state/error behavior against [testing](TEST_PLAN.md) and keep the policy independent of model vendors.
 
 V1.1.0: each tool has its own response-schema branch with required arguments. Runtime checks reject missing fields before simplicity checks or file actions. Existing tool-level argument/path/permission validation remains in place.
+
+V1.1.1: after simplicity reconsideration, required explanation fields apply to mutation branches and completion, not list/read/search/run. Runtime installation gates still require justification before command approval. `unchanged` observations now include `last_failing_command` (text or null), a stale-evidence note and a retest/completion instruction. Repeated unchanged writes use existing recovery events and bounded current-file context; successful verification clears old command failures. No new persisted schema or public API was introduced.
+
+V1.2.0 desktop-only event: `startup` carries captured root/goal/options, a local model object and either resource config or error text through the in-process queue. It is not a persisted agent event, a serializable public API, or a permission grant. The UI consumes it only while preparing and not closed; cancelled results cannot construct an Agent. Worker discovery never accesses Tk. Existing model HTTP contracts/timeouts and task command approval are unchanged.
+
+V1.3.0 repository metadata: Python `imports` strings retain leading dots and imported-name candidates. The existing map/list/search operations observe scoped ignore rules; model actions and command permissions are unchanged. Cached import metadata is refreshed automatically through a parser-versioned fingerprint. No new endpoint or public API.

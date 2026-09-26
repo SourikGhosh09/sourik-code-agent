@@ -17,6 +17,27 @@ def sensitive(path):
     return any(p.lower() in EXCLUDED or p.lower().startswith('.env') or p.lower() in ('credentials', 'id_rsa', 'id_ed25519') or p.lower().endswith(('.pem', '.key', '.pfx')) for p in Path(path).parts)
 
 
+def ignore_match(relative, pattern):
+    """Match our documented ignore subset without letting '*' cross a slash."""
+    anchored = pattern.startswith('/')
+    pattern = pattern.lstrip('/')
+    parts = relative.parts
+    if '/' not in pattern and not anchored:
+        return fnmatch.fnmatchcase(parts[-1],pattern)
+    segments = pattern.split('/')
+    positions = {0}
+    for index, segment in enumerate(segments):
+        if segment == '**':
+            # A trailing '/**' means contents, not the directory itself.
+            offset = 1 if index == len(segments)-1 and index > 0 else 0
+            positions = set(range(min(positions)+offset,len(parts)+1))
+        else:
+            positions = {i+1 for i in positions if i < len(parts) and fnmatch.fnmatchcase(parts[i],segment)}
+        if not positions:
+            return False
+    return len(parts) in positions
+
+
 def redact(text):
     return re.sub(r'(?i)((?:api[_-]?key|password|token|secret)\s*[=:]\s*)[^\s,;]+', r'\1[REDACTED]', str(text))
 
@@ -64,24 +85,56 @@ class Tools:
 
     def files(self):
         found = []
-        patterns = []
-        ignore = self.root/'.gitignore'
-        if ignore.is_file() and not ignore.is_symlink():
-            patterns = [line.strip().rstrip('/') for line in ignore.read_text(encoding='utf-8',errors='replace').splitlines() if line.strip() and not line.startswith(('#','!'))]
-        def ignored(rel):
-            return any(fnmatch.fnmatch(rel.as_posix(),p) or any(fnmatch.fnmatch(part,p) for part in rel.parts) for p in patterns)
+        inherited = {self.root: []}
         for directory, dirs, files in os.walk(self.root, followlinks=False):
-            dirs[:] = [d for d in dirs if not sensitive(Path(directory).relative_to(self.root) / d) and not ignored(Path(directory).relative_to(self.root)/d) and not (Path(directory)/d).is_symlink() and not (hasattr(Path(directory)/d,'is_junction') and (Path(directory)/d).is_junction())]
-            for name in files:
-                rel = str((Path(directory)/name).relative_to(self.root))
-                if rel.lower() != 'project_log.txt' and not sensitive(rel) and not ignored(Path(rel)):
-                    try:
-                        self.path(rel)
-                        found.append(rel)
-                    except (ValueError, PermissionError):
-                        continue
+            directory = Path(directory)
+            rules = list(inherited.pop(directory, []))
+            try:
+                ignore = self.path(str((directory/'.gitignore').relative_to(self.root)))
+                if ignore.is_file() and ignore.stat().st_size <= 200_000:
+                    for line in ignore.read_text(encoding='utf-8',errors='replace').splitlines():
+                        pattern = line.rstrip()
+                        if not pattern or pattern.startswith('#') or '\\' in pattern:
+                            continue  # Escaped patterns are outside the supported subset.
+                        include = pattern.startswith('!')
+                        if include:
+                            pattern = pattern[1:]
+                        directory_only = pattern.endswith('/')
+                        pattern = pattern.rstrip('/')
+                        if pattern:
+                            rules.append((directory,pattern,include,directory_only))
+            except (OSError, ValueError):
+                pass  # Linked/unreadable ignore files never supply rules.
+            def ignored(path, is_dir):
+                excluded = False
+                for base, pattern, include, directory_only in rules:
+                    if (not directory_only or is_dir) and ignore_match(path.relative_to(base),pattern):
+                        excluded = not include
+                return excluded
+            kept = []
+            for name in sorted(dirs):
+                path = directory/name
+                try:
+                    self.path(str(path.relative_to(self.root)))
+                except (ValueError, PermissionError):
+                    continue
+                if not ignored(path,True):
+                    kept.append(name)
+                    inherited[path] = rules
+            dirs[:] = kept
+            for name in sorted(files):
+                path = directory/name
+                rel = str(path.relative_to(self.root))
+                if rel.lower() == 'project_log.txt':
+                    continue
+                try:
+                    self.path(rel)
+                except (ValueError, PermissionError):
+                    continue
+                if not ignored(path,False):
+                    found.append(rel)
                 if len(found) >= 2000:
-                    return found
+                    return sorted(found)
         return sorted(found)
 
     def snapshot(self, name):

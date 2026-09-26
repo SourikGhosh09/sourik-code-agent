@@ -4,7 +4,7 @@ No sign-in exists. OS access to the desktop/project is the current access bounda
 
 ## F01 - Launch and select (R01,R05,R07,R08)
 
-Preconditions: Python/Tk, running local server and installed model. Launch, choose project, inspect Auto/Quality or local settings, enter goal. Empty recent history is normal. Missing model/runtime, invalid endpoint and inaccessible folder must show errors. Discovery can block startup. Success: selected project ready for work; automatic download is not promised.
+Preconditions: Python/Tk, running local server and installed model. Launch, choose project, inspect Auto/Quality or local settings, enter goal. Empty recent history is normal. Missing model/runtime, invalid endpoint and inaccessible folder must show errors. Run starts hardware/model discovery in a background worker with a Preparing status. The window remains available; Stop prevents task startup and close exits without accepting late discovery results. Success: selected project ready for work; automatic download is not promised.
 
 ## F02 - Complete task (R01,R02,R03,R06,R07)
 
@@ -30,3 +30,9 @@ After unwanted/interrupted work, inspect checkpoint/diff and request rollback. C
 ## F05 - Settings (R05,R08)
 
 Choose power and Quality/Speed; optionally set CPU/context, backend, endpoint and model. Reject invalid numeric targets. If no suitable installed model exists, install separately or select a compatible existing one. Low RAM reduces future targets, not necessarily loaded weights. Success: valid settings applied to later work; exact resource percentages are not guaranteed. Compare versions sequentially on separate project copies.
+
+V1.1.1 F02 recovery detail: an unchanged write keeps the current file/revision, supplies earlier failing-command evidence to the model, and repeated unchanged writes refresh source context. The normal command approval prompt still applies to retesting. Successful verification clears stale failure evidence. Simplicity estimates do not request new files or documentation; explanations stay in the action response. These are controller-feedback changes, with no new user interaction.
+
+V1.2.0 F01/F02/F05 detail: project, goal and settings are captured when Run is clicked. Edits while Preparing apply to the next Run. A slow check does not enable a second startup. On discovery error, Run becomes available again and the error is shown. Stop may wait for the current discovery call to return; no agent task/command starts from a cancelled result. Closing during discovery need not wait for the call. A new project folder may already have been created; cancellation does not remove it. During an active agent task, close still requests Stop and asks the user to close again after the task ends.
+
+V1.3.0 F02 inspection: common generated/ignored paths are filtered using root and nested project rules before ranking. Python files related through local relative imports are prioritized by actual candidate path. Existing cached metadata refreshes automatically; no settings or migration action is required. Ignore rules do not replace direct-file access checks. User-run Windows/Ollama validation is deferred for now.

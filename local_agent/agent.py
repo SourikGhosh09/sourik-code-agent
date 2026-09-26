@@ -169,8 +169,18 @@ class Agent:
                         observation = {'error':str(exc)}
                         self.event('state','REPAIRING')
                         self.event('observation',observation)
-                if observation.get('exit_code',0) != 0 or observation.get('error'):
-                    failure = str(observation.get('error') or observation.get('output'))
+                if observation.get('verification') and self.tools.verified_revision == self.tools.revision:
+                    failed_test = None
+                    last_failure = None
+                if 'unchanged' in observation:
+                    observation = {**observation,
+                                   'instruction':'The file already contains this content. Do not repeat this edit. Run approved tests on current code to identify remaining failures, or complete if already verified.',
+                                   'last_failing_command':failed_test,
+                                   'failure_evidence_note':'Earlier command output may be stale after edits; retest current code.'}
+                    if self.tools.verified_revision != self.tools.revision:
+                        self.event('state','REPAIRING')
+                if observation.get('exit_code',0) != 0 or observation.get('error') or 'unchanged' in observation:
+                    failure = ('Unchanged edit: '+observation['unchanged']) if 'unchanged' in observation else str(observation.get('error') or observation.get('output'))
                     if observation.get('exit_code', 0) != 0:
                         failed_test = failure[:4000]
                     if failure == last_failure:
@@ -178,6 +188,8 @@ class Agent:
                         messages = messages[:2]+[{'role':'user','content':'The previous attempt repeated the same failure. Change approach. Search existing code/callers, diagnose the root cause using CURRENT files, and apply the smallest correct repair without weakening tests or protections. Error: '+failure+'\nLast failing command evidence (may be stale; retest current code): '+str(failed_test or 'none')+'\nCurrent files: '+json.dumps(evidence)}]
                         self.event('recovery','Refreshed current file evidence after a repeated failure.')
                     last_failure = failure
+                elif 'changed' in observation:
+                    last_failure = None
                 if self.tools.verified_revision == self.tools.revision:
                     observation = {**observation,'simplicity_review':observation.get('simplicity_review') or simplicity.review(),'controller_instruction':'Tests passed after the last edit. Review the supplied diff internally; do not write review or log files. If the task is fulfilled, return {"done":"summary of behavior and checks"} now, adding a simplicity explanation if the budget was exceeded. Do not repeat tests or unchanged reads. Only use another tool if a concrete correction is needed; then retest.'}
                 messages.append({'role':'user','content':'Tool/controller observation: '+json.dumps(observation)})

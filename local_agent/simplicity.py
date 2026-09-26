@@ -77,7 +77,7 @@ class SimplicityEngine:
         if not isinstance(budget,dict) or any(type(budget.get(k)) is not int or budget[k] < 0 for k in ('files','new_files','dependencies') if k in budget):
             raise ValueError('Change budget counts must be nonnegative integers.')
         self.budget = budget
-        return {'phase':'plan','budget':budget,'note':'Estimates trigger reconsideration, not automatic scope reduction.'}
+        return {'phase':'plan','budget':budget,'note':'Estimates are not quotas or remaining work. Change only files needed for the goal; unused budget needs no action.'}
 
     def changes(self):
         changes = []
@@ -143,7 +143,7 @@ class SimplicityEngine:
         allowed = isinstance(explanation,str) and bool(explanation.strip())
         return {'phase':'before','reconsider':not allowed,'findings':flags,
                 'explanation':explanation if allowed else '',
-                'note':'Retry with a concrete simplicity explanation or choose a smaller correct action. This never grants command permission.'}
+                'note':'This is feedback on the proposed action, not a request to edit documentation. If blocked, no action ran. Retry the necessary change with a simplicity explanation in the JSON response, or inspect/test current code. This never grants command permission.'}
 
     def review(self):
         changes = self.changes()
@@ -162,4 +162,4 @@ class SimplicityEngine:
         return {'phase':'review','counts':counts,'budget_exceeded':exceeded,'added_dependencies':added[:20],
                 'files':[name for name,_,_ in changes][:50], 'diff':diff[:self.context_limit], 'diff_truncated':len(diff)>self.context_limit,
                 'source':'task checkpoint diff (includes new files; excludes pre-task edits)',
-                'checklist':CHECKLIST,'note':'Review this evidence before completion. Keep every required behavior and protection. No automatic deletion or quality score.'}
+                'checklist':CHECKLIST,'note':'Counts describe actual changes, not remaining work or quotas. Budget findings are controller feedback, not test failures. Explain necessary growth in the JSON simplicity field; do not edit files to document the budget. Review internally and keep required behavior and protections.'}
