@@ -198,12 +198,14 @@ class Startup(unittest.TestCase):
         self.app.model.set('next-model')
         self.app.cpu_target.set('not an integer')
         self.finish_discovery()
-        self.assertEqual(self.agent_type.call_args.args[0], Path(original))
+        # Windows temp paths may use an 8.3 alias; startup stores canonical paths.
+        expected_root = Path(original).expanduser().resolve()
+        self.assertEqual(self.agent_type.call_args.args[0], expected_root)
         self.agent_type.return_value.run.assert_called_once_with('Inspect the original project')
         self.assertEqual(self.app.model.get(), 'next-model')
         self.assertEqual(self.app.cpu_target.get(), 'not an integer')
         saved = json.loads(self.app.settings.read_text())
-        self.assertEqual(saved['project'], original)
+        self.assertEqual(saved['project'], str(expected_root))
         self.assertEqual(saved['model'], 'manual-model')
         self.assertEqual(saved['cpu_target'], '')
 

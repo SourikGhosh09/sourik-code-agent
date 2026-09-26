@@ -190,3 +190,9 @@ Checks: Imported V1.3.0 passed 80 of 82 tests on Windows, with two symlink-fixtu
 Result: RESOURCE-001 baseline tooling and reporting implemented. Actual inference-load/pressure measurement remains unfinished; simulated low-memory results do not establish OOM safety or hard caps. No new real-model run or manual accessibility acceptance is claimed.
 Errors: No new test failures. Two symlink fixtures cannot be created with current Windows permissions. Previous archive GUI errors were environment-specific and did not recur in this Windows automated suite.
 Next: Measure a repeatable inference workload, retain pending manual UI and real-model repair gates, and publish this version to the existing private repository. Do not add new resource architecture until measurements justify it.
+
+UPDATE: Corrected Windows CI path-alias expectation
+Date: 2026-09-26
+Problem: GitHub's Windows runner supplied a temporary path using RUNNER~1, while startup correctly resolved it to runneradmin. The snapshot test compared the canonical agent path against an unresolved expected path; its saved-settings assertion had the same issue.
+Fix: Resolve the expected original project path once and use it for both assertions. The test still checks the original project, goal, model and settings snapshot while later UI edits remain unchanged. No production behavior, permissions, dependencies or version metadata changed.
+Checks: All 12 UI tests passed locally. Full suite: 83 passed, two Windows symlink-fixture skips (85 total). The reported hosted alias condition still requires the new CI run for confirmation. No real-model evaluation was needed for this test-only correction.
