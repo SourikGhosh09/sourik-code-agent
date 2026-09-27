@@ -1,0 +1,76 @@
+{
+  "version": "1.4.1",
+  "date": "2026-09-27",
+  "change": "Repeated-failure recovery discards initial stale inspection/memory while retaining the original goal and fresh bounded evidence.",
+  "infrastructure": {
+    "total": 85,
+    "passed": 83,
+    "skipped": 2,
+    "focused_passed": 7,
+    "regression_failed_before_fix": true,
+    "compilation_passed": true,
+    "notes": [
+      "Windows symlink fixtures skipped.",
+      "Tk emitted callback-after-destroy diagnostics during the passing suite; manual UI acceptance remains pending."
+    ]
+  },
+  "trials": [
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "04445ab7aeb3b2294a87e49b5137082173dfa25bd6ac421a470a8de98d5bba7f",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": false,
+      "observed_failure": true,
+      "simplicity_reviews": 3,
+      "changed_files": [
+        "line_items.py",
+        "test_invoice.py"
+      ],
+      "trusted_fixture_only": false,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 111.51
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "04445ab7aeb3b2294a87e49b5137082173dfa25bd6ac421a470a8de98d5bba7f",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 1,
+      "changed_files": [
+        "line_items.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 51.03
+    }
+  ],
+  "raw_report_sha256": "d7a868fcd1c8f54f2eb4c5b9d68a1b3da7e5dd35fa72b72ff752db9b075dcc62",
+  "acceptance": "Not met. Both trials exhausted steps. First altered test_invoice.py and failed the trust check; second preserved fixtures but left invoice arithmetic incorrect. No overall reliability improvement claimed.",
+  "dependencies_added": [],
+  "dependencies_removed": []
+}

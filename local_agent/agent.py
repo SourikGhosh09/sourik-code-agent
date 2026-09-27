@@ -185,7 +185,7 @@ class Agent:
                         failed_test = failure[:4000]
                     if failure == last_failure:
                         evidence = repair_context(self.tools,(failed_test or failure))
-                        messages = messages[:2]+[{'role':'user','content':'The previous attempt repeated the same failure. Change approach. Search existing code/callers, diagnose the root cause using CURRENT files, and apply the smallest correct repair without weakening tests or protections. Error: '+failure+'\nLast failing command evidence (may be stale; retest current code): '+str(failed_test or 'none')+'\nCurrent files: '+json.dumps(evidence)}]
+                        messages = [messages[0], {'role':'user','content':goal}]+[{'role':'user','content':'The previous attempt repeated the same failure. Change approach. Search existing code/callers, diagnose the root cause using CURRENT files, and apply the smallest correct repair without weakening tests or protections. Error: '+failure+'\nLast failing command evidence (may be stale; retest current code): '+str(failed_test or 'none')+'\nCurrent files: '+json.dumps(evidence)}]
                         self.event('recovery','Refreshed current file evidence after a repeated failure.')
                     last_failure = failure
                 elif 'changed' in observation:

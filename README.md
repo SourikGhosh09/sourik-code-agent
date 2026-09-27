@@ -4,7 +4,7 @@ Repository: https://github.com/SourikGhosh09/sourik-code-agent (private).
 
 A local-first desktop coding agent that inspects projects, makes bounded changes, runs approved tests, and repairs failures.
 
-Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.4.0 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
+Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.4.1 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
 
 ## Setup and commands
 
@@ -25,7 +25,7 @@ python scripts/evaluate_local.py qwen2.5-coder:7b --multifile
 
 The evaluation commands need Ollama and the model. Their fixture-only approval callbacks must never be reused for arbitrary projects. Compilation checks syntax; it is not an installer build. CI runs infrastructure tests without downloading models and cannot certify model quality.
 
-`Start V1.4.0.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
+`Start V1.4.1.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
 
 ## Capabilities and limits
 
@@ -64,13 +64,13 @@ Assumption: Windows remains the primary preview target; other platforms need val
 
 ## Version naming
 
-Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.4.0.cmd. Historical V0/V1 labels remain in their original evidence.
+Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.4.1.cmd. Historical V0/V1 labels remain in their original evidence.
 
-## Updating to V1.4.0
+## Updating to V1.4.1
 
 1. Close the agent and extract this ZIP into a separate folder. Keep your current app folder, project folders and their `.agent` data. The ZIP contains source, not Ollama or models.
 2. When you are ready to test later, start your existing Ollama server. Open PowerShell in the extracted project folder and run `python -m unittest discover -v`, then `python scripts/evaluate_local.py qwen2.5-coder:7b --multifile`. The second command creates two disposable invoice projects under `evaluation-results`; it does not modify your working projects.
-3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.4.0 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
+3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.4.1 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
 
 Both invoice trials must finish with `passed: true` before accepting this repair milestone. If either fails, retain the generated results/events for diagnosis. The supplied source ZIP has been integrated into the existing Git repository for this update.
 
@@ -86,4 +86,6 @@ python scripts/measure_resources.py --samples 3 --interval 1 --power Balanced --
 
 This read-only command needs no model. It samples existing host RAM/disk/NVIDIA telemetry and shows resource targets before/after the current backoff policy. Simulated low-memory checks are separately labeled and allocate no stress workload. Unknown readings remain null/empty rather than invented zeroes. The output path must be new; existing files are never overwritten. Sampling is bounded to 1-60 observations and intervals of 0-60 seconds. Detection itself can take time, so the interval is not a fixed sampling frequency. CPU utilization, temperature, process memory and hard caps are not measured. Raw reports stay under ignored evaluation-results/.
 
-Latest real-model workload check (2026-09-27): 42 host snapshots stayed above the low-RAM threshold, but both invoice trials failed due to repeated edits with the second defect left unresolved. No model-reliability improvement is claimed. See [workload evidence](docs/evaluation-v1.4.0-workload.json).
+V1.4.0 real-model workload check (2026-09-27): 42 host snapshots stayed above the low-RAM threshold, but both invoice trials failed due to repeated edits with the second defect left unresolved. No model-reliability improvement is claimed. See [workload evidence](docs/evaluation-v1.4.0-workload.json).
+
+V1.4.1 corrects stale source excerpts in repeated-failure recovery. Its 85-test suite passed with two skips, but both unchanged real-model invoice trials failed; one also altered a protected test file and failed fixture trust. Reliable multi-file repair remains unaccepted. See [V1.4.1 evidence](docs/evaluation-v1.4.1.json).

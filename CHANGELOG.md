@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1 - 2026-09-27 (preview)
+
+- Remove stale initial excerpts when refreshing repeated-failure context; retain the task and current evidence.
+- Strengthened the existing invoice recovery regression; 83 tests passed, two skipped. No dependencies or permission changes.
+- Both unchanged real-model invoice trials failed. This patch corrects stale context but does not establish reliable autonomous repair. See docs/evaluation-v1.4.1.json.
+
 ## 1.4.0 - 2026-09-26 (preview)
 
 - Integrated the supplied V1.3.0 source into the existing Git checkout; retained its startup, repair-feedback and indexing improvements.

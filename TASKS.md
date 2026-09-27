@@ -48,3 +48,7 @@ Imported V1.3.0 passed 80 tests with two symlink skips on Windows. The combined 
 ## Measured workload checkpoint - 2026-09-27
 
 RESOURCE-001: normal real-model workload measured using 42 snapshots; RAM stayed above the backoff threshold. Physical low-memory validation remains open. Both unchanged invoice trials failed despite preserving original tests/validation/README. Next priority is REPAIR-001: diagnose repeated selection of the already-modified invoice file while the line-item defect remains. Preserve the failed runs and unchanged evaluation; do not widen resource controls without evidence. See docs/evaluation-v1.4.0-workload.json.
+
+## V1.4.1 recovery checkpoint - 2026-09-27
+
+V1.4.1 removes stale initial source/memory excerpts from repeated-failure recovery while retaining the goal, system policy, current bounded file evidence and explicitly stale last-test output. The strengthened regression fails before the fix and passes after it. Seven focused tests passed; full Windows suite: 83 passed, two symlink skips (85 total). Compilation passed. Both unchanged 7B invoice trials failed at the step limit (111.51 and 51.03 seconds). Trial one changed line_items.py and test_invoice.py, failing fixture trust; trial two changed only line_items.py, preserving tests/validation/README but leaving invoice arithmetic incorrect. REPAIR-001 remains open; no model-reliability improvement is established. Evidence: docs/evaluation-v1.4.1.json.

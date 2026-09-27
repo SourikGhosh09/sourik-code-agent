@@ -74,6 +74,9 @@ class Contracts(unittest.TestCase):
                         case.assertIn('Last failing command evidence', str(messages))
                         case.assertIn('test_line', str(messages))
                         case.assertIn('unit_cents + quantity', str(messages))
+                        case.assertIn('subtotal - discount_cents', str(messages))
+                        case.assertNotIn('subtotal + discount_cents', str(messages))
+                        case.assertEqual(messages[1]['content'], 'Repair invoice and line totals; preserve README, tests and validation')
                     return action
             invoice = {'tool':'write', 'path':'invoice.py', 'content':INVOICE_FIXED['invoice.py']}
             command = {'tool':'run', 'argv':[sys.executable, '-m', 'unittest', 'discover']}

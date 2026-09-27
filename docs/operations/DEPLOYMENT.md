@@ -16,7 +16,7 @@ No packaged application build exists. python -m compileall -q local_agent script
 
 ## Windows launchers
 
-Start V1.4.0.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
+Start V1.4.1.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
 
 Only current V1 is retained locally. The obsolete V0 launcher and release copies have been removed; historical source and acceptance records remain in Git.
 
