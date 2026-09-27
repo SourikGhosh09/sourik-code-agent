@@ -15,7 +15,7 @@ Statuses follow code/evidence, not roadmap promises. References: [PRD](docs/PRD.
 - [ ] UI-001 - Nonblocking startup discovery (implemented in V1.2.0; native manual acceptance pending). Depends: BASE-001. Ref: R07, [UI](docs/UI_SPEC.md). Acceptance: responsive window with slow/failed discovery and safe close. Tests: delayed/failing discovery and manual launch/close.
 - [ ] UI-002 - Keyboard/screen-reader journey validation. Depends: UI-001. Ref: R07,F01-F05. Acceptance: record focus/labels/scaling/approval/recovery and repair demonstrated barriers. Tests: manual matrix and focused regressions.
 - [x] INDEX-001 - Representative ignore/import fixture (V1.3.0; documented subset). Depends: V1-001. Ref: R01. Acceptance: reproduce limitation, smallest justified fix. Tests: ranking/ignore boundaries without weaker secret protection.
-- [ ] RESOURCE-001 - Repeatable pressure measurement (V1.4.0 baseline sampler and simulated checks implemented; inference-load/pressure measurement pending). Depends: V1-001. Ref: R05. Acceptance: record RAM/VRAM behavior before changes; no hard-cap claim. Tests: simulated telemetry and measured run.
+- [ ] RESOURCE-001 - Repeatable pressure measurement (V1.4.0 baseline sampler and simulated checks implemented; normal inference load measured; low-memory/physical-pressure validation pending). Depends: V1-001. Ref: R05. Acceptance: record RAM/VRAM behavior before changes; no hard-cap claim. Tests: simulated telemetry and measured run.
 
 - [ ] REPAIR-001 - Improve action-format validation and repeated-patch recovery. Depends: EVAL-001. Ref: R02, [multi-file evidence](docs/evaluation-multifile.json). Acceptance: reject incomplete tool actions clearly, preserve current failure context, rerun the same two invoice trials without weakening fixture/tests/permissions. Tests: focused regression plus repeated real-model evaluation. Initial EVAL-001 result was one pass and one failure; reliability is not accepted. V1.1.0 adds required-field/no-op checks and retains failing-command evidence, but the broader repeated-reasoning issue remains open pending consistent model acceptance.
 
@@ -44,3 +44,7 @@ User explicitly deferred their testing while development continues. Leave UI-001
 ## V1.4.0 Windows checkpoint
 
 Imported V1.3.0 passed 80 tests with two symlink skips on Windows. The combined V1.4.0 suite passed 83 with the same two skips, including native Tk construction/startup and real junction tests. Three actual host snapshots were collected with no induced workload; low-RAM/recovery behavior is simulated separately. RESOURCE-001 remains open for a repeatable inference workload and measured pressure; no hard-cap or OOM protection is claimed. Manual UI-001/UI-002 and real-model REPAIR-001 remain pending. See [evidence](docs/evaluation-v1.4.0.json).
+
+## Measured workload checkpoint - 2026-09-27
+
+RESOURCE-001: normal real-model workload measured using 42 snapshots; RAM stayed above the backoff threshold. Physical low-memory validation remains open. Both unchanged invoice trials failed despite preserving original tests/validation/README. Next priority is REPAIR-001: diagnose repeated selection of the already-modified invoice file while the line-item defect remains. Preserve the failed runs and unchanged evaluation; do not widen resource controls without evidence. See docs/evaluation-v1.4.0-workload.json.

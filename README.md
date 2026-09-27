@@ -60,7 +60,7 @@ Confirmed stack: Python standard library, Tkinter, SQLite and local Ollama or Op
 
 Original precedence remains in [the master pack](specs/00_MASTER_PROJECT_PACK.txt). Inspect current code; prefer the smallest correct change without weakening quality, permissions or tests. Preserve source specs and exclude local data/secrets from Git. Update PROJECT_LOG after meaningful work.
 
-Assumption: Windows remains the primary preview target; other platforms need validation. Future ideas are not delivered features. Open: representative acceptance projects, supported hardware/OS, distribution/license and stronger OS isolation. Next: measure a repeatable inference workload using the diagnostic command; resource-pressure, model and manual desktop acceptance remain open.
+Assumption: Windows remains the primary preview target; other platforms need validation. Future ideas are not delivered features. Open: representative acceptance projects, supported hardware/OS, distribution/license and stronger OS isolation. Next: diagnose repeated patch selection in REPAIR-001. Normal inference load has been measured; low-memory pressure and manual desktop acceptance remain open.
 
 ## Version naming
 
@@ -85,3 +85,5 @@ python scripts/measure_resources.py --samples 3 --interval 1 --power Balanced --
 ```
 
 This read-only command needs no model. It samples existing host RAM/disk/NVIDIA telemetry and shows resource targets before/after the current backoff policy. Simulated low-memory checks are separately labeled and allocate no stress workload. Unknown readings remain null/empty rather than invented zeroes. The output path must be new; existing files are never overwritten. Sampling is bounded to 1-60 observations and intervals of 0-60 seconds. Detection itself can take time, so the interval is not a fixed sampling frequency. CPU utilization, temperature, process memory and hard caps are not measured. Raw reports stay under ignored evaluation-results/.
+
+Latest real-model workload check (2026-09-27): 42 host snapshots stayed above the low-RAM threshold, but both invoice trials failed due to repeated edits with the second defect left unresolved. No model-reliability improvement is claimed. See [workload evidence](docs/evaluation-v1.4.0-workload.json).

@@ -1,0 +1,81 @@
+{
+  "version": "1.4.0",
+  "date": "2026-09-27",
+  "source_commit": "743320f",
+  "code_digest": "61ca6b58ff9e54294139c93a5838cfe60b9ced0f2b0cbfffcdfb1f37f313ea5b",
+  "workload": "python scripts/evaluate_local.py qwen2.5-coder:7b --multifile",
+  "sample_count": 42,
+  "interval_seconds": 5,
+  "sampling_capped": false,
+  "available_ram_gib": {
+    "min": 4.793,
+    "max": 7.543
+  },
+  "gpu_free_mib": {
+    "min": 6663.0,
+    "max": 11761.0
+  },
+  "observed_ram_below_2gib": false,
+  "evaluation_exit_code": 1,
+  "trials": [
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "61ca6b58ff9e54294139c93a5838cfe60b9ced0f2b0cbfffcdfb1f37f313ea5b",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 1,
+      "changed_files": [
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 102.45
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "61ca6b58ff9e54294139c93a5838cfe60b9ced0f2b0cbfffcdfb1f37f313ea5b",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 19,
+      "changed_files": [
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 94.79
+    }
+  ],
+  "raw_report_sha256": "01ee52e46d9ec3f3d69bc1bb6f3c2a5c0e6d015c704ef507683e9f376bf13c73",
+  "limits": [
+    "Whole-host snapshots, not per-process attribution.",
+    "Five-second waits plus detection time can miss brief peaks.",
+    "No forced low-memory stress, CPU utilization, temperature or hard-cap validation.",
+    "Simulation evidence remains separate in evaluation-v1.4.0.json."
+  ]
+}
