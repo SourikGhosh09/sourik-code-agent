@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0 - 2026-09-28 (preview)
+
+- Add `python scripts/start_local_runtime.py --check` for Python/Tk and default local Ollama/model readiness, with actionable failures and no automatic installs or inference.
+- Explain how to use separately installed Ollama when the portable runtime is absent; reuse local-only no-redirect HTTP handling.
+- Add six setup regressions while retaining portable startup waiting. No dependencies or agent-loop changes. Full suite: 95 passed, two symlink skips; fresh source-copy setup passed on the existing Windows host. Clean-machine acceptance remains pending.
+
+
 ## 1.4.3 - 2026-09-28 (preview)
 
 - Fix Windows checkpoint collisions when the clock returns the same timestamp; atomically create unique folders using existing tempfile support. Old checkpoints remain readable.

@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.4.3 Windows run has 91 tests: 89 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.5.0 Windows run has 97 tests: 95 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -119,3 +119,7 @@ New/strengthened regressions cover fresh source/goal and verified-review context
 ## V1.4.3 checkpoint - 2026-09-28
 
 V1.4.3 prevents same-timestamp checkpoint collisions using atomic standard-library directory creation. The forced-clock regression fails on V1.4.2 and passes after the fix, including independent rollback. Final Windows suite: 89 passed, two skips (91 total). Both unchanged invoice trials and all four calculator/no-change cases passed independent checks on the exact V1.4.3 source; invoice tests, validation and README remained intact. See docs/evaluation-v1.4.3.json.
+
+## V1.5.0 setup verification - 2026-09-28
+
+Seven launcher tests pass, including the original wait-for-readiness case and six new checks covering an external server without portable files, missing/invalid models, unavailable/malformed discovery, unavailable Tk, old Python, actionable missing-runtime errors and proxy/redirect restrictions. Mocked setup checks assert no process launch or files created in the checkout. Actual readiness and all 97 tests (95 passed, two symlink skips) also ran from a fresh source copy on the current Windows machine using its existing Ollama server. This is not a clean-machine, manual accessibility or real-model coding evaluation. Pre-existing Tk teardown callback diagnostics remain. No agent-flow or evaluator change; latest model results remain V1.4.3.

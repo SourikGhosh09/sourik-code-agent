@@ -1,6 +1,8 @@
 # Current handover
 
-Current version: V1.4.3 preview. Start Agent.cmd opens Start V1.4.3.cmd.
+Current version: V1.5.0 preview. Start Agent.cmd opens Start V1.5.0.cmd.
+
+V1.5.0 adds a read-only setup check in the existing runtime helper. Run python scripts/start_local_runtime.py --check for Python/Tk and default Ollama/model readiness. No server/model download, inference, settings migration or dependency was added. Full suite: 95 passed, two symlink skips (97 total). The check and tests passed from a fresh source copy using the existing Windows host/server; a truly clean machine remains untested. Agent behavior is unchanged; latest real-model evidence is V1.4.3, not a V1.5.0 trial.
 
 Previous V1.4.2 passed four consecutive unchanged invoice trials on the exact final source, plus all four calculator/no-change cases. Every invoice trial preserved tests, validation and README, changed only invoice.py and line_items.py, and passed independent assertions. Full Windows suite: 88 passed, two symlink skips (90 total). Evidence and source/model/evaluator hashes: docs/evaluation-v1.4.2.json. This closes the narrow REPAIR-001 fixture milestone, not broad coding reliability.
 

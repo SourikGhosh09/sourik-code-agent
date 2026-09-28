@@ -36,3 +36,7 @@ Proceed with INDEX-001 while user-run desktop/model tests are deferred. Reproduc
 ## V1.4.0 resource baseline
 
 Integrate the supplied V1.3.0 source, verify on Windows, then reuse existing telemetry and backoff policy in a bounded read-only diagnostic command. Record actual snapshots separately from simulations. Keep RESOURCE-001 open for inference-load/pressure measurements; do not expand resource control before evidence requires it.
+
+## V1.5.0 setup readiness
+
+Reuse the existing launcher script and local model discovery to diagnose Python/Tk and default Ollama/model availability. Keep checks read-only, no automatic installs and no new dependencies. Verify missing requirements with focused tests and run setup/full regressions from a fresh source copy. Keep clean-machine acceptance separate from same-host checks; do not change the agent loop or broaden model-reliability claims.

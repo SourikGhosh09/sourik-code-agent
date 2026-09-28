@@ -22,7 +22,7 @@ Statuses follow code/evidence, not roadmap promises. References: [PRD](docs/PRD.
 ## Security and distribution
 
 - [ ] SEC-001 - Select bounded OS-isolation approach. Depends: EVAL-001. Ref: R03, [security](SECURITY.md). Acceptance: ADR compares threat boundary/compatibility/cost; no implementation claim before boundary tests. Tests: proof-of-concept escape/permission checks after decision.
-- [ ] DIST-001 - Clean-machine source setup. Depends: DOC-001. Ref: [deployment](docs/operations/DEPLOYMENT.md). Acceptance: setup works without original machine files. Tests: fresh checkout launch, regressions and disposable task.
+- [ ] DIST-001 - Clean-machine source setup (V1.5.0 readiness check and fresh-source-copy tests implemented; genuinely clean-machine acceptance pending). Depends: DOC-001. Ref: [deployment](docs/operations/DEPLOYMENT.md). Acceptance: setup works without original machine files. Tests: fresh checkout launch, regressions and disposable task.
 - [ ] RELEASE-001 - Distribution/license and release gates. Depends: EVAL-001,UI-002,DIST-001,SEC-001. Ref: [PRD](docs/PRD.md). Acceptance: owner-approved scope/support, reporting channel and evidence. Tests: exact-release acceptance rerun.
 
 Plugins, advanced workers and training remain later original roadmap phases, not scheduled implementation. Do not build speculative managers/dependencies before concrete tasks.
@@ -60,3 +60,7 @@ V1.4.2 passed four consecutive unchanged invoice trials on the exact final sourc
 ## V1.4.3 checkpoint - 2026-09-28
 
 V1.4.3 prevents same-timestamp checkpoint collisions using atomic standard-library directory creation. The forced-clock regression fails on V1.4.2 and passes after the fix, including independent rollback. Final Windows suite: 89 passed, two skips (91 total). Both unchanged invoice trials and all four calculator/no-change cases passed independent checks on the exact V1.4.3 source; invoice tests, validation and README remained intact. See docs/evaluation-v1.4.3.json.
+
+## V1.5.0 setup checkpoint - 2026-09-28
+
+The existing launcher helper now checks Python/Tk and default Ollama model discovery without starting a server or inference. Six new failure/readiness regressions pass; full suite: 95 passed, two symlink skips (97 total). A fresh source copy works with the existing host server and no bundled runtime/models. DIST-001 remains open for a clean computer and disposable real task. Latest real-model evidence remains V1.4.3; no new reliability claim.
