@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0 - 2026-09-29 (preview)
+
+- Add a constrained `--tags` real-model repair evaluation for Unicode normalization and stable deduplication across modules, reusing the existing trusted fixture runner.
+- Add independent Unicode/order/input-validation checks and reuse approval safety tests; original invoice fixture and production agent behavior remain unchanged.
+- Both tag trials passed on the installed 7B model. Full suite: 99 passed, two skips (101 total). See docs/evaluation-v1.6.0.json for exact evidence and limits. No new dependencies.
+
+
 ## 1.5.0 - 2026-09-28 (preview)
 
 - Add `python scripts/start_local_runtime.py --check` for Python/Tk and default local Ollama/model readiness, with actionable failures and no automatic installs or inference.

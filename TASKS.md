@@ -64,3 +64,9 @@ V1.4.3 prevents same-timestamp checkpoint collisions using atomic standard-libra
 ## V1.5.0 setup checkpoint - 2026-09-28
 
 The existing launcher helper now checks Python/Tk and default Ollama model discovery without starting a server or inference. Six new failure/readiness regressions pass; full suite: 95 passed, two symlink skips (97 total). A fresh source copy works with the existing host server and no bundled runtime/models. DIST-001 remains open for a clean computer and disposable real task. Latest real-model evidence remains V1.4.3; no new reliability claim.
+
+## V1.6.0 text-repair checkpoint - 2026-09-28
+
+- [x] EVAL-002 - Non-arithmetic multi-file fixture. Depends: EVAL-001. Unicode casefold normalization and first-seen deduplication use the existing bounded runner/approval checks. Two real 7B trials passed with original tests, validation and README preserved, changing only normalization.py and catalog.py. Both independent partial-fix checks fail until the two repairs are present. See docs/evaluation-v1.6.0.json. This is a constrained, explicitly guided fixture, not broad reliability acceptance.
+
+Infrastructure: 99 passed, two symlink skips (101 total). No production agent behavior, dependencies or resource/permission boundaries changed. Next: complete pending manual UI/accessibility and clean-machine acceptance before adding more architecture. Broader user-project evaluation remains open.

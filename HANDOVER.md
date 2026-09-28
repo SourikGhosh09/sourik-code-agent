@@ -1,6 +1,8 @@
 # Current handover
 
-Current version: V1.5.0 preview. Start Agent.cmd opens Start V1.5.0.cmd.
+Current version: V1.6.0 preview. Start Agent.cmd opens Start V1.6.0.cmd.
+
+V1.6.0 adds the --tags real-model evaluation in scripts/evaluate_local.py. Both 7B trials repaired Unicode normalization and stable deduplication, preserving tests/validation/README and changing only two source modules. Full suite: 99 passed, two symlink skips (101 total). Source/model/evaluator hashes and original invoice regression results are in docs/evaluation-v1.6.0.json. Production agent behavior is unchanged; this is guided fixture evidence, not a new general-reliability claim.
 
 V1.5.0 adds a read-only setup check in the existing runtime helper. Run python scripts/start_local_runtime.py --check for Python/Tk and default Ollama/model readiness. No server/model download, inference, settings migration or dependency was added. Full suite: 95 passed, two symlink skips (97 total). The check and tests passed from a fresh source copy using the existing Windows host/server; a truly clean machine remains untested. Agent behavior is unchanged; latest real-model evidence is V1.4.3, not a V1.5.0 trial.
 
@@ -10,6 +12,6 @@ V1.4.3 prevents same-timestamp checkpoint collisions using atomic standard-libra
 
 Implemented: current-source context at repair/edit/verified review; compatible finish action through existing gates; freshly approved retesting using the prior verification command; existing-file estimate review at completion; file-tool protection for explicit Preserve ... tests clauses. No dependencies, new runtime module, storage migration or mandatory cloud service.
 
-Next: evaluate a different representative task before expanding reliability claims, and complete UI-001/UI-002 manual startup/accessibility checks when the owner is ready. Physical low-memory validation, clean-machine distribution and stronger OS isolation remain open. Normal resource workload was measured previously; no hard caps are claimed.
+Next: complete UI-001/UI-002 manual startup/accessibility checks when the owner is ready, and validate genuinely clean-machine setup. The non-arithmetic tag fixture is now evaluated, but broader real user-project reliability remains unaccepted. Physical low-memory validation, clean-machine distribution and stronger OS isolation remain open. Normal resource workload was measured previously; no hard caps are claimed.
 
 Several intermediate experiments failed, including one passing pair followed by failures; their outcomes are retained in the versioned report. The final acceptance uses two sequential passing invoice pairs on the same source, with calculator regression checks between them. Runtime/models/raw fixtures stay ignored; original specs/history remain preserved. Read PROJECT_LOG and source before further changes.

@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.5.0 Windows run has 97 tests: 95 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.6.0 Windows run has 101 tests: 99 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -123,3 +123,9 @@ V1.4.3 prevents same-timestamp checkpoint collisions using atomic standard-libra
 ## V1.5.0 setup verification - 2026-09-28
 
 Seven launcher tests pass, including the original wait-for-readiness case and six new checks covering an external server without portable files, missing/invalid models, unavailable/malformed discovery, unavailable Tk, old Python, actionable missing-runtime errors and proxy/redirect restrictions. Mocked setup checks assert no process launch or files created in the checkout. Actual readiness and all 97 tests (95 passed, two symlink skips) also ran from a fresh source copy on the current Windows machine using its existing Ollama server. This is not a clean-machine, manual accessibility or real-model coding evaluation. Pre-existing Tk teardown callback diagnostics remain. No agent-flow or evaluator change; latest model results remain V1.4.3.
+
+## V1.6.0 tag catalog verification - 2026-09-28
+
+Run `python scripts/evaluate_local.py qwen2.5-coder:7b --tags`. Two disposable fixtures require Unicode casefolding and stable deduplication across imported modules. The goal names the expected expression repairs; the approval callback accepts only original/fixed AST variants and unchanged tests/validation/README. It rejects additional executable files and unrelated commands. This intentionally restricted approval is not an OS sandbox and must never be used for user projects.
+
+Seven evaluator unit tests pass: three original invoice cases plus four tag cases. Both fixture defects and each partial repair fail independent assertions; the combined fix passes Unicode equivalence, first-seen order, input preservation, iterator, empty and invalid-tag checks. Full Windows suite: 99 passed, two symlink skips (101 total), with the pre-existing Tk teardown diagnostics. Two real-model tag trials passed; exact hashes and invoice regression results are recorded in evaluation-v1.6.0.json. These runs do not certify general coding reliability, manual accessibility, low-memory pressure or clean-machine setup.

@@ -1,6 +1,6 @@
 """Real model acceptance tasks, with independent tests and restricted command approval.
 
-Not a general sandbox. Approval is limited to the calculator or trusted invoice fixtures.
+Not a general sandbox. Approval is limited to the calculator or fixed trusted repair fixtures.
 """
 import ast
 import hashlib
@@ -64,20 +64,58 @@ INVOICE_FIXED = {
 }
 
 
+# Non-arithmetic repair: Unicode normalization and stable deduplication.
+TAG_FILES = {
+    'validation.py': "def validate_tag(tag):\n    if not isinstance(tag, str) or not tag.strip():\n        raise ValueError('tag must be a nonempty string')\n",
+    'normalization.py': "from validation import validate_tag\n\ndef normalize_tag(tag):\n    validate_tag(tag)\n    return tag.strip().lower()\n",
+    'catalog.py': "from normalization import normalize_tag\n\ndef unique_tags(tags):\n    normalized = [normalize_tag(tag) for tag in tags]\n    return sorted(set(normalized))\n",
+    'test_catalog.py': "import unittest\nfrom normalization import normalize_tag\nfrom catalog import unique_tags\n\nclass CatalogTests(unittest.TestCase):\n    def test_unicode(self):\n        self.assertEqual(normalize_tag(' Stra\u00dfe '), 'strasse')\n    def test_order(self):\n        self.assertEqual(unique_tags(['Zulu', 'alpha', 'Zulu']), ['zulu', 'alpha'])\n    def test_invalid(self):\n        with self.assertRaises(ValueError):\n            unique_tags(['good', '  '])\n    def test_empty(self):\n        self.assertEqual(unique_tags([]), [])\n",
+    'README.md': 'Normalize tags by stripping whitespace and Unicode casefolding. Deduplicate normalized tags while preserving first-seen order. Preserve input, validation and public functions. Use existing modules and the standard library only.\n',
+}
+TAG_FIXED = {
+    **TAG_FILES,
+    'normalization.py': TAG_FILES['normalization.py'].replace('.lower()', '.casefold()'),
+    'catalog.py': TAG_FILES['catalog.py'].replace('sorted(set(normalized))', 'list(dict.fromkeys(normalized))'),
+}
+TAG_CHECKS = """from normalization import normalize_tag
+from catalog import unique_tags
+assert normalize_tag(' Stra\u00dfe ') == 'strasse'
+assert normalize_tag(' \u03a3 ') == normalize_tag('\u03c2') == '\u03c3'
+source = ['Zulu', ' Stra\u00dfe ', 'alpha', 'STRASSE', ' ZULU ']
+before = source.copy()
+assert unique_tags(source) == ['zulu', 'strasse', 'alpha']
+assert source == before
+assert unique_tags(iter(['B', 'a', 'b'])) == ['b', 'a']
+assert unique_tags([]) == []
+for tag in ('', '  ', None, 42, True):
+    try: unique_tags(['valid', tag])
+    except ValueError: pass
+    else: raise AssertionError('invalid tag accepted')
+"""
+
+
 def approve_invoice(root, argv):
+    return _approve_fixture(root, argv, INVOICE_FILES, INVOICE_FIXED, ('line_items.py', 'invoice.py'))
+
+
+def approve_tags(root, argv):
+    return _approve_fixture(root, argv, TAG_FILES, TAG_FIXED, ('normalization.py', 'catalog.py'))
+
+
+def _approve_fixture(root, argv, files, fixed, editable):
     if not argv or argv[0] not in ('python', sys.executable):
         return False
     if argv[1:] not in (['-m', 'unittest', 'discover'], ['-m', 'unittest', 'discover', '-v']):
         return False
     try:
-        for name, original in INVOICE_FILES.items():
+        for name, original in files.items():
             path = root / name
             if path.is_symlink() or path.is_junction() or not path.is_file():
                 return False
             actual = path.read_text(encoding='utf-8')
-            if name in ('line_items.py', 'invoice.py'):
+            if name in editable:
                 # AST identity allows comments/formatting, but no new executable behavior.
-                allowed = {ast.dump(ast.parse(original)), ast.dump(ast.parse(INVOICE_FIXED[name]))}
+                allowed = {ast.dump(ast.parse(original)), ast.dump(ast.parse(fixed[name]))}
                 if ast.dump(ast.parse(actual)) not in allowed:
                     return False
             elif actual != original:
@@ -88,7 +126,7 @@ def approve_invoice(root, argv):
                 return False
             if relative.parts[0] == '.agent':
                 continue
-            if path.is_file() and str(relative) not in INVOICE_FILES and str(relative) != 'PROJECT_LOG.txt':
+            if path.is_file() and str(relative) not in files and str(relative) != 'PROJECT_LOG.txt':
                 # Reject added modules, bytecode and startup customizations as well.
                 return False
     except (OSError, UnicodeError, SyntaxError):
@@ -96,27 +134,38 @@ def approve_invoice(root, argv):
     return True
 
 
-def evaluate_multifile(base, model_runtime, model, model_digest, code_digest):
+def evaluate_multifile(base, model_runtime, model, model_digest, code_digest, suite='invoice'):
+    if suite not in ('invoice', 'tags'):
+        raise ValueError('Unknown trusted repair suite.')
+    files = TAG_FILES if suite == 'tags' else INVOICE_FILES
+    approve = approve_tags if suite == 'tags' else approve_invoice
+    preserved_names = ('test_catalog.py', 'validation.py', 'README.md') if suite == 'tags' else ('test_invoice.py', 'validation.py', 'README.md')
     results = []
     for repeat in range(1, 3):
-        root = base / f'invoice-{repeat}'
+        root = base / f'{suite}-{repeat}'
         root.mkdir()
-        for name, content in INVOICE_FILES.items():
+        for name, content in files.items():
             (root / name).write_text(content, encoding='utf-8')
         events = []
         def emit(event):
             events.append(event)
             print(root.name, event['kind'], json.dumps(event['data'])[:1000], flush=True)
         config = preference_profile(detect(root), 'Balanced')
-        agent = Agent(root, model_runtime, config, emit, lambda argv: approve_invoice(root, argv))
+        agent = Agent(root, model_runtime, config, emit, lambda argv: approve(root, argv))
         goal = ('Repair this multi-file invoice project. Inspect its modules and run the existing tests first. '
                 'Line totals must multiply integer cents by quantity; invoice totals must subtract the discount. '
                 'Preserve validation, public functions, README and existing tests. Reuse the existing modules; '
                 'add no files or dependencies. Only python -m unittest discover is approved. '
                 'This controlled evaluation accepts only arithmetic-expression repairs to the two existing functions.')
+        if suite == 'tags':
+            goal = ('Repair this tag catalog project. Inspect its modules and run existing tests first. '
+                    'Normalize tags with strip and Unicode casefold, then deduplicate with list(dict.fromkeys(normalized)) '
+                    'to preserve first-seen order. Preserve validation, public functions, README and existing tests. '
+                    'Reuse existing modules; add no files or dependencies. Only python -m unittest discover is approved. '
+                    'This controlled evaluation accepts only these expression repairs in normalization.py and catalog.py.')
         started = time.monotonic()
         state = agent.run(goal)
-        approved = approve_invoice(root, ['python', '-m', 'unittest', 'discover'])
+        approved = approve(root, ['python', '-m', 'unittest', 'discover'])
         independent = False
         if approved:
             # Execute only AST-identical trusted fixture variants, independently of model tests.
@@ -139,20 +188,22 @@ try: line_total(-1, 1)
 except ValueError: pass
 else: raise AssertionError('negative price accepted')
 """
+            if suite == 'tags':
+                checks = TAG_CHECKS
             check = subprocess.run([sys.executable, '-I', '-B', '-c',
                 'import sys; sys.path.insert(0, ' + repr(str(root)) + ');\n' + checks],
                 capture_output=True, text=True, timeout=15)
             independent = check.returncode == 0
-            (base / f'invoice-{repeat}-independent.txt').write_text(check.stdout + check.stderr, encoding='utf-8')
-        changed = [name for name, original in INVOICE_FILES.items()
+            (base / f'{suite}-{repeat}-independent.txt').write_text(check.stdout + check.stderr, encoding='utf-8')
+        changed = [name for name, original in files.items()
                    if not (root / name).exists() or (root / name).read_text(encoding='utf-8') != original]
-        preserved = all((root / name).exists() and (root / name).read_text(encoding='utf-8') == INVOICE_FILES[name]
-                        for name in ('test_invoice.py', 'validation.py', 'README.md'))
+        preserved = all((root / name).exists() and (root / name).read_text(encoding='utf-8') == files[name]
+                        for name in preserved_names)
         observed = any(e['kind'] == 'observation' and isinstance(e['data'], dict)
                        and e['data'].get('exit_code', 0) != 0 for e in events)
         reviews = sum(e['kind'] == 'simplicity' and e['data'].get('phase') == 'review' for e in events)
         passed = state == 'COMPLETED' and independent and preserved and observed and reviews > 0 and approved
-        result = dict(suite_version='multifile-1', case=root.name, model=model, model_digest=model_digest,
+        result = dict(suite_version='tags-1' if suite == 'tags' else 'multifile-1', case=root.name, model=model, model_digest=model_digest,
                       code_digest=code_digest, evaluator_digest=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                       state=state, passed=passed, independent_pass=independent, tests_and_validation_preserved=preserved,
                       observed_failure=observed, simplicity_reviews=reviews, changed_files=changed,
@@ -171,6 +222,8 @@ def main():
     code_digest=hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in sorted(code_root.glob('*.py')))).hexdigest()
     model_runtime=LocalModel(model)
     model_digest=next((m.get('digest') for m in model_runtime.installed_models() if m.get('name')==model),None)
+    if '--tags' in sys.argv:
+        return evaluate_multifile(base, model_runtime, model, model_digest, code_digest, suite='tags')
     if '--multifile' in sys.argv:
         return evaluate_multifile(base, model_runtime, model, model_digest, code_digest)
     results=[]

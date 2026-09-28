@@ -1,0 +1,133 @@
+{
+  "version": "1.6.0-preview",
+  "evaluation_date": "2026-09-28",
+  "publication_date": "2026-09-29",
+  "scope": "Evaluation coverage expansion; production agent behavior unchanged.",
+  "code_digest": "55b862a5db14260585f2117b6c0a037715c7c18441cb67434a1943f6f6858343",
+  "evaluator_digest": "042ad06ccc9c84dbb4c87be09c14373452c25a7c7e710487d7177e58292401d0",
+  "infrastructure": {
+    "total": 101,
+    "passed": 99,
+    "skipped": 2,
+    "skip_reason": "Windows symlink creation permissions",
+    "compilation": "passed",
+    "notes": "Pre-existing Tk teardown callback diagnostics; manual desktop acceptance pending."
+  },
+  "results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "55b862a5db14260585f2117b6c0a037715c7c18441cb67434a1943f6f6858343",
+      "evaluator_digest": "042ad06ccc9c84dbb4c87be09c14373452c25a7c7e710487d7177e58292401d0",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 24.66
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "55b862a5db14260585f2117b6c0a037715c7c18441cb67434a1943f6f6858343",
+      "evaluator_digest": "042ad06ccc9c84dbb4c87be09c14373452c25a7c7e710487d7177e58292401d0",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 6,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 22.61
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "55b862a5db14260585f2117b6c0a037715c7c18441cb67434a1943f6f6858343",
+      "evaluator_digest": "042ad06ccc9c84dbb4c87be09c14373452c25a7c7e710487d7177e58292401d0",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 12.93
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "55b862a5db14260585f2117b6c0a037715c7c18441cb67434a1943f6f6858343",
+      "evaluator_digest": "042ad06ccc9c84dbb4c87be09c14373452c25a7c7e710487d7177e58292401d0",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 26.98
+    }
+  ],
+  "limits": [
+    "Fixed guided expression repairs only; AST approval rejects other implementations even if semantically correct.",
+    "Fixture-only approvals are not an OS sandbox and must never be used on user projects.",
+    "No general coding reliability, clean-machine, manual accessibility or physical-pressure acceptance.",
+    "Timings are observations, not controlled comparisons; infrastructure tests overlapped part of the tag run.",
+    "Calculator trials were not rerun; their branch is unchanged."
+  ]
+}

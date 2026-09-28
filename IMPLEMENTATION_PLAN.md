@@ -40,3 +40,7 @@ Integrate the supplied V1.3.0 source, verify on Windows, then reuse existing tel
 ## V1.5.0 setup readiness
 
 Reuse the existing launcher script and local model discovery to diagnose Python/Tk and default Ollama/model availability. Keep checks read-only, no automatic installs and no new dependencies. Verify missing requirements with focused tests and run setup/full regressions from a fresh source copy. Keep clean-machine acceptance separate from same-host checks; do not change the agent loop or broaden model-reliability claims.
+
+## V1.6.0 non-arithmetic evaluation
+
+Add one tag normalization/order fixture to the existing real-model evaluator. Reuse its approval and reporting logic, retaining the original invoice contract. Prove both defects and partial repairs independently; allow only trusted AST variants, preserve tests/validation/README and report exact source/model/evaluator hashes. Run two sequential tag trials and the original invoice regression. Do not modify production reasoning or claim general reliability based on these guided cases.
