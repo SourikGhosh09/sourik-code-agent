@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: V1.3.0 Linux run has 82 tests: 78 passed, two Windows-only skips, two Tk errors due to no display. Full suite is not green in this environment. Historical V1.1.0 Windows run had 56 passed and one symlink skip.
+- python -m unittest discover -v: current V1.4.2 Windows run has 90 tests: 88 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -109,3 +109,9 @@ Hosted CI for the path-alias correction 743320f passed. No production source cha
 ## V1.4.1 recovery checkpoint - 2026-09-27
 
 V1.4.1 removes stale initial source/memory excerpts from repeated-failure recovery while retaining the goal, system policy, current bounded file evidence and explicitly stale last-test output. The strengthened regression fails before the fix and passes after it. Seven focused tests passed; full Windows suite: 83 passed, two symlink skips (85 total). Compilation passed. Both unchanged 7B invoice trials failed at the step limit (111.51 and 51.03 seconds). Trial one changed line_items.py and test_invoice.py, failing fixture trust; trial two changed only line_items.py, preserving tests/validation/README but leaving invoice arithmetic incorrect. REPAIR-001 remains open; no model-reliability improvement is established. Evidence: docs/evaluation-v1.4.1.json.
+
+## V1.4.2 verification - 2026-09-28
+
+V1.4.2 passed four consecutive unchanged invoice trials on the exact final source, plus all four calculator/no-change cases. Every invoice trial preserved tests, validation and README, changed only invoice.py and line_items.py, and passed independent assertions. Full Windows suite: 88 passed, two symlink skips (90 total). Evidence and source/model/evaluator hashes: docs/evaluation-v1.4.2.json. This closes the narrow REPAIR-001 fixture milestone, not broad coding reliability.
+
+New/strengthened regressions cover fresh source/goal and verified-review context, completion schema and runtime revision gating, freshly approved/denied scheduled checks, existing-test write/patch/delete/move and ancestor-move rejection, negated preservation requests, and deferred existing-file count review with new-file gates intact. Existing native Tk tests pass but emit teardown callback diagnostics; manual accessibility acceptance is still pending. Raw results remain ignored; intermediate failures are summarized in the versioned evidence rather than discarded.

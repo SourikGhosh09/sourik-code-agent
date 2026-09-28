@@ -61,6 +61,7 @@ class Tools:
         self.root = Path(root).resolve()
         self.cancel, self.approve = cancel, approve
         self.backups = {}
+        self.protected_paths = set()
         self.expected = {}
         self.revision = 0
         self.verified_revision = -1
@@ -247,6 +248,9 @@ class Tools:
             p = self.path(name)
             if p == self.root/'PROJECT_LOG.txt' or (tool == 'move' and self.path(action['destination']) == self.root/'PROJECT_LOG.txt'):
                 raise PermissionError('The controller owns PROJECT_LOG.txt.')
+            targets = [p] + ([self.path(action['destination'])] if tool == 'move' else [])
+            if any(target == protected or target in protected.parents for target in targets for protected in self.protected_paths):
+                raise PermissionError('Task requires preserving existing tests. This file is read-only for file tools; repair the implementation instead of changing expected test results.')
             self.snapshot(name)
             if tool == 'delete':
                 p.unlink()
@@ -262,7 +266,7 @@ class Tools:
                 if tool == 'patch':
                     original = p.read_text(encoding='utf-8')
                     if not action.get('old') or original.count(action['old']) != 1:
-                        raise ValueError('Patch must match exactly one location.')
+                        raise ValueError('Patch not applied: old text must match exactly one location. Read the current file and use its exact text; if the desired change is already present, test it instead of repeating or reversing the patch.')
                     content = original.replace(action['old'],action['new'],1)
                 # Some local models wrap a whole source file in a Markdown fence.
                 # Remove only an unambiguous whole-file wrapper, never interior text.

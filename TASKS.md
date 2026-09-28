@@ -17,7 +17,7 @@ Statuses follow code/evidence, not roadmap promises. References: [PRD](docs/PRD.
 - [x] INDEX-001 - Representative ignore/import fixture (V1.3.0; documented subset). Depends: V1-001. Ref: R01. Acceptance: reproduce limitation, smallest justified fix. Tests: ranking/ignore boundaries without weaker secret protection.
 - [ ] RESOURCE-001 - Repeatable pressure measurement (V1.4.0 baseline sampler and simulated checks implemented; normal inference load measured; low-memory/physical-pressure validation pending). Depends: V1-001. Ref: R05. Acceptance: record RAM/VRAM behavior before changes; no hard-cap claim. Tests: simulated telemetry and measured run.
 
-- [ ] REPAIR-001 - Improve action-format validation and repeated-patch recovery. Depends: EVAL-001. Ref: R02, [multi-file evidence](docs/evaluation-multifile.json). Acceptance: reject incomplete tool actions clearly, preserve current failure context, rerun the same two invoice trials without weakening fixture/tests/permissions. Tests: focused regression plus repeated real-model evaluation. Initial EVAL-001 result was one pass and one failure; reliability is not accepted. V1.1.0 adds required-field/no-op checks and retains failing-command evidence, but the broader repeated-reasoning issue remains open pending consistent model acceptance.
+- [x] REPAIR-001 - Action/repeated-repair correction; narrow invoice acceptance met in V1.4.2. Depends: EVAL-001. Four final-source invoice trials passed independent assertions without changing the fixture, tests, validation, README or approvals. Calculator/no-change regression also passed. Broader reliability remains unaccepted. See [evidence](docs/evaluation-v1.4.2.json).
 
 ## Security and distribution
 
@@ -52,3 +52,7 @@ RESOURCE-001: normal real-model workload measured using 42 snapshots; RAM stayed
 ## V1.4.1 recovery checkpoint - 2026-09-27
 
 V1.4.1 removes stale initial source/memory excerpts from repeated-failure recovery while retaining the goal, system policy, current bounded file evidence and explicitly stale last-test output. The strengthened regression fails before the fix and passes after it. Seven focused tests passed; full Windows suite: 83 passed, two symlink skips (85 total). Compilation passed. Both unchanged 7B invoice trials failed at the step limit (111.51 and 51.03 seconds). Trial one changed line_items.py and test_invoice.py, failing fixture trust; trial two changed only line_items.py, preserving tests/validation/README but leaving invoice arithmetic incorrect. REPAIR-001 remains open; no model-reliability improvement is established. Evidence: docs/evaluation-v1.4.1.json.
+
+## V1.4.2 checkpoint - 2026-09-28
+
+V1.4.2 passed four consecutive unchanged invoice trials on the exact final source, plus all four calculator/no-change cases. Every invoice trial preserved tests, validation and README, changed only invoice.py and line_items.py, and passed independent assertions. Full Windows suite: 88 passed, two symlink skips (90 total). Evidence and source/model/evaluator hashes: docs/evaluation-v1.4.2.json. This closes the narrow REPAIR-001 fixture milestone, not broad coding reliability.

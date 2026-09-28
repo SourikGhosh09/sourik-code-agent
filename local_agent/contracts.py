@@ -47,4 +47,7 @@ def response_schema(planned, verified, simplicity_required=False):
                         'required': ['reason', 'tool', *fields] + (['simplicity'] if simplicity_required and tool in ('write', 'patch', 'move', 'delete') else []),
                         'additionalProperties': False})
     done={'type':'object','properties':{'done':{'type':'string'},'simplicity':{'type':'string'}},'required':['done']+(['simplicity'] if simplicity_required else []),'additionalProperties':False}
-    return {'anyOf': actions + ([done] if verified else [])}
+    finish = {'type':'object','properties':{'reason':props['reason'], 'tool':{'type':'string','enum':['finish']},
+              'content':{'type':'string'}, 'simplicity':{'type':'string'}},
+              'required':['reason','tool','content']+(['simplicity'] if simplicity_required else []), 'additionalProperties':False}
+    return {'anyOf': ([finish, done] if verified else []) + actions}

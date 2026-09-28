@@ -1,0 +1,400 @@
+{
+  "version": "1.4.2",
+  "date": "2026-09-28",
+  "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+  "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+  "infrastructure": {
+    "total": 90,
+    "passed": 88,
+    "skipped": 2,
+    "notes": [
+      "Windows symlink fixtures skipped; junction checks passed.",
+      "Pre-existing Tk callback teardown diagnostics appeared during passing tests; manual UI acceptance remains pending."
+    ]
+  },
+  "invoice_trials": [
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 34.25
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 30.31
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 26.05
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 25.38
+    }
+  ],
+  "calculator_trials": [
+    {
+      "suite_version": "simplicity-1",
+      "minimal_noop": true,
+      "simplicity_reviews": 4,
+      "tests_preserved": true,
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+      "case": "empty",
+      "profile": "Eco",
+      "config": {
+        "num_thread": 5,
+        "num_ctx": 4096,
+        "max_steps": 24,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "state": "COMPLETED",
+      "independent_pass": true,
+      "observed_failure": false,
+      "seconds": 18.55
+    },
+    {
+      "suite_version": "simplicity-1",
+      "minimal_noop": true,
+      "simplicity_reviews": 3,
+      "tests_preserved": true,
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+      "case": "broken",
+      "profile": "Balanced",
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "state": "COMPLETED",
+      "independent_pass": true,
+      "observed_failure": true,
+      "seconds": 9.03
+    },
+    {
+      "suite_version": "simplicity-1",
+      "minimal_noop": true,
+      "simplicity_reviews": 3,
+      "tests_preserved": true,
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+      "case": "indexed",
+      "profile": "Balanced",
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "state": "COMPLETED",
+      "independent_pass": true,
+      "observed_failure": true,
+      "seconds": 8.12
+    },
+    {
+      "suite_version": "simplicity-1",
+      "minimal_noop": true,
+      "simplicity_reviews": 1,
+      "tests_preserved": true,
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "cc2c6a820a70c888bcae0a4942ce74fe48be968fb6ff34c8bba77584f53e80ad",
+      "case": "satisfied",
+      "profile": "Balanced",
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "state": "COMPLETED",
+      "independent_pass": true,
+      "observed_failure": false,
+      "seconds": 3.88
+    }
+  ],
+  "intermediate_experiments": [
+    {
+      "stage": "repair-next-1.log",
+      "code_digest": "b30824d698c573725c1e9834508a731a71734f871e7b5aef004e969b76a3590c",
+      "passed": [
+        false,
+        false
+      ],
+      "independent_pass": [
+        false,
+        false
+      ],
+      "preserved": [
+        false,
+        false
+      ]
+    },
+    {
+      "stage": "repair-next-2.log",
+      "code_digest": "37ad72369d05a0962040695a5e1b123649ac220e119043bc6dc08b73ff848594",
+      "passed": [
+        false,
+        false
+      ],
+      "independent_pass": [
+        false,
+        true
+      ],
+      "preserved": [
+        false,
+        true
+      ]
+    },
+    {
+      "stage": "repair-next-3.log",
+      "code_digest": "8b336d3dbb5265e7e759559333abab4f1ef5fea0858894e8954fc17553ff6d7a",
+      "passed": [
+        false,
+        false
+      ],
+      "independent_pass": [
+        true,
+        true
+      ],
+      "preserved": [
+        true,
+        true
+      ]
+    },
+    {
+      "stage": "repair-next-4.log",
+      "code_digest": "225922b3030add5585ad9a89cb46af9b244bfc591d03d6244c3a215a1b34b348",
+      "passed": [
+        false,
+        false
+      ],
+      "independent_pass": [
+        true,
+        false
+      ],
+      "preserved": [
+        true,
+        false
+      ]
+    },
+    {
+      "stage": "repair-next-5.log",
+      "code_digest": "874f21693b7fe1fb18c276f1bf7bf4d3360117c8c4b3585c00b83f89e78742c4",
+      "passed": [
+        true,
+        true
+      ],
+      "independent_pass": [
+        true,
+        true
+      ],
+      "preserved": [
+        true,
+        true
+      ]
+    },
+    {
+      "stage": "evaluation-v1.4.2-invoice.log",
+      "code_digest": "bd73f938b8bfa0171cbf08523cad3cf55da772d6fd3d2acf717718312c2353d3",
+      "passed": [
+        false,
+        false
+      ],
+      "independent_pass": [
+        false,
+        false
+      ],
+      "preserved": [
+        false,
+        false
+      ]
+    },
+    {
+      "stage": "evaluation-v1.4.2-consolidated.log",
+      "code_digest": "52c88cf71645320c257cb3a4a90bb6a1392a1c44a01244e4357d45fdee8db74e",
+      "passed": [
+        false,
+        false
+      ],
+      "independent_pass": [
+        true,
+        true
+      ],
+      "preserved": [
+        true,
+        true
+      ]
+    },
+    {
+      "stage": "evaluation-v1.4.2-review.log",
+      "code_digest": "b254a716999007b59423656446e8f23fa6e251bea8f1506f5c36f4e7c3478c36",
+      "passed": [
+        true,
+        false
+      ],
+      "independent_pass": [
+        true,
+        false
+      ],
+      "preserved": [
+        true,
+        true
+      ]
+    },
+    {
+      "stage": "evaluation-v1.4.2-budget.log",
+      "code_digest": "3b94c87a97ab181a36986470b75adcca9b013048240daa321b91abc2c79df9ff",
+      "passed": [
+        false,
+        false
+      ],
+      "independent_pass": [
+        false,
+        false
+      ],
+      "preserved": [
+        true,
+        true
+      ]
+    },
+    {
+      "stage": "evaluation-v1.4.2-retest.log",
+      "code_digest": "c363ce5318630eb459080646605e499d3a08f88657bf416d155cf447a9f6b6a5",
+      "passed": [
+        true,
+        false
+      ],
+      "independent_pass": [
+        true,
+        false
+      ],
+      "preserved": [
+        true,
+        false
+      ]
+    },
+    {
+      "stage": "evaluation-v1.4.2-protected.log",
+      "code_digest": "92d6aec00a5549a451135454aba59cd4a29ac6865debbac8e38f44da9786b258",
+      "passed": [
+        true,
+        true
+      ],
+      "independent_pass": [
+        true,
+        true
+      ],
+      "preserved": [
+        true,
+        true
+      ]
+    }
+  ],
+  "limits": [
+    "Narrow fixture acceptance only; no broad autonomous coding guarantee.",
+    "Original evaluator, assertions and fixture-only command approvals unchanged.",
+    "Two early intermediate experiments briefly overlapped; their durations are not performance comparisons. Final runs were sequential.",
+    "Preserve-tests recognition is a documented literal English clause rule; file tools only, not OS isolation.",
+    "No dependencies or cloud services added."
+  ]
+}

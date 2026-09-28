@@ -24,3 +24,7 @@ No dedicated security contact or SLA is configured. Report privately to the repo
 Use a backup/disposable copy; confirm local server; inspect approvals; verify tests and diff; retain checkpoints; protect local metadata; avoid concurrent writers. Stronger isolation and signed distribution need separate design/testing.
 
 V1.3.0 scanner clarification: `.gitignore` is a discovery filter, not authorization. Root/nested exceptions cannot reinclude hard-excluded secrets, metadata or linked paths. Direct file tools still apply their existing path guards and approved commands still run with user OS permissions. Static Python import candidates are intersected with admitted scanned paths; no project import is executed. Only the documented ignore subset is supported; do not rely on an arbitrary ignore pattern to protect a secret.
+
+## V1.4.2 test-preservation boundary
+
+A recognized explicit Preserve ... tests clause makes conventionally named existing test files read-only to write/patch/delete/move tools for that task, including ancestor directory moves. Recognition is a narrow English clause rule described in docs/SIMPLICITY.md; it is not a general instruction parser or OS sandbox. Reads/new test files remain available. Approved commands still run with user OS rights and can modify files, so inspect every proposed command. Retesting after an edit always asks for fresh command approval; no fixture auto-approval is used in production.

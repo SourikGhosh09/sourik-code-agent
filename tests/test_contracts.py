@@ -15,7 +15,7 @@ class Contracts(unittest.TestCase):
     def test_tool_specific_schema_requires_parameters(self):
         for verified in (False, True):
             shapes = response_schema(True, verified, True)['anyOf']
-            actions = [s for s in shapes if 'tool' in s['properties']]
+            actions = [s for s in shapes if s['properties'].get('tool', {}).get('enum') != ['finish'] and 'tool' in s['properties']]
             self.assertEqual(len(actions), len(REQUIRED_FIELDS))
             for shape in actions:
                 tool = shape['properties']['tool']['enum'][0]
@@ -23,6 +23,86 @@ class Contracts(unittest.TestCase):
                 self.assertEqual('simplicity' in shape['required'], tool in ('write', 'patch', 'move', 'delete'))
                 if tool == 'patch':
                     self.assertNotIn('start_line', shape['properties'])
+
+    def test_verified_finish_uses_the_action_shape(self):
+        verified = response_schema(True, True, True)['anyOf']
+        completion = next(s for s in verified if 'done' in s['properties'])
+        self.assertIn('done', completion['required'])
+        self.assertIn('simplicity', completion['required'])
+        self.assertNotIn('tool', completion['properties'])
+        finish = next(s for s in verified if s['properties'].get('tool', {}).get('enum') == ['finish'])
+        self.assertIn('reason', finish['required'])
+        self.assertIn('content', finish['required'])
+        self.assertIn('simplicity', finish['required'])
+        self.assertFalse(any('done' in shape['properties']
+                             or shape['properties'].get('tool', {}).get('enum') == ['finish']
+                             for shape in response_schema(True, False)['anyOf']))
+
+    def test_finish_cannot_bypass_current_revision_verification(self):
+        finish = {'tool':'finish','reason':'Claimed complete','content':'Finished'}
+        for edit_after_test in (False, True):
+            with self.subTest(edit_after_test=edit_after_test), tempfile.TemporaryDirectory() as folder:
+                root = Path(folder)
+                (root/'app.py').write_text('value=1', encoding='utf-8')
+                actions = [{'plan':['Update value']}]
+                if edit_after_test:
+                    actions += [{'tool':'run','argv':[sys.executable,'-c','from app import value; assert value==1'],'verify':True},
+                                {'tool':'write','path':'app.py','content':'value=2'}]
+                actions.append(finish)
+                events = []
+                agent = Agent(root, ScriptedModel(actions), {'max_steps':len(actions)}, events.append, lambda argv:True)
+                self.assertEqual(agent.run('Set value to two and verify'), 'FAILED')
+                self.assertNotEqual(agent.tools.verified_revision, agent.tools.revision)
+                self.assertTrue(any(e['kind']=='problem' for e in events))
+
+    def test_edit_retests_with_fresh_approval_before_model_completion(self):
+        for allow_retest in (False, True):
+            with self.subTest(allow_retest=allow_retest), tempfile.TemporaryDirectory() as folder:
+                root = Path(folder)
+                (root/'app.py').write_text('value=1', encoding='utf-8')
+                (root/'test_app.py').write_text('import unittest\nfrom app import value\nclass Check(unittest.TestCase):\n def test_value(self): self.assertEqual(value,2)\n', encoding='utf-8')
+                approvals, events = [], []
+                def approve(argv):
+                    approvals.append(argv)
+                    return len(approvals) == 1 or allow_retest
+                actions = [{'plan':['Repair value']},
+                           {'tool':'patch','path':'app.py','old':'value=1','new':'value=2'},
+                           {'tool':'finish','reason':'Verified','content':'Repaired value'}]
+                agent = Agent(root, ScriptedModel(actions), {'max_steps':4}, events.append, approve)
+                self.assertEqual(agent.run('Repair value; preserve tests'), 'COMPLETED' if allow_retest else 'FAILED')
+                self.assertEqual(len(approvals), 2)
+                self.assertEqual(approvals[0], approvals[1])
+                self.assertEqual(sum(e['kind']=='controller_check' for e in events), 1)
+                self.assertEqual(agent.tools.verified_revision == agent.tools.revision, allow_retest)
+
+    def test_explicit_preserve_tests_blocks_mutations_but_allows_inspection(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root/'tests').mkdir()
+            (root/'tests'/'test_app.py').write_text('# original tests', encoding='utf-8')
+            (root/'app.py').write_text('value=1', encoding='utf-8')
+            agent = Agent(root, ScriptedModel([{'plan':['Inspect']}]), {'max_steps':1})
+            agent.run('Repair app. Preserve validation, README and existing tests.')
+            for action in ({'tool':'write','path':'tests/test_app.py','content':'weakened'},
+                           {'tool':'patch','path':'tests/test_app.py','old':'original','new':'weakened'},
+                           {'tool':'delete','path':'tests/test_app.py'},
+                           {'tool':'move','path':'tests/test_app.py','destination':'moved.py'},
+                           {'tool':'move','path':'app.py','destination':'tests/test_app.py'},
+                           {'tool':'move','path':'tests','destination':'moved_tests'}):
+                with self.subTest(action=action), self.assertRaisesRegex(PermissionError, 'preserving existing tests'):
+                    agent.tools.execute(action)
+            self.assertEqual(agent.tools.execute({'tool':'read','path':'tests/test_app.py'})['content'], '# original tests')
+            agent.tools.execute({'tool':'write','path':'tests/test_new.py','content':'# additional tests'})
+            self.assertEqual((root/'tests/test_app.py').read_text(), '# original tests')
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root/'test_app.py').write_text('# existing', encoding='utf-8')
+            agent = Agent(root, ScriptedModel([{'plan':['Update tests']}]), {'max_steps':1})
+            agent.run('Update tests for the new behavior.')
+            self.assertEqual(agent.tools.protected_paths, set())
+            negative = Agent(root, ScriptedModel([{'plan':['Replace tests']}]), {'max_steps':1})
+            negative.run('Do not preserve tests; replace them for the new behavior.')
+            self.assertEqual(negative.tools.protected_paths, set())
 
     def test_incomplete_patch_recovery_keeps_failing_test_evidence(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -33,6 +113,10 @@ class Contracts(unittest.TestCase):
             class Model(ScriptedModel):
                 def generate(inner, messages, config):
                     action = super(Model, inner).generate(messages, config)
+                    if action == {'tool':'patch','path':'app.py'}:
+                        case.assertIn('Last failing command evidence', str(messages))
+                        case.assertIn('Current files:', str(messages))
+                        case.assertTrue(messages[1]['content'].startswith('Repair add without weakening tests\n'))
                     if action.get('old') == 'a-b':
                         context = str(messages)
                         case.assertIn('Last failing command evidence', context)
@@ -69,6 +153,18 @@ class Contracts(unittest.TestCase):
             class Model(ScriptedModel):
                 def generate(inner, messages, config):
                     action = super(Model, inner).generate(messages, config)
+                    if action.get('tool') == 'finish':
+                        case.assertEqual([m['role'] for m in messages], ['system', 'user'])
+                        case.assertIn('Approved verification passed', messages[1]['content'])
+                        case.assertIn('simplicity_review', messages[1]['content'])
+                        case.assertNotIn('Last failing command evidence', messages[1]['content'])
+                    if action.get('tool') == 'run':
+                        case.assertIn('Current files', str(messages))
+                        case.assertEqual([m['role'] for m in messages], ['system', 'user'])
+                        case.assertNotIn('Inspected excerpts', str(messages))
+                    if action.get('path') == 'invoice.py' and action.get('tool') == 'write' and any('Last failing command evidence' in m['content'] and 'test_line' in m['content'] for m in messages):
+                        case.assertIn('Current files:', str(messages))
+                        case.assertNotIn('Inspected excerpts', str(messages))
                     if action.get('path') == 'line_items.py' and action.get('tool') == 'write':
                         case.assertIn('Unchanged edit: invoice.py', str(messages))
                         case.assertIn('Last failing command evidence', str(messages))
@@ -76,7 +172,7 @@ class Contracts(unittest.TestCase):
                         case.assertIn('unit_cents + quantity', str(messages))
                         case.assertIn('subtotal - discount_cents', str(messages))
                         case.assertNotIn('subtotal + discount_cents', str(messages))
-                        case.assertEqual(messages[1]['content'], 'Repair invoice and line totals; preserve README, tests and validation')
+                        case.assertTrue(messages[1]['content'].startswith('Repair invoice and line totals; preserve README, tests and validation\n'))
                     return action
             invoice = {'tool':'write', 'path':'invoice.py', 'content':INVOICE_FIXED['invoice.py']}
             command = {'tool':'run', 'argv':[sys.executable, '-m', 'unittest', 'discover']}
@@ -85,12 +181,12 @@ class Contracts(unittest.TestCase):
                        {'tool':'read', 'path':'line_items.py'}, invoice, command,
                        invoice, {'tool':'read', 'path':'invoice.py'}, invoice,
                        {'tool':'write', 'path':'line_items.py', 'content':INVOICE_FIXED['line_items.py']},
-                       command, {'done':'Both expressions verified with original tests'}]
+                       command, {'tool':'finish','reason':'Verified original tests','content':'Both expressions verified with original tests','simplicity':'Two source expressions required correction'}]
             events = []
             agent = Agent(root, Model(actions), {}, events.append, lambda argv:approve_invoice(root, argv))
             self.assertEqual(agent.run('Repair invoice and line totals; preserve README, tests and validation'), 'COMPLETED')
             self.assertEqual(agent.tools.revision, 2)
-            self.assertEqual(sum(e['kind']=='recovery' for e in events), 1)
+            self.assertEqual(sum(e['kind']=='recovery' for e in events), 4)
             self.assertTrue(approve_invoice(root, command['argv']))
             for name in ('README.md', 'test_invoice.py', 'validation.py'):
                 self.assertEqual((root/name).read_text(encoding='utf-8'), INVOICE_FILES[name])
@@ -142,6 +238,8 @@ class Contracts(unittest.TestCase):
                 def generate(inner, messages, config):
                     action = super(Model, inner).generate(messages, config)
                     if action.get('tool') == 'read':
+                        case.assertIn('Action NOT executed', messages[-1]['content'])
+                        case.assertIn('extra.py', messages[-1]['content'])
                         shapes = config['response_schema']['anyOf']
                         for tool in ('read', 'search', 'list', 'run'):
                             shape = next(s for s in shapes if s['properties'].get('tool', {}).get('enum') == [tool])

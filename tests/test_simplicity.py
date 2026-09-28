@@ -71,6 +71,17 @@ class SimplicityTests(unittest.TestCase):
         self.assertIsNone(engine.before({'tool':'write','path':'feature.py','content':'value=1'}))
         with self.assertRaises(ValueError): engine.plan({'change_budget':{'files':-1}})
 
+    def test_existing_file_repairs_defer_count_estimate_to_final_review(self):
+        (self.root/'original.py').write_text('value=1')
+        engine = self.engine()
+        engine.inspect()
+        engine.plan({'change_budget':{'files':0,'new_files':0,'dependencies':0,'complexity':'underestimate'}})
+        action = {'tool':'patch','path':'original.py','old':'1','new':'2'}
+        self.assertIsNone(engine.before(action))
+        self.tools.execute(action)
+        self.assertEqual(engine.review()['budget_exceeded'], ['files'])
+        self.assertTrue(engine.before({'tool':'write','path':'extra.py','content':'value=2'})['reconsider'])
+
     def test_unread_file_requires_evidence_before_modification(self):
         (self.root/'original.py').write_text('value=1')
         engine = self.engine()

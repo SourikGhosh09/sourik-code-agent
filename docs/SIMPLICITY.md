@@ -53,3 +53,9 @@ Final verification on 2026-09-25: 51 unittest cases ran, with 50 passed and one 
 ## V1.1.1 feedback correction
 
 Budget counts are estimates of actual change, not quotas to fill. Review and pre-action messages explicitly distinguish them from test failures and direct necessary explanations into the JSON `simplicity` field, not project files. After a flagged action, read/search/list/run schema branches stay available without an unrelated required explanation. Mutation/completion branches still request it; runtime installation/dependency checks and command approval remain enforced. The model can still disregard task instructions: no new README protection or semantic guarantee is claimed. Real-model retesting is pending; see [current evidence](evaluation-v1.1.1.json).
+
+## V1.4.2 repair policy
+
+File-count estimates for patches/writes to existing files are checked at final review rather than repeatedly blocking each repair. Completion still requires justification for exceeded estimates. New-file, dependency, inspection and abstraction gates remain. Reviews are recorded after changes; the repair prompt uses current source, while verification/final review receives the diff.
+
+An explicit English clause beginning with Preserve (at the start of a request or after a period, semicolon or newline) and containing tests before the next period/newline marks existing test_ files, *_test.py files and files below a tests directory read-only for file tools. Example: Preserve validation, README and existing tests. This is a narrow literal convention, not a general natural-language constraint parser; it does not infer that all named files are immutable. New test files and reading remain allowed.

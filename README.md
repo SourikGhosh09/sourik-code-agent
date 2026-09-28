@@ -4,7 +4,7 @@ Repository: https://github.com/SourikGhosh09/sourik-code-agent (private).
 
 A local-first desktop coding agent that inspects projects, makes bounded changes, runs approved tests, and repairs failures.
 
-Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.4.1 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
+Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.4.2 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
 
 ## Setup and commands
 
@@ -25,11 +25,11 @@ python scripts/evaluate_local.py qwen2.5-coder:7b --multifile
 
 The evaluation commands need Ollama and the model. Their fixture-only approval callbacks must never be reused for arbitrary projects. Compilation checks syntax; it is not an installer build. CI runs infrastructure tests without downloading models and cannot certify model quality.
 
-`Start V1.4.1.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
+`Start V1.4.2.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
 
 ## Capabilities and limits
 
-Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. V1.3.0 adds scoped ignore rules and more accurate local Python import context, while retaining background startup discovery. Current Windows validation: **83 passed, two symlink-fixture skips (85 total)**, including native Tk and junction checks. V1.4.0 adds read-only resource diagnostics using existing telemetry. Three actual host snapshots and a separate simulated low-memory sequence are recorded in [V1.4.0 evidence](docs/evaluation-v1.4.0.json). Actual RAM stayed above the backoff threshold; this is a baseline, not stress/inference acceptance. Manual accessibility and real-model checks remain pending.
+Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. V1.3.0 adds scoped ignore rules and more accurate local Python import context, while retaining background startup discovery. Current Windows validation: **88 passed, two symlink-fixture skips (90 total)**, including native Tk and junction checks. V1.4.0 adds read-only resource diagnostics using existing telemetry. Three actual host snapshots and a separate simulated low-memory sequence are recorded in [V1.4.0 evidence](docs/evaluation-v1.4.0.json). Actual RAM stayed above the backoff threshold; this is a baseline, not stress/inference acceptance. Manual accessibility and broader real-model acceptance remain pending.
 
 Commands run with your OS rights: **there is no OS sandbox or network isolation**. Resource settings are targets, not hard CPU/RAM/VRAM caps. Scans/context are bounded; JS/TS indexing and simplicity checks are heuristic. Hardware/model discovery runs in the background; project history/database access and initial agent setup remain synchronous. Broader multi-file/language reliability, pressure handling, plugins and model training remain unfinished.
 
@@ -60,17 +60,17 @@ Confirmed stack: Python standard library, Tkinter, SQLite and local Ollama or Op
 
 Original precedence remains in [the master pack](specs/00_MASTER_PROJECT_PACK.txt). Inspect current code; prefer the smallest correct change without weakening quality, permissions or tests. Preserve source specs and exclude local data/secrets from Git. Update PROJECT_LOG after meaningful work.
 
-Assumption: Windows remains the primary preview target; other platforms need validation. Future ideas are not delivered features. Open: representative acceptance projects, supported hardware/OS, distribution/license and stronger OS isolation. Next: diagnose repeated patch selection in REPAIR-001. Normal inference load has been measured; low-memory pressure and manual desktop acceptance remain open.
+Assumption: Windows remains the primary preview target; other platforms need validation. Future ideas are not delivered features. Open: representative acceptance projects, supported hardware/OS, distribution/license and stronger OS isolation. Next: broader representative-task evaluation and pending manual UI checks. Normal inference load has been measured; low-memory pressure and manual desktop acceptance remain open.
 
 ## Version naming
 
-Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.4.1.cmd. Historical V0/V1 labels remain in their original evidence.
+Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.4.2.cmd. Historical V0/V1 labels remain in their original evidence.
 
-## Updating to V1.4.1
+## Updating to V1.4.2
 
 1. Close the agent and extract this ZIP into a separate folder. Keep your current app folder, project folders and their `.agent` data. The ZIP contains source, not Ollama or models.
 2. When you are ready to test later, start your existing Ollama server. Open PowerShell in the extracted project folder and run `python -m unittest discover -v`, then `python scripts/evaluate_local.py qwen2.5-coder:7b --multifile`. The second command creates two disposable invoice projects under `evaluation-results`; it does not modify your working projects.
-3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.4.1 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
+3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.4.2 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
 
 Both invoice trials must finish with `passed: true` before accepting this repair milestone. If either fails, retain the generated results/events for diagnosis. The supplied source ZIP has been integrated into the existing Git repository for this update.
 
@@ -89,3 +89,7 @@ This read-only command needs no model. It samples existing host RAM/disk/NVIDIA 
 V1.4.0 real-model workload check (2026-09-27): 42 host snapshots stayed above the low-RAM threshold, but both invoice trials failed due to repeated edits with the second defect left unresolved. No model-reliability improvement is claimed. See [workload evidence](docs/evaluation-v1.4.0-workload.json).
 
 V1.4.1 corrects stale source excerpts in repeated-failure recovery. Its 85-test suite passed with two skips, but both unchanged real-model invoice trials failed; one also altered a protected test file and failed fixture trust. Reliable multi-file repair remains unaccepted. See [V1.4.1 evidence](docs/evaluation-v1.4.1.json).
+
+## V1.4.2 repair result
+
+Four consecutive invoice trials on the final source passed, preserving original tests, validation and README and changing only the two source modules. All four calculator/no-change cases also passed independent checks. Existing-file estimates are reviewed at completion; edits trigger the prior verification command with fresh approval. Explicit Preserve ... tests clauses protect recognized existing tests from file-tool mutations. See [exact evidence and intermediate failures](docs/evaluation-v1.4.2.json) and [policy limits](docs/SIMPLICITY.md). This completes the narrow invoice milestone, not general coding reliability.

@@ -212,3 +212,19 @@ What changed and why: V1.4.1 removes stale initial source/memory excerpts from r
 Errors: The new regression reproduced the stale-context defect before the one-line fix. The passing full suite emitted Tk callback-after-destroy diagnostics; manual UI validation remains pending. A temporary log-inspection command encountered truncated JSON; final structured results were used instead.
 Review: One production behavior line, strengthened existing test, version/launcher and current documentation. No dependencies, new runtime layer, evaluator change, permissions change or architecture migration.
 Remaining: Diagnose failed patch/search loops and test preservation. Do not claim full V0/V1 acceptance from scripted results.
+
+UPDATE: V1.4.2 repair investigation in progress
+Date: 2026-09-27
+Request: Repair the failed real-model invoice trials.
+Found: Rejected actions and old excerpts/diffs encouraged repeated or reversed edits; zero-file estimates repeatedly interrupted source repair; successful tests did not reliably lead to completion; the model sometimes weakened tests despite the explicit preserve request.
+Changes under validation: Refresh current task/source at edits, failed checks and verified review; expose a finish action through existing completion gates; defer existing-file count overages to final review while preserving other simplicity gates; schedule the previously used verification command after edits with fresh approval; enforce explicit preserve-tests requests in file tools. Existing modules reused, no dependencies or evaluator changes.
+Tests so far: Focused regressions cover goal/current-source retention, finish before/after stale verification, fresh command approval/denial, read-only tests including parent moves, and final estimate review. Several intermediate real-model pairs failed; an intermediate pair passed but a later repeat failed, so no final acceptance was claimed. Two early experiments overlapped briefly; their timings are not comparative performance evidence.
+Errors: Automatic approval review twice blocked tool calls due to usage limits; neither blocked call executed, and work resumed after the user requested continuation. Passing Windows suites still emit pre-existing Tk callback teardown diagnostics; manual UI acceptance remains pending.
+Remaining: Finish unchanged real-model invoice repeats and calculator/no-change regressions, review the diff, record exact final evidence, and publish only with accurate scope.
+
+UPDATE: V1.4.2 preview - scoped repair acceptance complete
+Date: 2026-09-28
+Result: V1.4.2 passed four consecutive unchanged invoice trials on the exact final source, plus all four calculator/no-change cases. Every invoice trial preserved tests, validation and README, changed only invoice.py and line_items.py, and passed independent assertions. Full Windows suite: 88 passed, two symlink skips (90 total). Evidence and source/model/evaluator hashes: docs/evaluation-v1.4.2.json. This closes the narrow REPAIR-001 fixture milestone, not broad coding reliability.
+Why the changes help: Keep obsolete actions/source out of current decisions; distinguish withheld edits from applied edits; make Test after Repair a controller step that still needs fresh approval; give completion a compatible action shape; stop file tools weakening explicitly preserved tests. Existing-file count estimates no longer repeatedly interrupt repair, but final growth still needs justification.
+Review: Reused agent.py, contracts.py, simplicity.py and tools.py. No dependencies, model download, storage migration, new worker or external service. Original evaluator and specs unchanged. All final-source invoice runs were sequential.
+Remaining: Broader representative tasks, manual startup/accessibility, physical low-memory checks and distribution/isolation gates. Prepare the current source ZIP and publish this coherent version to the existing private repository.

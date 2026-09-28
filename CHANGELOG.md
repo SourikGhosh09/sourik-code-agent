@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.2 - 2026-09-28 (preview)
+
+- Refresh current-source and review context, clarify rejected actions, and support a finish action through existing verification/budget gates.
+- Schedule the previously used verification command after edits with fresh approval; never invent a command or auto-approve it.
+- Enforce explicit Preserve ... tests clauses in file tools. Defer existing-file count estimates to final review while preserving new-file/dependency/abstraction gates.
+- Validation: 88 passed, two skips; four final-source invoice trials and four calculator/no-change cases passed independent checks. No dependencies or architecture migration. Broader reliability and manual UI acceptance remain open.
+
 ## 1.4.1 - 2026-09-27 (preview)
 
 - Remove stale initial excerpts when refreshing repeated-failure context; retain the task and current evidence.
