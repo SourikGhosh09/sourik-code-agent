@@ -65,8 +65,9 @@ class Tools:
         self.expected = {}
         self.revision = 0
         self.verified_revision = -1
-        self.checkpoint = private_folder(self.root) / 'checkpoints' / str(time.time_ns())
-        self.checkpoint.mkdir(parents=True)
+        checkpoints = private_folder(self.root) / 'checkpoints'
+        checkpoints.mkdir(exist_ok=True)
+        self.checkpoint = Path(tempfile.mkdtemp(prefix=str(time.time_ns())+'-', dir=checkpoints))
 
     def path(self, name):
         p = Path(name)

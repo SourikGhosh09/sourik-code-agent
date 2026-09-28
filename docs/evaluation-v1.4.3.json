@@ -1,0 +1,170 @@
+{
+  "version": "1.4.3",
+  "date": "2026-09-28",
+  "code_digest": "40573aa2f6d597b954236f6ea537e8c8443f739addef12b3a861e8b5dae1db9e",
+  "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+  "change": "Atomic unique checkpoint directories prevent same-timestamp Windows collisions; existing manifests and old folders remain compatible.",
+  "regression_failed_before_fix": true,
+  "infrastructure": {
+    "total": 91,
+    "passed": 89,
+    "skipped": 2,
+    "compilation_passed": true,
+    "notes": [
+      "Two Windows symlink-fixture skips.",
+      "Existing Tk teardown diagnostics; manual UI acceptance remains pending."
+    ]
+  },
+  "invoice_trials": [
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "40573aa2f6d597b954236f6ea537e8c8443f739addef12b3a861e8b5dae1db9e",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 34.56
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "40573aa2f6d597b954236f6ea537e8c8443f739addef12b3a861e8b5dae1db9e",
+      "evaluator_digest": "9f4d1ea8125c969ddafe23a072cb91e96c66177052103596fc250fce78934660",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 11.72
+    }
+  ],
+  "calculator_trials": [
+    {
+      "suite_version": "simplicity-1",
+      "minimal_noop": true,
+      "simplicity_reviews": 4,
+      "tests_preserved": true,
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "40573aa2f6d597b954236f6ea537e8c8443f739addef12b3a861e8b5dae1db9e",
+      "case": "empty",
+      "profile": "Eco",
+      "config": {
+        "num_thread": 5,
+        "num_ctx": 4096,
+        "max_steps": 24,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "state": "COMPLETED",
+      "independent_pass": true,
+      "observed_failure": false,
+      "seconds": 15.56
+    },
+    {
+      "suite_version": "simplicity-1",
+      "minimal_noop": true,
+      "simplicity_reviews": 3,
+      "tests_preserved": true,
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "40573aa2f6d597b954236f6ea537e8c8443f739addef12b3a861e8b5dae1db9e",
+      "case": "broken",
+      "profile": "Balanced",
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "state": "COMPLETED",
+      "independent_pass": true,
+      "observed_failure": true,
+      "seconds": 9.25
+    },
+    {
+      "suite_version": "simplicity-1",
+      "minimal_noop": true,
+      "simplicity_reviews": 3,
+      "tests_preserved": true,
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "40573aa2f6d597b954236f6ea537e8c8443f739addef12b3a861e8b5dae1db9e",
+      "case": "indexed",
+      "profile": "Balanced",
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "state": "COMPLETED",
+      "independent_pass": true,
+      "observed_failure": true,
+      "seconds": 8.06
+    },
+    {
+      "suite_version": "simplicity-1",
+      "minimal_noop": true,
+      "simplicity_reviews": 1,
+      "tests_preserved": true,
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "40573aa2f6d597b954236f6ea537e8c8443f739addef12b3a861e8b5dae1db9e",
+      "case": "satisfied",
+      "profile": "Balanced",
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "state": "COMPLETED",
+      "independent_pass": true,
+      "observed_failure": false,
+      "seconds": 3.8
+    }
+  ],
+  "prior_repair_evidence": "docs/evaluation-v1.4.2.json",
+  "limits": [
+    "Scoped fixture acceptance, not broad coding reliability.",
+    "No evaluator, fixture or approval relaxation.",
+    "No dependencies or schema migration."
+  ]
+}

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.3 - 2026-09-28 (preview)
+
+- Fix Windows checkpoint collisions when the clock returns the same timestamp; atomically create unique folders using existing tempfile support. Old checkpoints remain readable.
+- Reproduced the hosted failure with a fixed-clock recovery test. Final suite: 89 passed, two skips. Both invoice trials and four calculator/no-change cases passed on exact final source.
+- No dependency, permission or manifest-format change. V1.4.2 tag remains intact.
+
 ## 1.4.2 - 2026-09-28 (preview)
 
 - Refresh current-source and review context, clarify rejected actions, and support a finish action through existing verification/budget gates.

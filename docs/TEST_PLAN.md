@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.4.2 Windows run has 90 tests: 88 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.4.3 Windows run has 91 tests: 89 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -115,3 +115,7 @@ V1.4.1 removes stale initial source/memory excerpts from repeated-failure recove
 V1.4.2 passed four consecutive unchanged invoice trials on the exact final source, plus all four calculator/no-change cases. Every invoice trial preserved tests, validation and README, changed only invoice.py and line_items.py, and passed independent assertions. Full Windows suite: 88 passed, two symlink skips (90 total). Evidence and source/model/evaluator hashes: docs/evaluation-v1.4.2.json. This closes the narrow REPAIR-001 fixture milestone, not broad coding reliability.
 
 New/strengthened regressions cover fresh source/goal and verified-review context, completion schema and runtime revision gating, freshly approved/denied scheduled checks, existing-test write/patch/delete/move and ancestor-move rejection, negated preservation requests, and deferred existing-file count review with new-file gates intact. Existing native Tk tests pass but emit teardown callback diagnostics; manual accessibility acceptance is still pending. Raw results remain ignored; intermediate failures are summarized in the versioned evidence rather than discarded.
+
+## V1.4.3 checkpoint - 2026-09-28
+
+V1.4.3 prevents same-timestamp checkpoint collisions using atomic standard-library directory creation. The forced-clock regression fails on V1.4.2 and passes after the fix, including independent rollback. Final Windows suite: 89 passed, two skips (91 total). Both unchanged invoice trials and all four calculator/no-change cases passed independent checks on the exact V1.4.3 source; invoice tests, validation and README remained intact. See docs/evaluation-v1.4.3.json.

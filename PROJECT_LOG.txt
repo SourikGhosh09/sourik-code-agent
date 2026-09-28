@@ -228,3 +228,16 @@ Result: V1.4.2 passed four consecutive unchanged invoice trials on the exact fin
 Why the changes help: Keep obsolete actions/source out of current decisions; distinguish withheld edits from applied edits; make Test after Repair a controller step that still needs fresh approval; give completion a compatible action shape; stop file tools weakening explicitly preserved tests. Existing-file count estimates no longer repeatedly interrupt repair, but final growth still needs justification.
 Review: Reused agent.py, contracts.py, simplicity.py and tools.py. No dependencies, model download, storage migration, new worker or external service. Original evaluator and specs unchanged. All final-source invoice runs were sequential.
 Remaining: Broader representative tasks, manual startup/accessibility, physical low-memory checks and distribution/isolation gates. Prepare the current source ZIP and publish this coherent version to the existing private repository.
+
+UPDATE: V1.4.3 checkpoint collision repair
+Date: 2026-09-28
+Found during publication: V1.4.2 branch CI passed, but the tag workflow hit FileExistsError when two Tools instances received the same Windows clock timestamp. This was a checkpoint-name collision, not an invoice failure. A forced identical-timestamp test reproduced it locally.
+Fix: Reused Python tempfile.mkdtemp to create unique checkpoint folders atomically, retaining a timestamp prefix. No new dependency or checkpoint manifest change; old saved folders still load. Added a regression proving distinct checkpoints and independent rollback under a fixed clock.
+Checks: 89 tests passed, two Windows symlink skips (91 total). Real-model confirmation for the exact V1.4.3 source is running. Existing Tk callback teardown diagnostics remain separate from manual UI acceptance.
+Packaging: Git normalizes line endings in some Python files. The V1.4.2 ZIP was checked for code equivalence and packaged with evaluated Python bytes so source/evaluator hashes matched; runtime/models/raw fixtures remain excluded. V1.4.3 will use the same check.
+Publication: Keep the published v1.4.2 tag intact; use v1.4.3 for this compatible checkpoint fix. No force-push. An additional approval-service usage limit interrupted work before execution; work resumed after user continuation.
+
+UPDATE: V1.4.3 final validation
+Date: 2026-09-28
+V1.4.3 prevents same-timestamp checkpoint collisions using atomic standard-library directory creation. The forced-clock regression fails on V1.4.2 and passes after the fix, including independent rollback. Final Windows suite: 89 passed, two skips (91 total). Both unchanged invoice trials and all four calculator/no-change cases passed independent checks on the exact V1.4.3 source; invoice tests, validation and README remained intact. See docs/evaluation-v1.4.3.json.
+Review: Three-line checkpoint allocation replacement and one focused recovery regression, plus version/launcher/documentation updates. Dependencies unchanged. Original source specs, evaluator and permissions unchanged. Ready for GitHub CI and verified source packaging. Broader project and manual UI/resource acceptance remain pending.

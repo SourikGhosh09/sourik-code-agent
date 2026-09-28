@@ -10,6 +10,21 @@ from local_agent.context import repository_map
 
 
 class Recovery(unittest.TestCase):
+    def test_same_timestamp_checkpoints_remain_distinct_and_recoverable(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as folder, patch('local_agent.tools.time.time_ns', return_value=123):
+            first = Tools(folder, threading.Event())
+            first.execute({'tool':'write','path':'a.txt','content':'one'})
+            second = Tools(folder, threading.Event())
+            self.assertNotEqual(first.checkpoint, second.checkpoint)
+            second.execute({'tool':'write','path':'a.txt','content':'two'})
+            second.rollback()
+            self.assertEqual((Path(folder)/'a.txt').read_text(), 'one')
+            reopened = Tools(folder, threading.Event())
+            reopened.load_checkpoint(first.checkpoint)
+            reopened.rollback()
+            self.assertFalse((Path(folder)/'a.txt').exists())
+
     def test_persisted_checkpoint(self):
         with tempfile.TemporaryDirectory() as d:
             tools=Tools(d,threading.Event())
