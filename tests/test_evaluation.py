@@ -1,5 +1,7 @@
 """Validate the trusted repair fixtures without a local model."""
 from pathlib import Path
+import contextlib
+import io
 import subprocess
 import sys
 import tempfile
@@ -71,3 +73,25 @@ class TagEvaluation(InvoiceEvaluation):
                     'import sys; sys.path.insert(0, ' + repr(str(self.root)) + ');\n' + TAG_CHECKS],
                     capture_output=True, text=True, timeout=15)
                 self.assertEqual(result.returncode == 0, len(repaired) == 2, result.stderr)
+
+
+class EvaluationOptions(unittest.TestCase):
+    def test_existing_commands_keep_their_defaults(self):
+        from scripts.evaluate_local import parse_arguments
+        args = parse_arguments(['qwen2.5-coder:7b','--multifile'])
+        self.assertEqual(args.model, 'qwen2.5-coder:7b')
+        self.assertEqual(args.backend, 'ollama')
+        self.assertEqual(args.endpoint, 'http://127.0.0.1:11434')
+        self.assertTrue(args.multifile)
+        self.assertEqual(parse_arguments([]).model, 'qwen2.5-coder:3b')
+
+    def test_configured_runtime_and_invalid_options(self):
+        from scripts.evaluate_local import parse_arguments, main
+        args = parse_arguments(['coder','--tags','--backend','openai-compatible','--endpoint','http://localhost:1234'])
+        self.assertEqual((args.model,args.backend,args.endpoint,args.tags), ('coder','openai-compatible','http://localhost:1234',True))
+        for values in (['--tags','--multifile'], ['--backend','unknown'], ['--unknown']):
+            with self.subTest(values=values), contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit) as error: parse_arguments(values)
+                self.assertEqual(error.exception.code, 2)
+        with self.assertRaisesRegex(ValueError, 'local model server'):
+            main(['coder','--endpoint','https://remote.example','--tags'])

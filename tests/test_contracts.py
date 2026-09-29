@@ -1,5 +1,7 @@
 """Action completeness and recovery evidence regressions."""
 from pathlib import Path
+import json
+from unittest.mock import MagicMock, patch
 import sys
 import tempfile
 import tomllib
@@ -12,6 +14,23 @@ from tests.test_agent import ScriptedModel
 
 
 class Contracts(unittest.TestCase):
+    def test_compatible_adapter_preserves_state_schema(self):
+        from local_agent.models import LocalModel
+        for schema in (response_schema(False,False), response_schema(True,False), response_schema(True,True,True), None):
+            with self.subTest(schema=schema):
+                opener = MagicMock()
+                # Build the envelope independently so literal JSON escaping cannot mask the contract.
+                opener.open.return_value.__enter__.return_value.read.return_value = json.dumps({'choices':[{'message':{'content':json.dumps({'ready':True})}}]}).encode()
+                config = {} if schema is None else {'response_schema':schema}
+                with patch('urllib.request.build_opener',return_value=opener):
+                    result = LocalModel('coder',backend='openai-compatible').generate([{'role':'user','content':'Inspect'}],config)
+                payload = json.loads(opener.open.call_args.args[0].data)
+                self.assertEqual(result, {'ready':True})
+                self.assertEqual(opener.open.call_args.args[0].full_url, 'http://127.0.0.1:11434/v1/chat/completions')
+                expected = {'type':'json_object'} if schema is None else {'type':'json_schema','json_schema':{'name':'agent_response','schema':schema}}
+                self.assertEqual(payload['response_format'], expected)
+                self.assertEqual(config, {} if schema is None else {'response_schema':schema})
+
     def test_tool_specific_schema_requires_parameters(self):
         for verified in (False, True):
             shapes = response_schema(True, verified, True)['anyOf']

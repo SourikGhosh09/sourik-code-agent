@@ -1,6 +1,8 @@
 # Current handover
 
-Current version: V1.8.0 preview. Start Agent.cmd opens Start V1.8.0.cmd.
+Current version: V1.9.0 preview. Start Agent.cmd opens Start V1.9.0.cmd.
+
+V1.9.0 forwards the existing state-dependent response schema to local OpenAI-compatible chat requests. The evaluator now accepts --backend and --endpoint while retaining the original Ollama defaults and restricted fixture approvals. Full suite: 111 passed, two Windows symlink skips (113 total). Before the fix, one compatible tag trial passed and one failed. After the fix, both compatible tag trials, both compatible invoice trials passed independent checks. Native Ollama tag regression had one failure and one success, preserving tests, validation and README. See docs/evaluation-v1.9.0.json for all results and exact hashes. Compatible inference was tested through local Ollama only; other implementations, general coding reliability and clean-machine acceptance remain unverified.
 
 V1.8.0 extends the existing read-only setup check with --endpoint, --backend and --model. It discovers local OpenAI-compatible model IDs through /v1/models, checks an exact requested ID, and rejects unknown backends and remote endpoints. No server start, download, inference or settings write occurs in check mode. Full suite: 108 passed, two symlink skips (110 total). Actual Ollama discovery and a loopback compatible HTTP fixture passed; no real compatible-runtime inference is claimed.
 

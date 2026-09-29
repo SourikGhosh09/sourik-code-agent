@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.8.0 Windows run has 110 tests: 108 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.9.0 Windows run has 113 tests: 111 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -147,3 +147,9 @@ A GC-disabled probe showed a plain destroyed window released its variable immedi
 V1.8.0 extends the existing read-only setup check with --endpoint, --backend and --model. It discovers local OpenAI-compatible model IDs through /v1/models, checks an exact requested ID, and rejects unknown backends and remote endpoints. No server start, download, inference or settings write occurs in check mode. Full suite: 108 passed, two symlink skips (110 total). Actual Ollama discovery and a loopback compatible HTTP fixture passed; no real compatible-runtime inference is claimed. Manual accessibility, clean-machine and physical-pressure gates remain open. Six new automated cases cover ID matching, option restrictions, configuration forwarding, malformed/oversized responses and backend validation. Existing local-only proxy/redirect controls are reused.
 
 V1.8.0 Ollama regression: both restricted tag trials passed on the exact source. See docs/evaluation-v1.8.0.json. Compatible-runtime inference remains untested.
+
+## V1.9.0 compatible inference checkpoint
+
+V1.9.0 forwards the existing state-dependent response schema to local OpenAI-compatible chat requests. The evaluator now accepts --backend and --endpoint while retaining the original Ollama defaults and restricted fixture approvals. Full suite: 111 passed, two Windows symlink skips (113 total). Before the fix, one compatible tag trial passed and one failed. After the fix, both compatible tag trials, both compatible invoice trials passed independent checks. Native Ollama tag regression had one failure and one success, preserving tests, validation and README. See docs/evaluation-v1.9.0.json for all results and exact hashes. Compatible inference was tested through local Ollama only; other implementations, general coding reliability and clean-machine acceptance remain unverified.
+
+Compatible trials use the existing Ollama server through /v1/chat/completions, without another runtime or cloud service. Schema forwarding has a mocked-wire regression for planning, actions, verified completion and the no-schema JSON-object fallback. CLI checks cover defaults, backend/endpoint selection, conflicting suites and remote endpoint rejection. Do not reuse fixture approval for user projects. Compatible result config contains requested agent settings; num_thread/num_ctx are not forwarded to this protocol. Model digests remain null when compatible discovery does not provide them.

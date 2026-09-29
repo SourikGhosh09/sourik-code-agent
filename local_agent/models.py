@@ -49,6 +49,8 @@ class LocalModel:
         else:
             path = '/v1/chat/completions'
             payload = dict(model=self.model, messages=messages, stream=False, temperature=0.1, max_tokens=4096, response_format={'type':'json_object'})
+            if 'response_schema' in config:
+                payload['response_format'] = {'type': 'json_schema', 'json_schema': {'name': 'agent_response', 'schema': config['response_schema']}}
         request = urllib.request.Request(self.endpoint + path, json.dumps(payload).encode(), {'Content-Type':'application/json'})
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}),NoRedirect())
         with opener.open(request, timeout=120) as response:

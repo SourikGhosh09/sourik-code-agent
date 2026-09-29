@@ -3,6 +3,7 @@
 Not a general sandbox. Approval is limited to the calculator or fixed trusted repair fixtures.
 """
 import ast
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -205,6 +206,7 @@ else: raise AssertionError('negative price accepted')
         passed = state == 'COMPLETED' and independent and preserved and observed and reviews > 0 and approved
         result = dict(suite_version='tags-1' if suite == 'tags' else 'multifile-1', case=root.name, model=model, model_digest=model_digest,
                       code_digest=code_digest, evaluator_digest=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                      backend=model_runtime.backend, endpoint=model_runtime.endpoint,
                       state=state, passed=passed, independent_pass=independent, tests_and_validation_preserved=preserved,
                       observed_failure=observed, simplicity_reviews=reviews, changed_files=changed,
                       trusted_fixture_only=approved, config=config, seconds=round(time.monotonic()-started, 2))
@@ -214,21 +216,34 @@ else: raise AssertionError('negative price accepted')
     return 0 if all(r['passed'] for r in results) else 1
 
 
-def main():
+def parse_arguments(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('model', nargs='?', default='qwen2.5-coder:3b')
+    parser.add_argument('--endpoint', default='http://127.0.0.1:11434', help='loopback HTTP base URL without /v1')
+    parser.add_argument('--backend', choices=['ollama','openai-compatible'], default='ollama')
+    suites = parser.add_mutually_exclusive_group()
+    suites.add_argument('--tags', action='store_true')
+    suites.add_argument('--multifile', action='store_true')
+    suites.add_argument('--simplicity', action='store_true')
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_arguments(argv)
+    model_runtime = LocalModel(args.model, args.endpoint, args.backend)
     base=Path(__file__).resolve().parents[1]/'evaluation-results'/time.strftime('%Y%m%d-%H%M%S')
     base.mkdir(parents=True)
-    model=sys.argv[1] if len(sys.argv)>1 else 'qwen2.5-coder:3b'
+    model=args.model
     code_root=Path(__file__).resolve().parents[1]/'local_agent'
     code_digest=hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in sorted(code_root.glob('*.py')))).hexdigest()
-    model_runtime=LocalModel(model)
     model_digest=next((m.get('digest') for m in model_runtime.installed_models() if m.get('name')==model),None)
-    if '--tags' in sys.argv:
+    if args.tags:
         return evaluate_multifile(base, model_runtime, model, model_digest, code_digest, suite='tags')
-    if '--multifile' in sys.argv:
+    if args.multifile:
         return evaluate_multifile(base, model_runtime, model, model_digest, code_digest)
     results=[]
     cases = [('Eco','empty'),('Balanced','broken'),('Balanced','indexed')]
-    if '--simplicity' in sys.argv:
+    if args.simplicity:
         cases.append(('Balanced','satisfied'))
     for power,case in cases:
         root=base/case
@@ -273,7 +288,7 @@ def main():
         tests_preserved = original_tests is None or (root/'test_calculator.py').read_bytes() == original_tests
         minimal_noop = case != 'satisfied' or (original_source == (root/'calculator.py').read_bytes() and not agent.tools.diff())
         reviews = sum(e['kind']=='simplicity' and e['data'].get('phase')=='review' for e in events)
-        result=dict(suite_version='simplicity-1',minimal_noop=minimal_noop,simplicity_reviews=reviews,tests_preserved=tests_preserved,model=model,model_digest=model_digest,code_digest=code_digest,case=case,profile=power,config=config,state=state,independent_pass=independent,observed_failure=failed_observation,seconds=round(time.monotonic()-start,2))
+        result=dict(backend=model_runtime.backend,endpoint=model_runtime.endpoint,suite_version='simplicity-1',minimal_noop=minimal_noop,simplicity_reviews=reviews,tests_preserved=tests_preserved,model=model,model_digest=model_digest,code_digest=code_digest,case=case,profile=power,config=config,state=state,independent_pass=independent,observed_failure=failed_observation,seconds=round(time.monotonic()-start,2))
         results.append(result)
         (base/'results.json').write_text(json.dumps(results,indent=2),encoding='utf-8')
         print('RESULT',json.dumps(result),flush=True)

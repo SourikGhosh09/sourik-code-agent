@@ -1,0 +1,251 @@
+{
+  "version": "1.9.0-preview",
+  "date": "2026-09-29",
+  "infrastructure": {
+    "total": 113,
+    "passed": 111,
+    "skipped": 2
+  },
+  "baseline_results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": null,
+      "code_digest": "ddba212c317bb7e7d9809199785c4e7eae56d64da49fd3db5b02fd89e484f345",
+      "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+      "backend": "openai-compatible",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 17,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 61.1
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": null,
+      "code_digest": "ddba212c317bb7e7d9809199785c4e7eae56d64da49fd3db5b02fd89e484f345",
+      "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+      "backend": "openai-compatible",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 20,
+      "changed_files": [
+        "normalization.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 69.64
+    }
+  ],
+  "results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": null,
+      "code_digest": "067ab3f0723f060008daa4414e09d84f0e5d971e3bb018771af92fcc5821f678",
+      "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+      "backend": "openai-compatible",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 17.75
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": null,
+      "code_digest": "067ab3f0723f060008daa4414e09d84f0e5d971e3bb018771af92fcc5821f678",
+      "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+      "backend": "openai-compatible",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 17.07
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": null,
+      "code_digest": "067ab3f0723f060008daa4414e09d84f0e5d971e3bb018771af92fcc5821f678",
+      "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+      "backend": "openai-compatible",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 16.79
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": null,
+      "code_digest": "067ab3f0723f060008daa4414e09d84f0e5d971e3bb018771af92fcc5821f678",
+      "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+      "backend": "openai-compatible",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 22.76
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "067ab3f0723f060008daa4414e09d84f0e5d971e3bb018771af92fcc5821f678",
+      "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 14,
+      "changed_files": [
+        "normalization.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 63.6
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "067ab3f0723f060008daa4414e09d84f0e5d971e3bb018771af92fcc5821f678",
+      "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 18.02
+    }
+  ],
+  "limits": [
+    "Compatible inference tested only through existing local Ollama, not LM Studio or another implementation.",
+    "Compatible discovery provides no model digest. Null values are retained; native Ollama results independently record the same advertised model ID digest.",
+    "Compatible requests do not enforce num_thread or num_ctx; result config records requested agent settings, not verified server resource settings.",
+    "Guided trusted fixtures only, not general coding reliability. Calculator cases were not rerun.",
+    "No OS sandbox or hard resource caps. Manual accessibility, clean-machine and physical-pressure acceptance remain open.",
+    "Timings are not controlled benchmarks; infrastructure checks overlapped part of the compatible tag run."
+  ]
+}

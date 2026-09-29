@@ -11,7 +11,7 @@ Model.generate(messages, config) returns a dict. LocalModel calls a loopback HTT
 | Ollama GET /api/tags and GET /api/ps | Discover installed/loaded models |
 | Ollama POST /api/chat | Model, messages, JSON schema, nonstreaming generation and local thread/context options |
 | Local OpenAI-compatible GET /v1/models | Discover advertised IDs from data[].id; five-second timeout, one-million-byte limit |
-| Local OpenAI-compatible POST /v1/chat/completions | Model/messages and JSON-object response; adapter does not enforce resource targets |
+| Local OpenAI-compatible POST /v1/chat/completions | Model/messages and state JSON schema when supplied, otherwise JSON-object response; adapter does not enforce resource targets |
 
 These endpoints belong to the runtime, not Sourik Code Agent. The adapter uses a 120-second timeout and bounded generation. HTTP/network failures and malformed/non-JSON output fail requests; provider status codes are not an app-specific HTTP error contract. One worker per instance and task limits apply, not server account rate limiting. Do not expose the server publicly to bypass localhost restrictions.
 
@@ -36,3 +36,7 @@ V1.4.2: after successful current-revision verification the model may return a fi
 After an edit, the controller schedules the last verification action that actually ran (including a failing approved baseline). It requests command approval again through the existing Tools path and consumes a normal task step. With no previous verification action, no command is invented. Scheduled requests have controller_check events; model completion still requires current-revision verification and final review. Protected test paths are in-memory task state, not an SQLite migration.
 
 V1.8.0 validates the backend name and adds read-only compatible model discovery. A malformed, oversized or missing data list fails clearly; each ID must be a nonblank string. Returned records expose name only and do not invent sizes or memory estimates. Ollama discovery and generation formats remain unchanged. Reference: [LM Studio compatible model discovery](https://lmstudio.ai/docs/developer/openai-compat/models). Local HTTP fixture validation does not establish real-provider inference support.
+
+## V1.9.0 schema forwarding
+
+The compatible adapter sends response_format.type=json_schema and json_schema={name: agent_response, schema: existing response_schema}. No schema is rewritten and no silent JSON-object fallback occurs on provider errors. Calls without response_schema retain json_object. Runtime validation, completion gates, approvals and loopback/proxy/redirect restrictions remain independent of server enforcement. The server must implement this schema format; tested with local Ollama only. See [Ollama structured outputs](https://docs.ollama.com/capabilities/structured-outputs). Compatible num_thread/num_ctx enforcement and authentication are not implemented.

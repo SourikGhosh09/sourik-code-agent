@@ -17,7 +17,7 @@ No packaged application build exists. python -m compileall -q local_agent script
 
 ## Windows launchers
 
-Start V1.8.0.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
+Start V1.9.0.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
 
 Only current V1 is retained locally. The obsolete V0 launcher and release copies have been removed; historical source and acceptance records remain in Git.
 
@@ -34,3 +34,5 @@ The setup check defaults to http://127.0.0.1:11434. V1.8.0 accepts --endpoint, -
 V1.5.0 was checked from a fresh source copy on the existing Windows host without copying .runtime or models. Its existing server supplied model discovery. A genuinely clean computer, packaged installation and manual desktop journeys remain unvalidated; DIST-001 stays open.
 
 V1.8.0 compatible discovery uses GET /v1/models, not chat generation. A server requiring authentication or lacking this endpoint can fail discovery; no credential support is added. Tests use a local HTTP fixture; a real compatible runtime and clean computer remain unvalidated.
+
+V1.9.0 adds actual compatible inference evidence using the existing local Ollama server. Use the same endpoint/backend/model settings in the UI and evaluator; the evaluator does not change saved settings. Compatible servers must support JSON-schema response_format. No new runtime download, API key or dependency is required. Other server implementations and clean-machine acceptance remain open. See ../evaluation-v1.9.0.json.
