@@ -1,4 +1,5 @@
 import json
+import gc
 from pathlib import Path
 import sqlite3
 import tempfile
@@ -134,6 +135,7 @@ class V1(unittest.TestCase):
     def test_desktop_memory_and_history(self):
         self.store.add_memory('note','Keep public API stable')
         self.store.task('Fix invoice rounding')
+        self.addCleanup(gc.collect)
         window = tk.Tk()
         window.withdraw()
         try:
@@ -150,4 +152,4 @@ class V1(unittest.TestCase):
             app.history_list.selection_set(0)
             app.reuse_goal()
             self.assertIn('Fix invoice rounding',app.goal.get('1.0','end'))
-        finally: window.destroy()
+        finally: app.close()

@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.7.0 Windows run has 104 tests: 102 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.7.1 Windows run has 104 tests: 102 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -135,3 +135,9 @@ Seven evaluator unit tests pass: three original invoice cases plus four tag case
 V1.7.0 adds keyboard navigation and compact model settings. Tab/Shift+Tab leave the request field without editing it; Ctrl+Enter runs through the existing task action, Esc requests Stop, and Ctrl+L focuses the project field. Ctrl+Tab/Ctrl+Shift+Tab cycle output tabs. Full Windows suite: 102 passed, two symlink skips (104 total). No dependencies or agent/approval changes. Manual screen-reader, full scaling and approval/recovery journeys remain pending.
 
 The original settings row requested 1048 pixels with 732 available at 780x600 and Tk scaling 2.0. Three native tests cover horizontal fit, forward/backward focus without text changes, Run/Stop/project shortcuts and forward/backward output traversal. They reproduced newline insertion before Ctrl+Enter and failed notebook traversal during implementation; both were corrected. Compilation passed. Pre-existing Tk teardown callback diagnostics remain; no new model evaluation was required for these UI changes.
+
+## V1.7.1 cleanup verification
+
+V1.7.1 repairs native test teardown: close through App.close, release UI references and collect cycles on the main thread before later worker tests. Ten sequential UI/history repetitions passed (240 tests), followed by the full suite: 102 passed, two symlink skips (104 total). No Tk teardown diagnostics appeared in those runs. Production behavior, existing timeouts and dependencies are unchanged. Latest real-model evidence remains V1.6.0; manual accessibility and clean-machine acceptance remain open.
+
+A GC-disabled probe showed a plain destroyed window released its variable immediately, while a real Agent approval callback retained it through an App/Agent cycle. Main-thread collection released the cycle. Weak-reference teardown assertions now verify release in native task and keyboard tests. This reproduces retention and removes the observed cleanup diagnostics; the exact historical Python 3.12 scheduling failure was not deterministically reproduced locally. Hosted CI remains an additional check, not proof that all timing failures are impossible.

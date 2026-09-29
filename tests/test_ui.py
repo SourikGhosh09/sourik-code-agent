@@ -1,4 +1,6 @@
 from pathlib import Path
+import gc
+import weakref
 import tempfile
 import time
 import tkinter as tk
@@ -13,6 +15,10 @@ class Desktop(unittest.TestCase):
             window=tk.Tk()
             window.withdraw()
             app=App(window)
+            variable = weakref.ref(app.project)
+            self.addCleanup(lambda:self.assertIsNone(variable(), 'Tk variable survived main-thread cleanup'))
+            self.addCleanup(gc.collect)
+            self.addCleanup(app.close)
             app.settings=Path(d)/'settings.json'
             app.project.set(d)
             app.goal.insert('1.0','An intentionally incomplete task')
@@ -28,10 +34,10 @@ class Desktop(unittest.TestCase):
                     time.sleep(.01)
             self.assertFalse(app.preparing)
             self.assertFalse(app.worker.is_alive())
+            window.after_cancel(app.poll_timer)
             app.poll()
             self.assertEqual(app.status.get(),'Failed')
             self.assertIn('Completion was not verified',app.views['What changed?'].get('1.0','end'))
-            window.destroy()
 
 
 class Startup(unittest.TestCase):
@@ -279,18 +285,21 @@ class Startup(unittest.TestCase):
 class KeyboardLayout(unittest.TestCase):
     def setUp(self):
         self.window = tk.Tk()
-        self.addCleanup(self.window.destroy)
         self.window.tk.call('tk', 'scaling', 2.0)
         with patch.object(App, 'refresh_project'):
             self.app = App(self.window)
         self.app.project.set('')
         self.window.geometry('780x600')
         self.window.update()
-        self.addCleanup(self.cancel_timers)
+        self.addCleanup(self.close_desktop)
 
-    def cancel_timers(self):
-        for timer in (self.app.poll_timer, self.app.refresh_timer):
-            self.window.after_cancel(timer)
+    def close_desktop(self):
+        variable = weakref.ref(self.app.project)
+        self.app.close()
+        self.app = None
+        self.window = None
+        gc.collect()
+        self.assertIsNone(variable(), 'Tk variable survived main-thread cleanup')
 
     def widgets(self, parent):
         for child in parent.winfo_children():

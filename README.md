@@ -4,7 +4,7 @@ Repository: https://github.com/SourikGhosh09/sourik-code-agent (private).
 
 A local-first desktop coding agent that inspects projects, makes bounded changes, runs approved tests, and repairs failures.
 
-Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.7.0 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
+Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.7.1 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
 
 ## Setup and commands
 
@@ -26,7 +26,7 @@ python scripts/evaluate_local.py qwen2.5-coder:7b --tags
 
 The evaluation commands need Ollama and the model. Their fixture-only approval callbacks must never be reused for arbitrary projects. Compilation checks syntax; it is not an installer build. CI runs infrastructure tests without downloading models and cannot certify model quality.
 
-`Start V1.7.0.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
+`Start V1.7.1.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
 
 ## Capabilities and limits
 
@@ -65,13 +65,13 @@ Assumption: Windows remains the primary preview target; other platforms need val
 
 ## Version naming
 
-Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.7.0.cmd. Historical V0/V1 labels remain in their original evidence.
+Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.7.1.cmd. Historical V0/V1 labels remain in their original evidence.
 
-## Updating to V1.7.0
+## Updating to V1.7.1
 
 1. Close the agent and extract this ZIP into a separate folder. Keep your current app folder, project folders and their `.agent` data. The ZIP contains source, not Ollama or models.
 2. When you are ready to test later, start your existing Ollama server. Open PowerShell in the extracted project folder and run `python scripts/start_local_runtime.py --check`, then `python -m unittest discover -v`. The setup check explains any missing requirements.
-3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.7.0 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
+3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.7.1 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
 
 To repeat the separate repair benchmark, run `python scripts/evaluate_local.py qwen2.5-coder:7b --multifile`. It creates two disposable invoice projects under `evaluation-results`. Both must report `passed: true`; retain results/events if either fails. Setup readiness alone does not establish coding reliability.
 
@@ -114,3 +114,7 @@ This extends evaluation coverage; it adds no new production agent behavior. The 
 V1.7.0 adds keyboard navigation and compact model settings. Tab/Shift+Tab leave the request field without editing it; Ctrl+Enter runs through the existing task action, Esc requests Stop, and Ctrl+L focuses the project field. Ctrl+Tab/Ctrl+Shift+Tab cycle output tabs. Full Windows suite: 102 passed, two symlink skips (104 total). No dependencies or agent/approval changes. Manual screen-reader, full scaling and approval/recovery journeys remain pending.
 
 No new model trial was run for this UI-only increment; latest recorded model evidence remains V1.6.0. See [keyboard details](docs/UI_SPEC.md).
+
+## V1.7.1 test-cleanup patch
+
+V1.7.1 repairs native test teardown: close through App.close, release UI references and collect cycles on the main thread before later worker tests. Ten sequential UI/history repetitions passed (240 tests), followed by the full suite: 102 passed, two symlink skips (104 total). No Tk teardown diagnostics appeared in those runs. Production behavior, existing timeouts and dependencies are unchanged. Latest real-model evidence remains V1.6.0; manual accessibility and clean-machine acceptance remain open.

@@ -74,3 +74,9 @@ Infrastructure: 99 passed, two symlink skips (101 total). No production agent be
 ## V1.7.0 desktop checkpoint
 
 V1.7.0 adds keyboard navigation and compact model settings. Tab/Shift+Tab leave the request field without editing it; Ctrl+Enter runs through the existing task action, Esc requests Stop, and Ctrl+L focuses the project field. Ctrl+Tab/Ctrl+Shift+Tab cycle output tabs. Full Windows suite: 102 passed, two symlink skips (104 total). No dependencies or agent/approval changes. Manual screen-reader, full scaling and approval/recovery journeys remain pending. UI-002 remains open for manual acceptance.
+
+## V1.7.1 cleanup verification
+
+V1.7.1 repairs native test teardown: close through App.close, release UI references and collect cycles on the main thread before later worker tests. Ten sequential UI/history repetitions passed (240 tests), followed by the full suite: 102 passed, two symlink skips (104 total). No Tk teardown diagnostics appeared in those runs. Production behavior, existing timeouts and dependencies are unchanged. Latest real-model evidence remains V1.6.0; manual accessibility and clean-machine acceptance remain open.
+
+A GC-disabled probe showed a plain destroyed window released its variable immediately, while a real Agent approval callback retained it through an App/Agent cycle. Main-thread collection released the cycle. Weak-reference teardown assertions now verify release in native task and keyboard tests. This reproduces retention and removes the observed cleanup diagnostics; the exact historical Python 3.12 scheduling failure was not deterministically reproduced locally. Hosted CI remains an additional check, not proof that all timing failures are impossible.

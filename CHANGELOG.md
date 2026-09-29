@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.1 - 2026-09-29 (preview)
+
+- Close native test windows normally and collect released Tk reference cycles on the UI thread.
+- Assert Tk variable release and avoid duplicate test polling timers. Ten repeated UI/history runs and the full suite pass without previous teardown diagnostics.
+- No production behavior, timeout, dependency or model change.
+
+
 ## 1.7.0 - 2026-09-29 (preview)
 
 - Add request-field Tab navigation, Run/Stop/project shortcuts and output-tab cycling.
