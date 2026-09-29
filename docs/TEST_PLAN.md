@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.6.0 Windows run has 101 tests: 99 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.7.0 Windows run has 104 tests: 102 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -129,3 +129,9 @@ Seven launcher tests pass, including the original wait-for-readiness case and si
 Run `python scripts/evaluate_local.py qwen2.5-coder:7b --tags`. Two disposable fixtures require Unicode casefolding and stable deduplication across imported modules. The goal names the expected expression repairs; the approval callback accepts only original/fixed AST variants and unchanged tests/validation/README. It rejects additional executable files and unrelated commands. This intentionally restricted approval is not an OS sandbox and must never be used for user projects.
 
 Seven evaluator unit tests pass: three original invoice cases plus four tag cases. Both fixture defects and each partial repair fail independent assertions; the combined fix passes Unicode equivalence, first-seen order, input preservation, iterator, empty and invalid-tag checks. Full Windows suite: 99 passed, two symlink skips (101 total), with the pre-existing Tk teardown diagnostics. Two real-model tag trials passed; exact hashes and invoice regression results are recorded in evaluation-v1.6.0.json. These runs do not certify general coding reliability, manual accessibility, low-memory pressure or clean-machine setup.
+
+## V1.7.0 native keyboard/layout verification
+
+V1.7.0 adds keyboard navigation and compact model settings. Tab/Shift+Tab leave the request field without editing it; Ctrl+Enter runs through the existing task action, Esc requests Stop, and Ctrl+L focuses the project field. Ctrl+Tab/Ctrl+Shift+Tab cycle output tabs. Full Windows suite: 102 passed, two symlink skips (104 total). No dependencies or agent/approval changes. Manual screen-reader, full scaling and approval/recovery journeys remain pending.
+
+The original settings row requested 1048 pixels with 732 available at 780x600 and Tk scaling 2.0. Three native tests cover horizontal fit, forward/backward focus without text changes, Run/Stop/project shortcuts and forward/backward output traversal. They reproduced newline insertion before Ctrl+Enter and failed notebook traversal during implementation; both were corrected. Compilation passed. Pre-existing Tk teardown callback diagnostics remain; no new model evaluation was required for these UI changes.

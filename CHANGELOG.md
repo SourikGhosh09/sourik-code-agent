@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0 - 2026-09-29 (preview)
+
+- Add request-field Tab navigation, Run/Stop/project shortcuts and output-tab cycling.
+- Use expanding model/server rows to fix demonstrated horizontal clipping.
+- Three native Tk regressions; 102 tests passed, two skipped. No dependencies or agent/approval changes. Manual accessibility acceptance remains open.
+
+
 ## 1.6.0 - 2026-09-29 (preview)
 
 - Add a constrained `--tags` real-model repair evaluation for Unicode normalization and stable deduplication across modules, reusing the existing trusted fixture runner.

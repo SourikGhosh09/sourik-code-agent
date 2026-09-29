@@ -41,6 +41,9 @@ class App:
         ttk.Label(frame,text='What do you want to build or change?').pack(anchor='w',pady=(18,6))
         self.goal = scrolledtext.ScrolledText(frame,height=4,font=('Segoe UI',12),wrap='word')
         self.goal.pack(fill='x')
+        self.goal.bind('<Tab>', lambda event:self.move_focus(event))
+        self.goal.bind('<Shift-Tab>', lambda event:self.move_focus(event, backward=True))
+        self.goal.bind('<ISO_Left_Tab>', lambda event:self.move_focus(event, backward=True))
         controls = ttk.Frame(frame)
         controls.pack(fill='x',pady=12)
         ttk.Label(controls,text='AI power').pack(side='left')
@@ -48,9 +51,9 @@ class App:
         ttk.Combobox(controls,textvariable=self.power,values=['Auto','Eco','Balanced','High'],state='readonly',width=12).pack(side='left',padx=8)
         self.preference = tk.StringVar(value='Quality')
         ttk.Combobox(controls,textvariable=self.preference,values=['Quality','Speed'],state='readonly',width=9).pack(side='left')
-        self.run_button = ttk.Button(controls,text='Run task',command=self.run)
+        self.run_button = ttk.Button(controls,text='Run task (Ctrl+Enter)',command=self.run)
         self.run_button.pack(side='right')
-        ttk.Button(controls,text='Stop',command=self.stop).pack(side='right',padx=8)
+        ttk.Button(controls,text='Stop (Esc)',command=self.stop).pack(side='right',padx=8)
         advanced_shell = ttk.Frame(frame)
         advanced_shell.pack(fill='x')
         advanced = ttk.LabelFrame(advanced_shell,text='Local model settings',padding=10)
@@ -61,14 +64,15 @@ class App:
                 advanced.pack(fill='x',pady=6)
         ttk.Button(advanced_shell,text='Model settings',command=toggle_settings).pack(anchor='w')
         self.automodel = tk.BooleanVar(value=True)
-        ttk.Checkbutton(advanced,text='Auto model',variable=self.automodel).pack(side='left')
+        advanced.columnconfigure(1,weight=1)
+        ttk.Checkbutton(advanced,text='Auto model',variable=self.automodel).grid(row=0,column=0,sticky='w')
         self.model = tk.StringVar(value='qwen2.5-coder:3b')
         self.endpoint = tk.StringVar(value='http://127.0.0.1:11434')
         self.backend = tk.StringVar(value='ollama')
-        for label,var in [('Model',self.model),('Server',self.endpoint)]:
-            ttk.Label(advanced,text=label).pack(side='left',padx=4)
-            ttk.Entry(advanced,textvariable=var,width=25).pack(side='left')
-        ttk.Combobox(advanced,textvariable=self.backend,values=['ollama','openai-compatible'],width=19,state='readonly').pack(side='left',padx=8)
+        for row_index,(label,var) in enumerate([('Model',self.model),('Server',self.endpoint)], start=1):
+            ttk.Label(advanced,text=label).grid(row=row_index,column=0,sticky='w',padx=(0,8),pady=3)
+            ttk.Entry(advanced,textvariable=var,width=25).grid(row=row_index,column=1,sticky='ew',pady=3)
+        ttk.Combobox(advanced,textvariable=self.backend,values=['ollama','openai-compatible'],width=19,state='readonly').grid(row=0,column=1,sticky='w',pady=3)
         self.cpu_target = tk.StringVar(value='')
         self.context_target = tk.StringVar(value='')
         # Targets stay inside the collapsed settings group.
@@ -86,10 +90,14 @@ class App:
         ttk.Label(frame,textvariable=self.status,font=('Segoe UI',12,'bold')).pack(anchor='w',pady=12)
         notebook = ttk.Notebook(frame)
         notebook.pack(fill='both',expand=True)
+        notebook.enable_traversal()
         self.views = {}
         for name in ('Progress','Changes','What changed?','Technical details'):
             view = scrolledtext.ScrolledText(notebook,wrap='word',font=('Consolas',10),state='disabled')
             notebook.add(view,text=name)
+            for sequence,step in (('<Control-Tab>',1),('<Control-Shift-Tab>',-1)):
+                view.bind(sequence,lambda event, step=step:self.shortcut(
+                    lambda:notebook.select((notebook.index('current')+step)%len(notebook.tabs()))))
             self.views[name] = view
         memory_frame = ttk.Frame(notebook,padding=8)
         notebook.add(memory_frame,text='Project memory')
@@ -127,6 +135,19 @@ class App:
         self.refresh_timer = window.after(200,self.refresh_project)
         window.protocol('WM_DELETE_WINDOW',self.close)
         self.poll_timer = window.after(100,self.poll)
+        window.bind('<Control-l>',lambda event:self.shortcut(self.project_picker.focus_set))
+        window.bind('<Control-Return>',lambda event:self.shortcut(self.run))
+        self.goal.bind('<Control-Return>',lambda event:self.shortcut(self.run))
+        window.bind('<Escape>',lambda event:self.shortcut(self.stop))
+
+    def move_focus(self, event, backward=False):
+        target = event.widget.tk_focusPrev() if backward else event.widget.tk_focusNext()
+        target.focus_set()
+        return 'break'
+
+    def shortcut(self, action):
+        action()
+        return 'break'
 
     def choose(self):
         folder = filedialog.askdirectory(mustexist=False,title='Choose or create your project folder')

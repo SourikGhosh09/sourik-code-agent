@@ -44,3 +44,7 @@ Reuse the existing launcher script and local model discovery to diagnose Python/
 ## V1.6.0 non-arithmetic evaluation
 
 Add one tag normalization/order fixture to the existing real-model evaluator. Reuse its approval and reporting logic, retaining the original invoice contract. Prove both defects and partial repairs independently; allow only trusted AST variants, preserve tests/validation/README and report exact source/model/evaluator hashes. Run two sequential tag trials and the original invoice regression. Do not modify production reasoning or claim general reliability based on these guided cases.
+
+## V1.7.0 desktop usability
+
+V1.7.0 adds keyboard navigation and compact model settings. Tab/Shift+Tab leave the request field without editing it; Ctrl+Enter runs through the existing task action, Esc requests Stop, and Ctrl+L focuses the project field. Ctrl+Tab/Ctrl+Shift+Tab cycle output tabs. Full Windows suite: 102 passed, two symlink skips (104 total). No dependencies or agent/approval changes. Manual screen-reader, full scaling and approval/recovery journeys remain pending. UI-002 remains open for manual acceptance.

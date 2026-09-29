@@ -1,6 +1,8 @@
 # Current handover
 
-Current version: V1.6.0 preview. Start Agent.cmd opens Start V1.6.0.cmd.
+Current version: V1.7.0 preview. Start Agent.cmd opens Start V1.7.0.cmd.
+
+V1.7.0 adds keyboard navigation and compact model settings. Tab/Shift+Tab leave the request field without editing it; Ctrl+Enter runs through the existing task action, Esc requests Stop, and Ctrl+L focuses the project field. Ctrl+Tab/Ctrl+Shift+Tab cycle output tabs. Full Windows suite: 102 passed, two symlink skips (104 total). No dependencies or agent/approval changes. Manual screen-reader, full scaling and approval/recovery journeys remain pending. Latest model evidence remains V1.6.0.
 
 V1.6.0 adds the --tags real-model evaluation in scripts/evaluate_local.py. Both 7B trials repaired Unicode normalization and stable deduplication, preserving tests/validation/README and changing only two source modules. Full suite: 99 passed, two symlink skips (101 total). Source/model/evaluator hashes and original invoice regression results are in docs/evaluation-v1.6.0.json. Production agent behavior is unchanged; this is guided fixture evidence, not a new general-reliability claim.
 

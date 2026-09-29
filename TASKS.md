@@ -70,3 +70,7 @@ The existing launcher helper now checks Python/Tk and default Ollama model disco
 - [x] EVAL-002 - Non-arithmetic multi-file fixture. Depends: EVAL-001. Unicode casefold normalization and first-seen deduplication use the existing bounded runner/approval checks. Two real 7B trials passed with original tests, validation and README preserved, changing only normalization.py and catalog.py. Both independent partial-fix checks fail until the two repairs are present. See docs/evaluation-v1.6.0.json. This is a constrained, explicitly guided fixture, not broad reliability acceptance.
 
 Infrastructure: 99 passed, two symlink skips (101 total). No production agent behavior, dependencies or resource/permission boundaries changed. Next: complete pending manual UI/accessibility and clean-machine acceptance before adding more architecture. Broader user-project evaluation remains open.
+
+## V1.7.0 desktop checkpoint
+
+V1.7.0 adds keyboard navigation and compact model settings. Tab/Shift+Tab leave the request field without editing it; Ctrl+Enter runs through the existing task action, Esc requests Stop, and Ctrl+L focuses the project field. Ctrl+Tab/Ctrl+Shift+Tab cycle output tabs. Full Windows suite: 102 passed, two symlink skips (104 total). No dependencies or agent/approval changes. Manual screen-reader, full scaling and approval/recovery journeys remain pending. UI-002 remains open for manual acceptance.

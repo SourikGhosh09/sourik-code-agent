@@ -274,3 +274,80 @@ class Startup(unittest.TestCase):
         finally:
             window.after_cancel(self.app.poll_timer)
             window.after_cancel(self.app.refresh_timer)
+
+
+class KeyboardLayout(unittest.TestCase):
+    def setUp(self):
+        self.window = tk.Tk()
+        self.addCleanup(self.window.destroy)
+        self.window.tk.call('tk', 'scaling', 2.0)
+        with patch.object(App, 'refresh_project'):
+            self.app = App(self.window)
+        self.app.project.set('')
+        self.window.geometry('780x600')
+        self.window.update()
+        self.addCleanup(self.cancel_timers)
+
+    def cancel_timers(self):
+        for timer in (self.app.poll_timer, self.app.refresh_timer):
+            self.window.after_cancel(timer)
+
+    def widgets(self, parent):
+        for child in parent.winfo_children():
+            yield child
+            yield from self.widgets(child)
+
+    def test_settings_fit_minimum_width_at_larger_text_scale(self):
+        widgets = list(self.widgets(self.window))
+        next(w for w in widgets if w.winfo_class() == 'TButton' and w.cget('text') == 'Model settings').invoke()
+        self.window.update()
+        settings = next(w for w in widgets if w.winfo_class() == 'TLabelframe' and w.cget('text') == 'Local model settings')
+        self.assertLessEqual(settings.winfo_reqwidth(), settings.winfo_width())
+        controls = self.app.run_button.master
+        self.assertLessEqual(controls.winfo_reqwidth(), controls.winfo_width())
+
+    def test_goal_tab_moves_focus_without_inserting_text(self):
+        goal = self.app.goal
+        goal.insert('1.0', 'Keep this request')
+        self.window.focus_force()
+        goal.focus_set()
+        self.window.update()
+        goal.event_generate('<Tab>')
+        self.window.update()
+        self.assertNotEqual(self.window.focus_get(), goal)
+        self.assertEqual(goal.get('1.0', 'end-1c'), 'Keep this request')
+        goal.focus_set()
+        goal.event_generate('<Shift-Tab>')
+        self.window.update()
+        self.assertEqual(self.window.focus_get(), self.app.project_picker.tk_focusNext())
+
+    def test_shortcuts_use_existing_actions(self):
+        self.window.geometry('1000x900')
+        self.window.update()
+        self.app.goal.insert('1.0', 'Keep this request')
+        self.window.focus_force()
+        self.app.goal.focus_set()
+        self.window.update()
+        with patch.object(self.app, 'run') as run, patch.object(self.app, 'stop') as stop:
+            self.app.goal.event_generate('<Control-Return>')
+            self.app.goal.event_generate('<Escape>')
+            self.window.update()
+            run.assert_called_once_with()
+            stop.assert_called_once_with()
+        self.assertEqual(self.app.goal.get('1.0', 'end-1c'), 'Keep this request')
+        self.app.goal.event_generate('<Control-l>')
+        self.window.update()
+        self.assertEqual(self.window.focus_get(), self.app.project_picker)
+        notebook = next(w for w in self.widgets(self.window) if w.winfo_class() == 'TNotebook')
+        before = notebook.select()
+        self.app.views['Progress'].focus_set()
+        self.window.update()
+        self.assertEqual(self.window.focus_get(), self.app.views['Progress'])
+        self.app.views['Progress'].event_generate('<Control-Tab>')
+        self.window.update()
+        self.assertNotEqual(notebook.select(), before)
+        self.app.views['Changes'].focus_set()
+        self.window.update()
+        self.app.views['Changes'].event_generate('<Control-Shift-Tab>')
+        self.window.update()
+        self.assertEqual(notebook.select(), before)
