@@ -1,0 +1,81 @@
+{
+  "version": "1.9.1-preview",
+  "date": "2026-09-30",
+  "scope": "Evaluator diagnostics only; rejected prompt candidates are separate historical evidence.",
+  "infrastructure": {
+    "total": 115,
+    "passed": 113,
+    "skipped": 2
+  },
+  "results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "719890f0a3a8e82b50d08319a497c33d0ad70f945f79108bb46ee78aeabe75a1",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 24.59
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "719890f0a3a8e82b50d08319a497c33d0ad70f945f79108bb46ee78aeabe75a1",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 6,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 20.06
+    }
+  ],
+  "limits": [
+    "No production recovery fix or broad reliability claim.",
+    "Compatible, invoice and calculator trials not rerun; approval rules and agent behavior unchanged.",
+    "Manual accessibility, clean-machine and physical-pressure acceptance remain open."
+  ]
+}

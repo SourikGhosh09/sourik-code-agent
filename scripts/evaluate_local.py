@@ -95,43 +95,47 @@ for tag in ('', '  ', None, 42, True):
 """
 
 
-def approve_invoice(root, argv):
-    return _approve_fixture(root, argv, INVOICE_FILES, INVOICE_FIXED, ('line_items.py', 'invoice.py'))
+def approve_invoice(root, argv, reasons=None):
+    return _approve_fixture(root, argv, INVOICE_FILES, INVOICE_FIXED, ('line_items.py', 'invoice.py'), reasons)
 
 
-def approve_tags(root, argv):
-    return _approve_fixture(root, argv, TAG_FILES, TAG_FIXED, ('normalization.py', 'catalog.py'))
+def approve_tags(root, argv, reasons=None):
+    return _approve_fixture(root, argv, TAG_FILES, TAG_FIXED, ('normalization.py', 'catalog.py'), reasons)
 
 
-def _approve_fixture(root, argv, files, fixed, editable):
+def _approve_fixture(root, argv, files, fixed, editable, reasons=None):
+    def deny(reason):
+        if reasons is not None:
+            reasons.append(reason)
+        return False
     if not argv or argv[0] not in ('python', sys.executable):
-        return False
+        return deny('interpreter_not_allowed')
     if argv[1:] not in (['-m', 'unittest', 'discover'], ['-m', 'unittest', 'discover', '-v']):
-        return False
+        return deny('command_not_allowed')
     try:
         for name, original in files.items():
             path = root / name
             if path.is_symlink() or path.is_junction() or not path.is_file():
-                return False
+                return deny('missing_or_linked_fixture: '+name)
             actual = path.read_text(encoding='utf-8')
             if name in editable:
                 # AST identity allows comments/formatting, but no new executable behavior.
                 allowed = {ast.dump(ast.parse(original)), ast.dump(ast.parse(fixed[name]))}
                 if ast.dump(ast.parse(actual)) not in allowed:
-                    return False
+                    return deny('untrusted_ast: '+name)
             elif actual != original:
-                return False
+                return deny('protected_fixture_changed: '+name)
         for path in root.rglob('*'):
             relative = path.relative_to(root)
             if path.is_symlink() or path.is_junction():
-                return False
+                return deny('linked_path: '+str(relative))
             if relative.parts[0] == '.agent':
                 continue
             if path.is_file() and str(relative) not in files and str(relative) != 'PROJECT_LOG.txt':
                 # Reject added modules, bytecode and startup customizations as well.
-                return False
-    except (OSError, UnicodeError, SyntaxError):
-        return False
+                return deny('extra_file: '+str(relative))
+    except (OSError, UnicodeError, SyntaxError) as exc:
+        return deny('fixture_read_or_parse_error: '+type(exc).__name__)
     return True
 
 
@@ -152,7 +156,15 @@ def evaluate_multifile(base, model_runtime, model, model_digest, code_digest, su
             events.append(event)
             print(root.name, event['kind'], json.dumps(event['data'])[:1000], flush=True)
         config = preference_profile(detect(root), 'Balanced')
-        agent = Agent(root, model_runtime, config, emit, lambda argv: approve(root, argv))
+        approval_denials = []
+        def approve_command(argv):
+            reasons = []
+            allowed = approve(root, argv, reasons)
+            if not allowed:
+                approval_denials.extend(reasons)
+                emit({'kind':'evaluation_approval_denied','data':reasons})
+            return allowed
+        agent = Agent(root, model_runtime, config, emit, approve_command)
         goal = ('Repair this multi-file invoice project. Inspect its modules and run the existing tests first. '
                 'Line totals must multiply integer cents by quantity; invoice totals must subtract the discount. '
                 'Preserve validation, public functions, README and existing tests. Reuse the existing modules; '
@@ -166,7 +178,8 @@ def evaluate_multifile(base, model_runtime, model, model_digest, code_digest, su
                     'This controlled evaluation accepts only these expression repairs in normalization.py and catalog.py.')
         started = time.monotonic()
         state = agent.run(goal)
-        approved = approve(root, ['python', '-m', 'unittest', 'discover'])
+        final_trust_reasons = []
+        approved = approve(root, ['python', '-m', 'unittest', 'discover'], final_trust_reasons)
         independent = False
         if approved:
             # Execute only AST-identical trusted fixture variants, independently of model tests.
@@ -208,6 +221,8 @@ else: raise AssertionError('negative price accepted')
                       code_digest=code_digest, evaluator_digest=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                       backend=model_runtime.backend, endpoint=model_runtime.endpoint,
                       state=state, passed=passed, independent_pass=independent, tests_and_validation_preserved=preserved,
+                      independent_check_status=('passed' if independent else 'failed') if approved else 'not_run_untrusted_fixture',
+                      approval_denials=approval_denials, final_trust_reasons=final_trust_reasons,
                       observed_failure=observed, simplicity_reviews=reviews, changed_files=changed,
                       trusted_fixture_only=approved, config=config, seconds=round(time.monotonic()-started, 2))
         results.append(result)

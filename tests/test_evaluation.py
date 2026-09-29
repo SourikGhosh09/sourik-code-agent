@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from scripts.evaluate_local import INVOICE_FILES, INVOICE_FIXED, approve_invoice, TAG_FILES, TAG_FIXED, TAG_CHECKS, approve_tags
 
@@ -62,6 +63,42 @@ class TagEvaluation(InvoiceEvaluation):
     fixed = TAG_FIXED
     approve = staticmethod(approve_tags)
     source = 'catalog.py'
+
+    def test_alternative_ast_is_denied_with_reason_without_execution(self):
+        self.write(TAG_FIXED)
+        (self.root/'catalog.py').write_text(TAG_FIXED['catalog.py'].replace(
+            'return list(dict.fromkeys(normalized))',
+            'unique = list(dict.fromkeys(normalized))\n    return unique'), encoding='utf-8')
+        reasons = []
+        self.assertFalse(approve_tags(self.root, ['python','-m','unittest','discover'], reasons))
+        self.assertEqual(reasons, ['untrusted_ast: catalog.py'])
+        self.write(TAG_FIXED)
+        reasons = []
+        self.assertTrue(approve_tags(self.root, ['python','-m','unittest','discover'], reasons))
+        self.assertEqual(reasons, [])
+
+    def test_untrusted_trial_reports_independent_checks_not_run(self):
+        from scripts.evaluate_local import evaluate_multifile
+        import json
+        class DeniedAgent:
+            def __init__(inner, root, model, config, emit, approve):
+                inner.root, inner.approve = root, approve
+            def run(inner, goal):
+                (inner.root/'catalog.py').write_text('raise RuntimeError("must not execute")', encoding='utf-8')
+                self.assertFalse(inner.approve(['python','-m','unittest','discover']))
+                return 'FAILED'
+        base = self.root/'results'
+        base.mkdir()
+        with patch('scripts.evaluate_local.Agent', DeniedAgent), patch('scripts.evaluate_local.detect', return_value={}), patch('scripts.evaluate_local.preference_profile', return_value={}), patch('scripts.evaluate_local.subprocess.run') as execute, contextlib.redirect_stdout(io.StringIO()):
+            model = type('Model', (), {'backend':'ollama','endpoint':'http://localhost:11434'})()
+            self.assertEqual(evaluate_multifile(base, model, 'fixture', None, 'test', suite='tags'), 1)
+            execute.assert_not_called()
+        for result in json.loads((base/'results.json').read_text(encoding='utf-8')):
+            self.assertFalse(result['passed'])
+            self.assertFalse(result['independent_pass'])
+            self.assertEqual(result['independent_check_status'], 'not_run_untrusted_fixture')
+            self.assertEqual(result['approval_denials'], ['untrusted_ast: catalog.py'])
+            self.assertEqual(result['final_trust_reasons'], ['untrusted_ast: catalog.py'])
 
     def test_independent_checks_require_both_repairs(self):
         for repaired in ((), ('normalization.py',), ('catalog.py',), ('normalization.py', 'catalog.py')):

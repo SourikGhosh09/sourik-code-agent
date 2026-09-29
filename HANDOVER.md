@@ -1,6 +1,8 @@
 # Current handover
 
-Current version: V1.9.0 preview. Start Agent.cmd opens Start V1.9.0.cmd.
+Historical candidate checkpoint (cleanup subsequently completed): uncommitted V1.9.1 recovery candidates failed real-model acceptance. Diff-context trials: zero of two passed; changed-path trials: one of two passed. Both full automated suites passed 111 with two skips. V1.9.0 remains published. Automatic approval rejected restoring candidate files even after backup to .runtime/rejected-v1.9.1-candidate-backup.zip; explicit user approval is required before cleanup. Preserve docs/evaluation-v1.9.1-candidates.json and raw traces. Do not publish the candidate as an accepted repair.
+
+Current version: V1.9.1 preview. Start Agent.cmd opens Start V1.9.1.cmd.
 
 V1.9.0 forwards the existing state-dependent response schema to local OpenAI-compatible chat requests. The evaluator now accepts --backend and --endpoint while retaining the original Ollama defaults and restricted fixture approvals. Full suite: 111 passed, two Windows symlink skips (113 total). Before the fix, one compatible tag trial passed and one failed. After the fix, both compatible tag trials, both compatible invoice trials passed independent checks. Native Ollama tag regression had one failure and one success, preserving tests, validation and README. See docs/evaluation-v1.9.0.json for all results and exact hashes. Compatible inference was tested through local Ollama only; other implementations, general coding reliability and clean-machine acceptance remain unverified.
 
@@ -27,3 +29,9 @@ Several intermediate experiments failed, including one passing pair followed by 
 Publication check: Both V1.7.0 Windows CI jobs passed on b3cbf0f. The older V1.6.0 tag run 36472118013 failed on Python 3.12 in test_discovery_error_is_visible_and_next_attempt_can_start cleanup: its worker remained alive after the three-second join, alongside Tk Variable finalizer/main-thread errors. This intermittent cleanup issue is not reproduced or fixed by V1.7.0; investigate Tk teardown/thread finalization next. The earlier V1.6.0 branch run passed.
 
 V1.8.0 Ollama regression: both restricted tag trials passed on the exact source. See docs/evaluation-v1.8.0.json. Compatible-runtime inference remains untested.
+
+Cleanup completed with explicit user approval on 2026-09-30. Rejected candidate code, tests, version metadata and launcher restored to V1.9.0. Candidate backup and all evaluation evidence preserved. Earlier pending-cleanup notices are historical; no cleanup approval remains outstanding.
+
+## V1.9.1 diagnostics checkpoint
+
+V1.9.1 is an evaluator diagnostics patch, not a repair-loop improvement. Restricted invoice/tag results now distinguish independent checks that passed, failed, or did not run because the fixture was untrusted. Approval denials and final trust failures carry concrete reasons. Boolean approval, fixed AST variants, fixture goals, independent assertions and pass criteria are unchanged. Full suite: 113 passed, two Windows symlink skips (115 total). Fresh native tag trials: 2 of two passed; exact outcomes and hashes are in docs/evaluation-v1.9.1.json. Production agent behavior is unchanged; intermittent repair reliability remains open.

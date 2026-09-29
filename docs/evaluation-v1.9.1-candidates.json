@@ -1,0 +1,136 @@
+{
+  "status": "Rejected recovery candidates; cleanup completed. These experiments are not the later V1.9.1 diagnostics patch.",
+  "date": "2026-09-30",
+  "infrastructure": {
+    "total": 113,
+    "passed": 111,
+    "skipped": 2
+  },
+  "experiments": {
+    "diff_context": [
+      {
+        "suite_version": "tags-1",
+        "case": "tags-1",
+        "model": "qwen2.5-coder:7b",
+        "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+        "code_digest": "40c1eec93a37d0d7358ed26da0763eabab5a9378240357a034a34a80f40af60b",
+        "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+        "backend": "ollama",
+        "endpoint": "http://127.0.0.1:11434",
+        "state": "FAILED",
+        "passed": false,
+        "independent_pass": false,
+        "tests_and_validation_preserved": true,
+        "observed_failure": true,
+        "simplicity_reviews": 3,
+        "changed_files": [
+          "normalization.py",
+          "catalog.py"
+        ],
+        "trusted_fixture_only": false,
+        "config": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "seconds": 78.93
+      },
+      {
+        "suite_version": "tags-1",
+        "case": "tags-2",
+        "model": "qwen2.5-coder:7b",
+        "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+        "code_digest": "40c1eec93a37d0d7358ed26da0763eabab5a9378240357a034a34a80f40af60b",
+        "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+        "backend": "ollama",
+        "endpoint": "http://127.0.0.1:11434",
+        "state": "FAILED",
+        "passed": false,
+        "independent_pass": false,
+        "tests_and_validation_preserved": true,
+        "observed_failure": true,
+        "simplicity_reviews": 3,
+        "changed_files": [
+          "normalization.py",
+          "catalog.py"
+        ],
+        "trusted_fixture_only": false,
+        "config": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "seconds": 59.58
+      }
+    ],
+    "changed_paths": [
+      {
+        "suite_version": "tags-1",
+        "case": "tags-1",
+        "model": "qwen2.5-coder:7b",
+        "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+        "code_digest": "00c69453f15fc38d228da9c580067dd7848b00068225168a8f87b263178626af",
+        "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+        "backend": "ollama",
+        "endpoint": "http://127.0.0.1:11434",
+        "state": "COMPLETED",
+        "passed": true,
+        "independent_pass": true,
+        "tests_and_validation_preserved": true,
+        "observed_failure": true,
+        "simplicity_reviews": 5,
+        "changed_files": [
+          "normalization.py",
+          "catalog.py"
+        ],
+        "trusted_fixture_only": true,
+        "config": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "seconds": 14.72
+      },
+      {
+        "suite_version": "tags-1",
+        "case": "tags-2",
+        "model": "qwen2.5-coder:7b",
+        "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+        "code_digest": "00c69453f15fc38d228da9c580067dd7848b00068225168a8f87b263178626af",
+        "evaluator_digest": "f75056b2bd64fefb5cbeb5519a8d2b1cbee470a7cb7fedc40e0a6af897cbffa8",
+        "backend": "ollama",
+        "endpoint": "http://127.0.0.1:11434",
+        "state": "FAILED",
+        "passed": false,
+        "independent_pass": false,
+        "tests_and_validation_preserved": true,
+        "observed_failure": true,
+        "simplicity_reviews": 11,
+        "changed_files": [
+          "normalization.py",
+          "catalog.py"
+        ],
+        "trusted_fixture_only": false,
+        "config": {
+          "num_thread": 10,
+          "num_ctx": 8192,
+          "max_steps": 40,
+          "workers": 1,
+          "monitor_resources": true
+        },
+        "seconds": 46.62
+      }
+    ]
+  },
+  "decision": "Neither prompt-only candidate established improved reliability. Fixture approval and assertions unchanged. Candidate code, tests, version metadata and launcher restored to V1.9.0 with explicit user approval; backup and trial evidence retained.",
+  "limits": [
+    "Three failed trials fell outside narrow trusted AST variants; independent behavior was not executed or proven.",
+    "Backup: .runtime/rejected-v1.9.1-candidate-backup.zip. Raw traces remain local."
+  ]
+}
