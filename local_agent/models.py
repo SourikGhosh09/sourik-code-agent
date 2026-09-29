@@ -15,6 +15,8 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 class LocalModel:
     def __init__(self, model, endpoint='http://127.0.0.1:11434', backend='ollama'):
+        if backend not in ('ollama', 'openai-compatible'):
+            raise ValueError('Choose ollama or openai-compatible as the local backend.')
         parsed = urlparse(endpoint)
         if parsed.scheme != 'http' or parsed.hostname not in ('127.0.0.1', 'localhost', '::1') or parsed.username:
             raise ValueError('V0 only connects to a local model server.')
@@ -22,6 +24,16 @@ class LocalModel:
 
     def installed_models(self):
         opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),NoRedirect())
+        if self.backend == 'openai-compatible':
+            with opener.open(self.endpoint+'/v1/models',timeout=5) as response:
+                payload = response.read(1_000_001)
+            if len(payload) > 1_000_000:
+                raise ValueError('Local model list exceeds the response limit.')
+            data = json.loads(payload)
+            rows = data.get('data') if isinstance(data, dict) else None
+            if not isinstance(rows, list) or any(not isinstance(row, dict) or not isinstance(row.get('id'), str) or not row['id'].strip() for row in rows):
+                raise ValueError('Local model list must contain a data list of model IDs.')
+            return [{'name': row['id']} for row in rows]
         with opener.open(self.endpoint+'/api/tags',timeout=5) as response:
             models=json.loads(response.read(1_000_000)).get('models',[])
         with opener.open(self.endpoint+'/api/ps',timeout=5) as response:

@@ -17,7 +17,7 @@ No packaged application build exists. python -m compileall -q local_agent script
 
 ## Windows launchers
 
-Start V1.7.1.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
+Start V1.8.0.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
 
 Only current V1 is retained locally. The obsolete V0 launcher and release copies have been removed; historical source and acceptance records remain in Git.
 
@@ -29,6 +29,8 @@ Monitor Progress/Technical details and local history. Model acceptance needs the
 
 ## Readiness limitations
 
-The setup check targets http://127.0.0.1:11434 only, bypasses HTTP proxies and rejects redirects. It does not read UI preferences or validate custom OpenAI-compatible backends. A model appearing in the installed list does not prove that it fits memory or can complete coding tasks. No software is installed automatically. If Ollama is unavailable, start your existing installation; if no model is installed, install a suitable model separately and repeat the check. See the UI settings for non-default endpoints.
+The setup check defaults to http://127.0.0.1:11434. V1.8.0 accepts --endpoint, --backend ollama|openai-compatible and --model in check mode. HTTP proxies and redirects remain disabled; only loopback HTTP is accepted. It does not read or change UI preferences. Enter the same configuration in Model settings yourself. Use a base URL without /v1; model IDs must match exactly. A model appearing in the installed list does not prove that it fits memory or can complete coding tasks. No software is installed automatically. If Ollama is unavailable, start your existing installation; if no model is installed, install a suitable model separately and repeat the check. See the UI settings for non-default endpoints.
 
 V1.5.0 was checked from a fresh source copy on the existing Windows host without copying .runtime or models. Its existing server supplied model discovery. A genuinely clean computer, packaged installation and manual desktop journeys remain unvalidated; DIST-001 stays open.
+
+V1.8.0 compatible discovery uses GET /v1/models, not chat generation. A server requiring authentication or lacking this endpoint can fail discovery; no credential support is added. Tests use a local HTTP fixture; a real compatible runtime and clean computer remain unvalidated.

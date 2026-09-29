@@ -10,6 +10,7 @@ Model.generate(messages, config) returns a dict. LocalModel calls a loopback HTT
 |---|---|
 | Ollama GET /api/tags and GET /api/ps | Discover installed/loaded models |
 | Ollama POST /api/chat | Model, messages, JSON schema, nonstreaming generation and local thread/context options |
+| Local OpenAI-compatible GET /v1/models | Discover advertised IDs from data[].id; five-second timeout, one-million-byte limit |
 | Local OpenAI-compatible POST /v1/chat/completions | Model/messages and JSON-object response; adapter does not enforce resource targets |
 
 These endpoints belong to the runtime, not Sourik Code Agent. The adapter uses a 120-second timeout and bounded generation. HTTP/network failures and malformed/non-JSON output fail requests; provider status codes are not an app-specific HTTP error contract. One worker per instance and task limits apply, not server account rate limiting. Do not expose the server publicly to bypass localhost restrictions.
@@ -33,3 +34,5 @@ V1.3.0 repository metadata: Python `imports` strings retain leading dots and imp
 V1.4.2: after successful current-revision verification the model may return a finish action with reason, tool=finish, content (summary) and optional simplicity explanation. It is normalized to the existing done path, retaining verification and budget checks; legacy done responses remain supported. Failed checks refresh bounded current evidence immediately. Successful edits discard obsolete assistant attempts/excerpts from the next prompt; full diffs remain recorded and supplied at verification/review. No new tool permissions or storage format.
 
 After an edit, the controller schedules the last verification action that actually ran (including a failing approved baseline). It requests command approval again through the existing Tools path and consumes a normal task step. With no previous verification action, no command is invented. Scheduled requests have controller_check events; model completion still requires current-revision verification and final review. Protected test paths are in-memory task state, not an SQLite migration.
+
+V1.8.0 validates the backend name and adds read-only compatible model discovery. A malformed, oversized or missing data list fails clearly; each ID must be a nonblank string. Returned records expose name only and do not invent sizes or memory estimates. Ollama discovery and generation formats remain unchanged. Reference: [LM Studio compatible model discovery](https://lmstudio.ai/docs/developer/openai-compat/models). Local HTTP fixture validation does not establish real-provider inference support.

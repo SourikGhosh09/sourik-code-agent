@@ -1,0 +1,76 @@
+{
+  "version": "1.8.0-preview",
+  "date": "2026-09-29",
+  "infrastructure": {
+    "total": 110,
+    "passed": 108,
+    "skipped": 2
+  },
+  "setup_checks": [
+    "Actual local Ollama advertised requested qwen2.5-coder:7b.",
+    "Compatible loopback HTTP fixture advertised requested ID and rejected redirect."
+  ],
+  "results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "c4282f51b09b1caf9be5ab8d96b21098b0abb5059a44b036481ac56dd72fa8fc",
+      "evaluator_digest": "042ad06ccc9c84dbb4c87be09c14373452c25a7c7e710487d7177e58292401d0",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 6,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 28.56
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "c4282f51b09b1caf9be5ab8d96b21098b0abb5059a44b036481ac56dd72fa8fc",
+      "evaluator_digest": "042ad06ccc9c84dbb4c87be09c14373452c25a7c7e710487d7177e58292401d0",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 17.12
+    }
+  ],
+  "limits": [
+    "No real OpenAI-compatible runtime/inference tested.",
+    "Discovery does not prove memory fit or task capability.",
+    "Guided trusted tag fixture only; no broad model reliability claim.",
+    "Invoice and calculator trials were not repeated; evaluator and generation payloads are unchanged.",
+    "Manual accessibility, clean-machine and physical-pressure acceptance remain open."
+  ]
+}

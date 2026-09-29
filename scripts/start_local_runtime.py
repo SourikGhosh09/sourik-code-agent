@@ -11,8 +11,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from local_agent.models import LocalModel, NoRedirect
 
 
-def check_setup(root):
-    """Report the default Ollama setup; never download, start inference or save settings."""
+def check_setup(root, endpoint='http://127.0.0.1:11434', backend='ollama', model=None):
+    """Report the selected local setup; never download, start inference or save settings."""
     ready = sys.version_info >= (3, 12)
     print(('OK' if ready else 'MISSING') + ': Python 3.12 or newer (running ' + sys.version.split()[0] + ').')
     try:
@@ -30,28 +30,36 @@ def check_setup(root):
     portable = root / '.runtime' / 'ollama' / 'ollama.exe'
     print('Portable runtime: ' + ('present' if portable.is_file() else 'absent (optional with a separately running server)') + '.')
     try:
-        models = LocalModel('').installed_models()
+        models = LocalModel(model or '', endpoint, backend).installed_models()
         names = [item['name'] for item in models if isinstance(item, dict) and isinstance(item.get('name'), str) and item['name'].strip()]
         if not names:
             ready = False
-            print('MISSING: No installed Ollama models. Install a coding model separately, then rerun this check.')
+            print('MISSING: No models advertised by the local server. Install a coding model separately, then rerun this check.')
+        elif model is not None and model not in names:
+            ready = False
+            print('MISSING: Requested model is not advertised: ' + model + '. Choose an exact listed ID: ' + ', '.join(names))
         else:
-            print('OK: Ollama at http://127.0.0.1:11434; installed models: ' + ', '.join(names))
+            print('OK: ' + backend + ' at ' + endpoint + '; advertised models: ' + ', '.join(names))
     except (OSError, ValueError, TypeError, AttributeError, KeyError) as exc:
         ready = False
-        print('UNAVAILABLE: Cannot discover local Ollama models. Start Ollama, then rerun this check. ' + str(exc))
-    print('This check uses the default Ollama endpoint; custom UI endpoints/backends are not checked.')
-    print('Setup check passed; run python -m local_agent.' if ready else 'Setup needs attention. See docs/operations/DEPLOYMENT.md.')
+        print('UNAVAILABLE: Cannot discover local models. ' + ('Start Ollama' if backend == 'ollama' else 'Start your local compatible server') + ', check the endpoint/backend, then rerun this check. ' + str(exc))
+    print('Discovery only: no inference or memory-fit test. UI settings are not read or changed.')
+    print('Setup check passed; run python -m local_agent and use the same endpoint/backend/model in Model settings.' if ready else 'Setup needs attention. See docs/operations/DEPLOYMENT.md.')
     return 0 if ready else 1
 
 
 def main(argv=None, root=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--check', action='store_true', help='check Python, Tk and the default Ollama server/models without starting a server or inference')
+    parser.add_argument('--check', action='store_true', help='check Python, Tk and local server/models without starting a server or inference')
+    parser.add_argument('--endpoint', help='loopback HTTP base URL without /v1 (check only)')
+    parser.add_argument('--backend', choices=['ollama','openai-compatible'], help='local backend (check only)')
+    parser.add_argument('--model', help='exact advertised model ID to require (check only)')
     args = parser.parse_args(argv)
+    if not args.check and any(value is not None for value in (args.endpoint,args.backend,args.model)):
+        parser.error('--endpoint, --backend and --model require --check')
     root = Path(root) if root is not None else Path(__file__).resolve().parents[1]
     if args.check:
-        return check_setup(root)
+        return check_setup(root, args.endpoint or 'http://127.0.0.1:11434', args.backend or 'ollama', args.model)
     runtime=root/'.runtime'
     opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),NoRedirect())
     try:

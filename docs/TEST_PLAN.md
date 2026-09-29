@@ -4,7 +4,7 @@ Preserve meaningful correctness/safety tests; do not delete tests to improve cod
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.7.1 Windows run has 104 tests: 102 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.8.0 Windows run has 110 tests: 108 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -141,3 +141,9 @@ The original settings row requested 1048 pixels with 732 available at 780x600 an
 V1.7.1 repairs native test teardown: close through App.close, release UI references and collect cycles on the main thread before later worker tests. Ten sequential UI/history repetitions passed (240 tests), followed by the full suite: 102 passed, two symlink skips (104 total). No Tk teardown diagnostics appeared in those runs. Production behavior, existing timeouts and dependencies are unchanged. Latest real-model evidence remains V1.6.0; manual accessibility and clean-machine acceptance remain open.
 
 A GC-disabled probe showed a plain destroyed window released its variable immediately, while a real Agent approval callback retained it through an App/Agent cycle. Main-thread collection released the cycle. Weak-reference teardown assertions now verify release in native task and keyboard tests. This reproduces retention and removes the observed cleanup diagnostics; the exact historical Python 3.12 scheduling failure was not deterministically reproduced locally. Hosted CI remains an additional check, not proof that all timing failures are impossible.
+
+## V1.8.0 configured setup check
+
+V1.8.0 extends the existing read-only setup check with --endpoint, --backend and --model. It discovers local OpenAI-compatible model IDs through /v1/models, checks an exact requested ID, and rejects unknown backends and remote endpoints. No server start, download, inference or settings write occurs in check mode. Full suite: 108 passed, two symlink skips (110 total). Actual Ollama discovery and a loopback compatible HTTP fixture passed; no real compatible-runtime inference is claimed. Manual accessibility, clean-machine and physical-pressure gates remain open. Six new automated cases cover ID matching, option restrictions, configuration forwarding, malformed/oversized responses and backend validation. Existing local-only proxy/redirect controls are reused.
+
+V1.8.0 Ollama regression: both restricted tag trials passed on the exact source. See docs/evaluation-v1.8.0.json. Compatible-runtime inference remains untested.

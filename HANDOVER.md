@@ -1,6 +1,8 @@
 # Current handover
 
-Current version: V1.7.1 preview. Start Agent.cmd opens Start V1.7.1.cmd.
+Current version: V1.8.0 preview. Start Agent.cmd opens Start V1.8.0.cmd.
+
+V1.8.0 extends the existing read-only setup check with --endpoint, --backend and --model. It discovers local OpenAI-compatible model IDs through /v1/models, checks an exact requested ID, and rejects unknown backends and remote endpoints. No server start, download, inference or settings write occurs in check mode. Full suite: 108 passed, two symlink skips (110 total). Actual Ollama discovery and a loopback compatible HTTP fixture passed; no real compatible-runtime inference is claimed.
 
 V1.7.1 repairs native test teardown: close through App.close, release UI references and collect cycles on the main thread before later worker tests. Ten sequential UI/history repetitions passed (240 tests), followed by the full suite: 102 passed, two symlink skips (104 total). No Tk teardown diagnostics appeared in those runs. Production behavior, existing timeouts and dependencies are unchanged. Latest real-model evidence remains V1.6.0; manual accessibility and clean-machine acceptance remain open.
 
@@ -21,3 +23,5 @@ Next: complete UI-001/UI-002 manual startup/accessibility checks when the owner 
 Several intermediate experiments failed, including one passing pair followed by failures; their outcomes are retained in the versioned report. The final acceptance uses two sequential passing invoice pairs on the same source, with calculator regression checks between them. Runtime/models/raw fixtures stay ignored; original specs/history remain preserved. Read PROJECT_LOG and source before further changes.
 
 Publication check: Both V1.7.0 Windows CI jobs passed on b3cbf0f. The older V1.6.0 tag run 36472118013 failed on Python 3.12 in test_discovery_error_is_visible_and_next_attempt_can_start cleanup: its worker remained alive after the three-second join, alongside Tk Variable finalizer/main-thread errors. This intermittent cleanup issue is not reproduced or fixed by V1.7.0; investigate Tk teardown/thread finalization next. The earlier V1.6.0 branch run passed.
+
+V1.8.0 Ollama regression: both restricted tag trials passed on the exact source. See docs/evaluation-v1.8.0.json. Compatible-runtime inference remains untested.

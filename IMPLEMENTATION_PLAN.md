@@ -48,3 +48,7 @@ Add one tag normalization/order fixture to the existing real-model evaluator. Re
 ## V1.7.0 desktop usability
 
 V1.7.0 adds keyboard navigation and compact model settings. Tab/Shift+Tab leave the request field without editing it; Ctrl+Enter runs through the existing task action, Esc requests Stop, and Ctrl+L focuses the project field. Ctrl+Tab/Ctrl+Shift+Tab cycle output tabs. Full Windows suite: 102 passed, two symlink skips (104 total). No dependencies or agent/approval changes. Manual screen-reader, full scaling and approval/recovery journeys remain pending. UI-002 remains open for manual acceptance.
+
+## V1.8.0 configured setup check
+
+V1.8.0 extends the existing read-only setup check with --endpoint, --backend and --model. It discovers local OpenAI-compatible model IDs through /v1/models, checks an exact requested ID, and rejects unknown backends and remote endpoints. No server start, download, inference or settings write occurs in check mode. Full suite: 108 passed, two symlink skips (110 total). Actual Ollama discovery and a loopback compatible HTTP fixture passed; no real compatible-runtime inference is claimed. Manual accessibility, clean-machine and physical-pressure gates remain open. Six new automated cases cover ID matching, option restrictions, configuration forwarding, malformed/oversized responses and backend validation. Existing local-only proxy/redirect controls are reused.

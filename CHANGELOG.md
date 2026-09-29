@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.0 - 2026-09-29 (preview)
+
+- Add explicit endpoint/backend/model options to read-only setup checks.
+- Discover compatible local model IDs with bounded, validated /v1/models responses. Preserve local-only connections and normal startup behavior.
+- Six new test cases; full suite: 108 passed, two skipped. No dependencies or automatic installs.
+
+
 ## 1.7.1 - 2026-09-29 (preview)
 
 - Close native test windows normally and collect released Tk reference cycles on the UI thread.
