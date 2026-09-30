@@ -41,3 +41,5 @@ V1.9.2 final-source trials passed; prior intermittent failures remain recorded. 
 Next: broader representative real-project acceptance, plus the independent manual/clean-machine/physical-pressure gates above.
 
 - [ ] EVAL-003 - Less-guided acceptance. Initial two tag trials failed at the step limit and ended outside trusted AST variants; independent checks did not run. Preserve the [baseline](docs/evaluation-v1.9.2-behavior.json), separate approval recovery from coding accuracy, and retain command restrictions. No general-project acceptance claim.
+
+EVAL-003 investigation update (2026-10-01): denial-detail comparison 0/2, pre-fixed-normalization control 0/2; all final independent checks skipped as untrusted. Missing rejection detail alone is not a demonstrated fix. See [comparison](docs/evaluation-v1.9.2-denial-comparison.json). Keep EVAL-003 open and establish separately reviewed execution or validated isolation before general behavioral acceptance. No production prompt change adopted.

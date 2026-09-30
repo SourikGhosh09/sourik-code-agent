@@ -1,0 +1,267 @@
+{
+  "recorded_date": "2026-10-01",
+  "trial_date": "2026-09-30",
+  "release": "1.9.2-preview",
+  "baseline": "evaluation-v1.9.2-behavior.json",
+  "experiments": [
+    {
+      "goal": "Repair this tag catalog project. Inspect the repository and run its existing tests first. Tags should compare without regard to case across Unicode text, ignore surrounding whitespace, and appear once in the order they were first encountered. Preserve validation, public functions, README and existing tests. Reuse existing modules; add no files or dependencies. Only python -m unittest discover is approved. This controlled evaluation permits only expression repairs in the existing functions; execution is restricted to pre-reviewed fixture variants, so other implementations may be rejected.",
+      "intervention": "Expose existing fixture denial reason; unchanged approval predicate and goal",
+      "harness_digest": "593195eb99046e491056b9b7c120b5b5d5c02c1c12de58aa1b2aaba16870e1ba",
+      "local_output": "evaluation-results/denial-reason-20260930-193105",
+      "harness_source": "\"\"\"Controlled evaluator-only reason feedback; no approval expansion.\"\"\"\nimport hashlib\nimport json\nfrom pathlib import Path\nimport sys\nimport time\nfrom unittest.mock import patch\n\nROOT = Path(__file__).resolve().parents[1]\nsys.path.insert(0, str(ROOT))\nfrom scripts import evaluate_local as evaluation\n\nbaseline = json.loads((ROOT/'docs/evaluation-v1.9.2-behavior.json').read_text(encoding='utf-8'))\ngoal = baseline['goal']\nbase = ROOT/'evaluation-results'/('denial-reason-'+time.strftime('%Y%m%d-%H%M%S'))\nbase.mkdir()\nmodel = evaluation.LocalModel('qwen2.5-coder:7b')\ndigest = next((m.get('digest') for m in model.installed_models() if m.get('name') == model.model), None)\ncode_digest = hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in sorted((ROOT/'local_agent').glob('*.py')))).hexdigest()\noriginal_run = evaluation.Agent.run\ndef run(agent, ignored_goal):\n    approve = agent.tools.approve\n    def explain(argv):\n        allowed = approve(argv)\n        if not allowed:\n            reasons = []\n            evaluation.approve_tags(agent.tools.root, argv, reasons)\n            raise PermissionError('Verification was not executed. Fixture approval rejected: '+ '; '.join(reasons)+\n                                  '. This is an execution-policy rejection, not a test result. Do not retry unchanged code.')\n        return allowed\n    agent.tools.approve = explain\n    return original_run(agent, goal)\nmetadata = {'goal':goal, 'intervention':'Expose existing fixture denial reason; unchanged approval predicate and goal',\n            'harness_digest':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}\n(base/'investigation.json').write_text(json.dumps(metadata, indent=2), encoding='utf-8')\nprint('OUTPUT', base, flush=True)\nwith patch.object(evaluation.Agent, 'run', run):\n    result = evaluation.evaluate_multifile(base, model, model.model, digest, code_digest, suite='tags')\nraise SystemExit(result)\n",
+      "results": [
+        {
+          "suite_version": "tags-1",
+          "case": "tags-1",
+          "model": "qwen2.5-coder:7b",
+          "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+          "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+          "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+          "backend": "ollama",
+          "endpoint": "http://127.0.0.1:11434",
+          "state": "FAILED",
+          "passed": false,
+          "independent_pass": false,
+          "tests_and_validation_preserved": true,
+          "independent_check_status": "not_run_untrusted_fixture",
+          "approval_denials": [
+            "untrusted_ast: normalization.py"
+          ],
+          "final_trust_reasons": [
+            "untrusted_ast: normalization.py"
+          ],
+          "observed_failure": true,
+          "simplicity_reviews": 1,
+          "changed_files": [
+            "normalization.py"
+          ],
+          "trusted_fixture_only": false,
+          "config": {
+            "num_thread": 10,
+            "num_ctx": 8192,
+            "max_steps": 40,
+            "workers": 1,
+            "monitor_resources": true
+          },
+          "seconds": 56.35,
+          "final_sources": {
+            "normalization.py": "from validation import validate_tag\n\ndef normalize_tag(tag):\n    validate_tag(tag)\n    return tag.strip().lower().casefold()\n",
+            "catalog.py": "from normalization import normalize_tag\n\ndef unique_tags(tags):\n    normalized = [normalize_tag(tag) for tag in tags]\n    return sorted(set(normalized))\n"
+          },
+          "static_parse": {
+            "normalization.py": "parsed; no execution or correctness claim",
+            "catalog.py": "parsed; no execution or correctness claim"
+          },
+          "terminal_problems": [
+            "Step budget exhausted without verified completion."
+          ],
+          "model_action_count": 39
+        },
+        {
+          "suite_version": "tags-1",
+          "case": "tags-2",
+          "model": "qwen2.5-coder:7b",
+          "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+          "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+          "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+          "backend": "ollama",
+          "endpoint": "http://127.0.0.1:11434",
+          "state": "FAILED",
+          "passed": false,
+          "independent_pass": false,
+          "tests_and_validation_preserved": true,
+          "independent_check_status": "not_run_untrusted_fixture",
+          "approval_denials": [
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py"
+          ],
+          "final_trust_reasons": [
+            "untrusted_ast: catalog.py"
+          ],
+          "observed_failure": true,
+          "simplicity_reviews": 8,
+          "changed_files": [
+            "normalization.py",
+            "catalog.py"
+          ],
+          "trusted_fixture_only": false,
+          "config": {
+            "num_thread": 10,
+            "num_ctx": 8192,
+            "max_steps": 40,
+            "workers": 1,
+            "monitor_resources": true
+          },
+          "seconds": 53.28,
+          "final_sources": {
+            "normalization.py": "from validation import validate_tag\n\ndef normalize_tag(tag):\n    validate_tag(tag)\n    return tag.strip().casefold()\n",
+            "catalog.py": "from normalization import normalize_tag\n\ndef unique_tags(tags):\n    seen = set()\n    result = []\n    for tag in tags:\n        normalized = normalize_tag(tag.strip().casefold())\n        if normalized not in seen:\n            seen.add(normalized)\n            result.append(normalized)\n    return result\n"
+          },
+          "static_parse": {
+            "normalization.py": "parsed; no execution or correctness claim",
+            "catalog.py": "parsed; no execution or correctness claim"
+          },
+          "terminal_problems": [
+            "Step budget exhausted without verified completion."
+          ],
+          "model_action_count": 33
+        }
+      ]
+    },
+    {
+      "goal": "Repair this tag catalog project. Inspect the repository and run its existing tests first. Tags should compare without regard to case across Unicode text, ignore surrounding whitespace, and appear once in the order they were first encountered. Preserve validation, public functions, README and existing tests. Reuse existing modules; add no files or dependencies. Only python -m unittest discover is approved. This controlled evaluation permits only expression repairs in the existing functions; execution is restricted to pre-reviewed fixture variants, so other implementations may be rejected.",
+      "intervention": "Pre-fix normalization with existing trusted variant before Agent.run; original denial feedback and approvals",
+      "measurement_note": "changed_files compares against original broken fixture, so includes the pre-fixed normalization; only catalog is model repair work",
+      "harness_digest": "a2b3bb21d1ee424cdc3c9038936de875098f9eceee768dc51f135545560433b8",
+      "local_output": "evaluation-results/order-only-20260930-193305",
+      "harness_source": "\"\"\"Repair-only control: trusted normalization already fixed; original approvals.\"\"\"\nimport hashlib\nimport json\nfrom pathlib import Path\nimport sys\nimport time\nfrom unittest.mock import patch\n\nROOT = Path(__file__).resolve().parents[1]\nsys.path.insert(0, str(ROOT))\nfrom scripts import evaluate_local as evaluation\n\nbaseline = json.loads((ROOT/'docs/evaluation-v1.9.2-behavior.json').read_text(encoding='utf-8'))\ngoal = baseline['goal']\nbase = ROOT/'evaluation-results'/('order-only-'+time.strftime('%Y%m%d-%H%M%S'))\nbase.mkdir()\nmodel = evaluation.LocalModel('qwen2.5-coder:7b')\ndigest = next((m.get('digest') for m in model.installed_models() if m.get('name') == model.model), None)\ncode_digest = hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in sorted((ROOT/'local_agent').glob('*.py')))).hexdigest()\noriginal_run = evaluation.Agent.run\ndef run(agent, ignored_goal):\n    (agent.tools.root/'normalization.py').write_text(evaluation.TAG_FIXED['normalization.py'], encoding='utf-8')\n    return original_run(agent, goal)\nmetadata = {'goal':goal, 'intervention':'Pre-fix normalization with existing trusted variant before Agent.run; original denial feedback and approvals',\n            'measurement_note':'changed_files compares against original broken fixture, so includes the pre-fixed normalization; only catalog is model repair work',\n            'harness_digest':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}\n(base/'investigation.json').write_text(json.dumps(metadata, indent=2), encoding='utf-8')\nprint('OUTPUT', base, flush=True)\nwith patch.object(evaluation.Agent, 'run', run):\n    result = evaluation.evaluate_multifile(base, model, model.model, digest, code_digest, suite='tags')\nraise SystemExit(result)\n",
+      "results": [
+        {
+          "suite_version": "tags-1",
+          "case": "tags-1",
+          "model": "qwen2.5-coder:7b",
+          "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+          "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+          "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+          "backend": "ollama",
+          "endpoint": "http://127.0.0.1:11434",
+          "state": "FAILED",
+          "passed": false,
+          "independent_pass": false,
+          "tests_and_validation_preserved": true,
+          "independent_check_status": "not_run_untrusted_fixture",
+          "approval_denials": [
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: normalization.py",
+            "untrusted_ast: normalization.py",
+            "untrusted_ast: normalization.py",
+            "untrusted_ast: normalization.py",
+            "untrusted_ast: normalization.py",
+            "untrusted_ast: normalization.py"
+          ],
+          "final_trust_reasons": [
+            "untrusted_ast: normalization.py"
+          ],
+          "observed_failure": true,
+          "simplicity_reviews": 6,
+          "changed_files": [
+            "normalization.py",
+            "catalog.py"
+          ],
+          "trusted_fixture_only": false,
+          "config": {
+            "num_thread": 10,
+            "num_ctx": 8192,
+            "max_steps": 40,
+            "workers": 1,
+            "monitor_resources": true
+          },
+          "seconds": 56.95,
+          "final_sources": {
+            "normalization.py": "from validation import validate_tag\n\ndef normalize_tag(tag):\n    validate_tag(tag)\n    return tag.strip().casefold().lower()\n",
+            "catalog.py": "from normalization import normalize_tag\n\ndef unique_tags(tags):\n    seen = set()\n    result = []\n    for tag in tags:\n        normalized = normalize_tag(tag.strip().casefold())\n        if normalized not in seen:\n            seen.add(normalized)\n            if normalized not in seen:\n    seen.add(normalized)\n    result.append(normalized)\n    return result\n"
+          },
+          "static_parse": {
+            "normalization.py": "parsed; no execution or correctness claim",
+            "catalog.py": "IndentationError: expected an indented block after 'if' statement on line 10 at line 11"
+          },
+          "terminal_problems": [
+            "Step budget exhausted without verified completion."
+          ],
+          "model_action_count": 34
+        },
+        {
+          "suite_version": "tags-1",
+          "case": "tags-2",
+          "model": "qwen2.5-coder:7b",
+          "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+          "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+          "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+          "backend": "ollama",
+          "endpoint": "http://127.0.0.1:11434",
+          "state": "FAILED",
+          "passed": false,
+          "independent_pass": false,
+          "tests_and_validation_preserved": true,
+          "independent_check_status": "not_run_untrusted_fixture",
+          "approval_denials": [
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py",
+            "untrusted_ast: catalog.py"
+          ],
+          "final_trust_reasons": [
+            "untrusted_ast: catalog.py"
+          ],
+          "observed_failure": true,
+          "simplicity_reviews": 4,
+          "changed_files": [
+            "normalization.py",
+            "catalog.py"
+          ],
+          "trusted_fixture_only": false,
+          "config": {
+            "num_thread": 10,
+            "num_ctx": 8192,
+            "max_steps": 40,
+            "workers": 1,
+            "monitor_resources": true
+          },
+          "seconds": 65.02,
+          "final_sources": {
+            "normalization.py": "from validation import validate_tag\n\ndef normalize_tag(tag):\n    validate_tag(tag)\n    return tag.strip().casefold()\n",
+            "catalog.py": "from normalization import normalize_tag\n\ndef unique_tags(tags):\n    normalized = [normalize_tag(tag) for tag in tags]\n    seen = set()\n    return [tag for tag, _ in sorted(zip(normalized, range(len(normalized))), key=lambda x: x[0].casefold()) if tag not in seen and not seen.add(tag)]\n"
+          },
+          "static_parse": {
+            "normalization.py": "parsed; no execution or correctness claim",
+            "catalog.py": "parsed; no execution or correctness claim"
+          },
+          "terminal_problems": [
+            "Step budget exhausted without verified completion."
+          ],
+          "model_action_count": 36
+        }
+      ]
+    }
+  ],
+  "infrastructure": {
+    "command": "python -m unittest tests.test_evaluation tests.test_contracts",
+    "passed": 24
+  },
+  "conclusion": "Exposing denial reasons did not produce verified completion (0/2). Pre-fixing normalization also did not produce verified completion (0/2); it did not prevent new untrusted catalog variants. Missing denial detail alone is not an adequate explanation or demonstrated fix.",
+  "static_findings": [
+    "Detailed-reason tags-1 still sorts the result, contrary to first-seen order.",
+    "Detailed-reason tags-2 calls tag.strip before validate_tag, so non-string inputs can fail before the intended validation.",
+    "Order-only tags-1 has an indentation syntax error in catalog.py.",
+    "Order-only tags-2 explicitly sorts normalized tags alphabetically, contrary to first-seen order."
+  ],
+  "limits": [
+    "All final fixtures were untrusted; independent execution was skipped, not failed assertions.",
+    "Static findings come from source inspection and ast.parse only; generated code was not executed outside approval.",
+    "Two sequential trials per intervention are diagnostic evidence, not a controlled performance or general accuracy benchmark.",
+    "Order-only changed_files includes normalization pre-fixed by the harness; later model edits to it are possible and preserved in final_sources.",
+    "Fixed-variant approvals still confound general accuracy assessment. Neither experiment justifies broadening approval or deploying a prompt change."
+  ],
+  "decision": "Keep production unchanged. Use separately reviewed execution or a validated isolation boundary for broader behavioral evaluation; preserve current trusted-fixture gates."
+}
