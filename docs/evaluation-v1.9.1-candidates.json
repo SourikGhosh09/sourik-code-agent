@@ -132,5 +132,38 @@
   "limits": [
     "Three failed trials fell outside narrow trusted AST variants; independent behavior was not executed or proven.",
     "Backup: .runtime/rejected-v1.9.1-candidate-backup.zip. Raw traces remain local."
-  ]
+  ],
+  "static_followup": {
+    "date": "2026-09-30",
+    "findings": [
+      {
+        "fixture": "20260929-192421/tags-1",
+        "reasons": [
+          "untrusted_ast: catalog.py"
+        ],
+        "file": "catalog.py",
+        "sha256": "db6367456faa7c766f41d33d03c7a255e3d047ff0b41796901fc2cc9d68ec0f3",
+        "observation": "Added a temporary variable before returning stable deduplication."
+      },
+      {
+        "fixture": "20260929-192421/tags-2",
+        "reasons": [
+          "untrusted_ast: catalog.py"
+        ],
+        "file": "catalog.py",
+        "sha256": "db6367456faa7c766f41d33d03c7a255e3d047ff0b41796901fc2cc9d68ec0f3",
+        "observation": "Added a temporary variable before returning stable deduplication."
+      },
+      {
+        "fixture": "20260929-192715/tags-2",
+        "reasons": [
+          "untrusted_ast: normalization.py"
+        ],
+        "file": "normalization.py",
+        "sha256": "4f6008458a4ee3562b5b99954a5f1aebc8bc334b0a8be043c963244d8abf964c",
+        "observation": "Wrapped casefold normalization in a single-item generator and join."
+      }
+    ],
+    "conclusion": "All three candidate failures violated the stated expression-only fixture contract. Static inspection suggests redundant equivalent expressions, not demonstrated incorrect outputs. Generated code was not executed. These cases do not establish that either candidate improves or worsens repair correctness; both were rejected for lack of acceptance evidence. The V1.9.0 native baseline failure that left catalog.py incorrect remains a separate unresolved repair failure."
+  }
 }
