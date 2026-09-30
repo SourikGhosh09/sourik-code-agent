@@ -1,6 +1,6 @@
 # Local deployment
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Requires a desktop, Python >=3.12 with Tk, writable project storage and separately installed local model runtime/model. Windows is the verified preview environment. No provider, domain, HTTPS certificate, hosted database or background-job service is needed. Keep inference on loopback.
 
@@ -19,7 +19,7 @@ No packaged application build exists. python -m compileall -q local_agent script
 
 ## Windows launchers
 
-Start V1.9.1.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
+Start V1.9.2.cmd and Start Agent.cmd use an already-running server or the expected .runtime/ollama/ollama.exe installation. Git/ZIP exclude runtime/models. With a separately running server, use direct Python launch on fresh machines.
 
 Only current V1 is retained locally. The obsolete V0 launcher and release copies have been removed; historical source and acceptance records remain in Git.
 

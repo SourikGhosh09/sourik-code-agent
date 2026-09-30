@@ -1,6 +1,6 @@
 # Communication contracts
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 No application REST API, public server, accounts or hosted backend exists. The desktop calls Python objects and receives task events through a queue. SQLite is local. Do not invent pagination, filtering or role-based endpoints.
 
@@ -46,3 +46,5 @@ The compatible adapter sends response_format.type=json_schema and json_schema={n
 ## V1.9.1 evaluator reporting
 
 Restricted invoice/tag results retain independent_pass and add independent_check_status: passed, failed or not_run_untrusted_fixture. approval_denials records first-failure reasons encountered during task commands; final_trust_reasons records the final fixture check. Optional reasons collection does not change approval Booleans. evaluation_approval_denied is emitted by the evaluator to its local output/events list, not injected into the model prompt or stored as a new production event contract. The pass expression, fixture contents and allowed variants are unchanged.
+
+V1.9.2: nonzero-exit check feedback omits diff and diff_truncated from the model-facing simplicity review. Current file evidence, failing output, counts and findings remain. Recorded simplicity events and successful verification/final review retain full bounded diffs. This prevents obsolete removed lines from being reintroduced after the recovery context refresh. Permissions, evaluator approval and completion gates are unchanged.

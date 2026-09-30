@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.2 - 2026-09-30 (preview)
+
+- Omit obsolete diff text from failed-check model feedback; preserve recorded and final-review diffs.
+- Controlled reconstructed-state probes changed from three stale patches to three correct remaining-file patches; no probe actions executed.
+- 114 tests passed, two skipped; four native tag, two native invoice and two compatible tag trials passed. No dependencies or permission changes; broad acceptance remains open.
+
 ## 1.9.1 - 2026-09-30 (preview)
 
 - Report concrete fixture approval rejections and independent checks that passed, failed or were not run. Approval and pass criteria are unchanged.

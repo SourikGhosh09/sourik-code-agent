@@ -1,6 +1,6 @@
 # Operations runbook
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Diagnose on disposable copies. Do not approve unfamiliar commands merely to clear errors.
 

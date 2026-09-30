@@ -1,6 +1,6 @@
 # Architecture
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Existing single Python desktop process: Tk UI, one task worker, a startup discovery worker and local SQLite. Preserve local_agent/; src/ is only the requested documentation-pack placeholder.
 

@@ -1,6 +1,6 @@
 # Extension contracts (future milestones)
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Model: `generate(messages, config) -> dict`; the orchestrator validates actions and the tool runtime enforces permission decisions. Implement this protocol to integrate a user-trained model.
 

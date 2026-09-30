@@ -1,8 +1,8 @@
 # Desktop UI specification
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
-Tk desktop, initially 1000x760 with 780x600 minimum. Product name is Sourik Code Agent; the window title shows Sourik Code Agent - V1.9.1 preview from the application version. No new visual branding or web/mobile interface is specified.
+Tk desktop, initially 1000x760 with 780x600 minimum. Product name is Sourik Code Agent; the window title shows Sourik Code Agent - V1.9.2 preview from the application version. No new visual branding or web/mobile interface is specified.
 
 | Surface/flow | Purpose and controls | States and interactions |
 |---|---|---|

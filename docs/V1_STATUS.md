@@ -1,8 +1,8 @@
 # V1 preview status
 
-Current release: **V1.9.1 preview**, reviewed 2026-09-30. Full Windows suite: **113 passed, two symlink skips (115 total)**. Both V1.9.1 native tag trials passed; intermittent native repair remains unresolved. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
+Current release: **V1.9.2 preview**, reviewed 2026-09-30. Full Windows suite: **114 passed, two symlink skips (116 total)**. V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
 
-Use Start Agent.cmd or Start V1.9.1.cmd. Old V0/V1 launchers and local release copies were removed; historical source remains in Git. See [handover](../HANDOVER.md), [changelog](../CHANGELOG.md) and [latest evidence](evaluation-v1.9.1.json).
+Use Start Agent.cmd or Start V1.9.2.cmd. Old V0/V1 launchers and local release copies were removed; historical source remains in Git. See [handover](../HANDOVER.md), [changelog](../CHANGELOG.md) and [latest evidence](evaluation-v1.9.1.json).
 
 ## Historical first V1 increment (2026-09-19)
 

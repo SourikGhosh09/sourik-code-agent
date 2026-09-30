@@ -14,6 +14,35 @@ from tests.test_agent import ScriptedModel
 
 
 class Contracts(unittest.TestCase):
+    def test_failed_check_prompt_excludes_old_diff_but_records_full_review(self):
+        from scripts.evaluate_local import TAG_FILES, TAG_FIXED, approve_tags
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            for name, content in TAG_FILES.items():
+                (root/name).write_text(content, encoding='utf-8')
+            case = self
+            class Model(ScriptedModel):
+                def generate(inner, messages, config):
+                    action = super(Model, inner).generate(messages, config)
+                    if action.get('path') == 'catalog.py':
+                        context = str(messages)
+                        case.assertIn('test_order', context)
+                        case.assertIn('return tag.strip().casefold()', context)
+                        case.assertIn('return sorted(set(normalized))', context)
+                        case.assertNotIn('return tag.strip().lower()', context)
+                    if action.get('tool') == 'finish':
+                        case.assertIn('--- before/normalization.py', str(messages))
+                    return action
+            actions = [{'plan':['Repair both expressions']},
+                       {'tool':'write','path':'normalization.py','content':TAG_FIXED['normalization.py']},
+                       {'tool':'write','path':'catalog.py','content':TAG_FIXED['catalog.py']},
+                       {'tool':'finish','reason':'Verified','content':'Both expressions repaired'}]
+            events = []
+            agent = Agent(root, Model(actions), {}, events.append, lambda argv:approve_tags(root,argv))
+            self.assertEqual(agent.run('Repair tags. Preserve validation, README and existing tests.'), 'COMPLETED')
+            reviews = [e['data'] for e in events if e['kind']=='simplicity' and e['data'].get('phase')=='review']
+            self.assertTrue(any('return tag.strip().lower()' in r['diff'] for r in reviews))
+
     def test_compatible_adapter_preserves_state_schema(self):
         from local_agent.models import LocalModel
         for schema in (response_schema(False,False), response_schema(True,False), response_schema(True,True,True), None):

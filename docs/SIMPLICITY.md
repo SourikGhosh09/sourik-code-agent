@@ -1,6 +1,6 @@
 # Minimal-change policy
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 ## Historical integration baseline (2026-09-24)
 
@@ -63,3 +63,5 @@ File-count estimates for patches/writes to existing files are checked at final r
 An explicit English clause beginning with Preserve (at the start of a request or after a period, semicolon or newline) and containing tests before the next period/newline marks existing test_ files, *_test.py files and files below a tests directory read-only for file tools. Example: Preserve validation, README and existing tests. This is a narrow literal convention, not a general natural-language constraint parser; it does not infer that all named files are immutable. New test files and reading remain allowed.
 
 Current V1.9.1 policy remains deterministic and model-independent. Later calculator/invoice/tag evidence supplements the historical integration baseline; it does not prove general minimality or reliability. The rejected recovery prompt experiments are not part of the policy. See [current status](../HANDOVER.md) and [candidate findings](evaluation-v1.9.1-candidates.json).
+
+V1.9.2: nonzero-exit check feedback omits diff and diff_truncated from the model-facing simplicity review. Current file evidence, failing output, counts and findings remain. Recorded simplicity events and successful verification/final review retain full bounded diffs. This prevents obsolete removed lines from being reintroduced after the recovery context refresh. Permissions, evaluator approval and completion gates are unchanged.

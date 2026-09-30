@@ -1,0 +1,360 @@
+{
+  "version": "1.9.2-preview",
+  "date": "2026-09-30",
+  "infrastructure": {
+    "total": 116,
+    "passed": 114,
+    "skipped": 2
+  },
+  "controlled_probe": {
+    "date": "2026-09-30",
+    "kind": "Reconstructed-state next-action probe; not full task acceptance",
+    "historical_fixture": "20260929-140932/tags-1",
+    "prefix_actions": [
+      {
+        "plan": [
+          "Run existing tests to identify any issues.",
+          "Inspect the normalization and catalog modules to understand their current behavior.",
+          "Modify the normalization module to normalize tags with strip and Unicode casefold, then deduplicate with list(dict.fromkeys(normalized)).",
+          "Ensure the catalog module uses the updated normalization function.",
+          "Preserve validation, public functions, README, and existing tests.",
+          "Re-run tests to verify the changes."
+        ],
+        "change_budget": {
+          "files": 1,
+          "new_files": 0,
+          "dependencies": 0,
+          "complexity": "Minor modification to existing functions"
+        }
+      },
+      {
+        "reason": "The current implementation of normalize_tag does not handle Unicode casefolding correctly, and unique_tags does not preserve the first-seen order of tags.",
+        "tool": "patch",
+        "path": "normalization.py",
+        "old": "return tag.strip().lower()",
+        "new": "return tag.strip().casefold()"
+      }
+    ],
+    "request_sha256": "cc953b54a566476deaf48535bf6076e615e1219a51393ce4a751bf9bef519bf9",
+    "code_digest": "719890f0a3a8e82b50d08319a497c33d0ad70f945f79108bb46ee78aeabe75a1",
+    "model": "qwen2.5-coder:7b",
+    "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "responses": [
+      {
+        "reason": "The test failure indicates that the order of tags is not being preserved after normalization. The current implementation sorts the tags, which is not the desired behavior. We need to normalize the tags and then deduplicate them while preserving the order.",
+        "tool": "patch",
+        "path": "normalization.py",
+        "old": "return tag.strip().lower()",
+        "new": "return tag.strip().casefold()"
+      },
+      {
+        "reason": "The test failure indicates that the order of tags is not being preserved after normalization. The current implementation sorts the tags, which is not the desired behavior. We need to normalize the tags and then deduplicate them while preserving the order.",
+        "tool": "patch",
+        "path": "normalization.py",
+        "old": "return tag.strip().lower()",
+        "new": "return tag.strip().casefold()"
+      },
+      {
+        "reason": "The test failure indicates that the order of tags is not being preserved after normalization. The current implementation sorts the tags, which is not the desired behavior. We need to normalize the tags and then deduplicate them while preserving the order.",
+        "tool": "patch",
+        "path": "normalization.py",
+        "old": "return tag.strip().lower()",
+        "new": "return tag.strip().casefold()"
+      }
+    ],
+    "limits": [
+      "Historical full request was not saved; current controller reconstructed it from the first two recorded actions.",
+      "All three requests use identical captured messages/config; runtime scheduling is not controlled.",
+      "Generated probe responses were not executed. No production or approval change."
+    ],
+    "comparison_request_sha256": "b5b8115142696ce15547d9ffef635d6fd458af1ae9b6b2c73df69d5a7074d219",
+    "comparison_responses": [
+      {
+        "reason": "The test failure indicates that the order of tags is not being preserved after normalization. The current implementation sorts the tags, which is not the intended behavior. We need to normalize the tags and then deduplicate them while preserving the first-seen order.",
+        "tool": "patch",
+        "path": "catalog.py",
+        "old": "return sorted(set(normalized))",
+        "new": "return list(dict.fromkeys(normalized))"
+      },
+      {
+        "reason": "The test failure indicates that the order of tags is not being preserved after normalization. The current implementation sorts the tags, which is not what the test expects. We need to normalize the tags and then deduplicate them while preserving the first-seen order.",
+        "tool": "patch",
+        "path": "catalog.py",
+        "old": "return sorted(set(normalized))",
+        "new": "return list(dict.fromkeys(normalized))"
+      },
+      {
+        "reason": "The test failure indicates that the order of tags is not being preserved after normalization. The current implementation sorts the tags, which is not what the test expects. We need to normalize the tags and then deduplicate them while preserving the first-seen order.",
+        "tool": "patch",
+        "path": "catalog.py",
+        "old": "return sorted(set(normalized))",
+        "new": "return list(dict.fromkeys(normalized))"
+      }
+    ]
+  },
+  "results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 12.39
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 11.78
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 11.88
+    },
+    {
+      "suite_version": "multifile-1",
+      "case": "invoice-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "line_items.py",
+        "invoice.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 12.46
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 11.86
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 11.89
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": null,
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "openai-compatible",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 19.5
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": null,
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "openai-compatible",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 12.16
+    }
+  ],
+  "limits": [
+    "Reconstructed state, not the original historical wire request. Probe actions were never executed.",
+    "Three identical-input probes per condition are narrow evidence, not a statistical benchmark.",
+    "Eight final-source guided fixture trials do not establish general coding reliability.",
+    "Compatible inference tested only through local Ollama; calculator cases not rerun.",
+    "Manual accessibility, clean-machine, physical-pressure and OS-isolation work remains open."
+  ]
+}

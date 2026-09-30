@@ -200,6 +200,11 @@ class Agent:
                     failure = ('Unchanged edit: '+observation['unchanged']) if 'unchanged' in observation else str(observation.get('error') or observation.get('output'))
                     if observation.get('exit_code', 0) != 0:
                         failed_test = failure[:4000]
+                        if 'simplicity_review' in observation:
+                            # Keep the recorded diff, but do not reintroduce obsolete code into repair context.
+                            observation = {**observation, 'simplicity_review': {
+                                key:value for key,value in observation['simplicity_review'].items()
+                                if key not in ('diff','diff_truncated')}}
                     if failure == last_failure or observation.get('exit_code', 0) != 0:
                         evidence = repair_context(self.tools,(failed_test or failure))
                         messages = [messages[0], {'role':'user','content':goal+'\nThe task is not verified. Diagnose the latest failure against current code. Search existing code/callers, diagnose the root cause using CURRENT files, and apply the smallest correct repair without weakening tests or protections. Error: '+failure+'\nLast failing command evidence (may be stale; retest current code): '+str(failed_test or 'none')+'\nCurrent files: '+json.dumps(evidence)}]

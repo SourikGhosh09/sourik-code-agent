@@ -1,6 +1,6 @@
 # V0 thin-slice acceptance: passed
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Verified on 2026-09-19 with local **qwen2.5-coder:7b**. This passes the documented small-project demonstration, not a broad coding-quality benchmark or production-security certification.
 

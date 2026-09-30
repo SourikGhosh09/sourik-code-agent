@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Current release: **V1.9.1 preview**, reviewed 2026-09-30. Full Windows suite: **113 passed, two symlink skips (115 total)**. Both V1.9.1 native tag trials passed; intermittent native repair remains unresolved. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
+Current release: **V1.9.2 preview**, reviewed 2026-09-30. Full Windows suite: **114 passed, two symlink skips (116 total)**. V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
 
 Statuses follow code/evidence, not roadmap promises. References: [PRD](docs/PRD.md), [testing](docs/TEST_PLAN.md), original specification precedence.
 
@@ -31,8 +31,11 @@ Plugins, advanced workers and training remain later original roadmap phases, not
 
 ## Current next action
 
-- [ ] REPAIR-002 - Reproduce the genuine native tag-repair repetition from V1.9.0 using a captured failing state. Separate implementation failure from fixture rejection. Compare unchanged inputs before altering recovery. No prompt candidate currently establishes improvement.
+- [x] REPAIR-002 - V1.9.2 reconstructed-state comparison reproduced obsolete-diff interference; focused fix, regression and eight full fixture trials passed. Scope is this trigger, not universal repair reliability.
 - [x] EVAL-002 - V1.9.1 rejection diagnostics and independent-check status. Approval rules and pass criteria unchanged; tests prove untrusted code is not executed.
 - [x] Candidate cleanup - Rejected recovery code removed with explicit approval; backup and all evidence preserved. No approval remains pending.
 
-Both fresh V1.9.1 tag trials passed, but prior intermittent failure remains recorded. Narrow REPAIR-001 invoice acceptance does not close REPAIR-002 or general coding reliability. See [handover](HANDOVER.md), [current evidence](docs/evaluation-v1.9.1.json), [candidate evidence](docs/evaluation-v1.9.1-candidates.json) and PROJECT_LOG.txt for dated history. User-deferred manual testing remains pending without blocking independent development.
+V1.9.2 final-source trials passed; prior intermittent failures remain recorded. Narrow REPAIR-001 invoice acceptance does not close REPAIR-002 or general coding reliability. See [handover](HANDOVER.md), [current evidence](docs/evaluation-v1.9.1.json), [candidate evidence](docs/evaluation-v1.9.1-candidates.json) and PROJECT_LOG.txt for dated history. User-deferred manual testing remains pending without blocking independent development.
+
+
+Next: broader representative real-project acceptance, plus the independent manual/clean-machine/physical-pressure gates above.

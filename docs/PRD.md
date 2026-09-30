@@ -1,6 +1,6 @@
 # Product requirements
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Current-state specification, reviewed 2026-09-30 for V1.9.1. Original requirements remain under specs/ with precedence defined by [the master](../specs/00_MASTER_PROJECT_PACK.txt). Status follows repository code and evidence.
 

@@ -1,6 +1,6 @@
 # V1 preview implementation plan
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Source precedence remains specs/00_MASTER_PROJECT_PACK.txt. V0 history remains at commit 462a311; obsolete local release copies and launcher were removed at the user's request. Only current V1 is maintained locally.
 
@@ -62,3 +62,7 @@ V1.9.0 forwards the existing state-dependent response schema to local OpenAI-com
 ## V1.9.1 diagnostics checkpoint
 
 V1.9.1 is an evaluator diagnostics patch, not a repair-loop improvement. Restricted invoice/tag results now distinguish independent checks that passed, failed, or did not run because the fixture was untrusted. Approval denials and final trust failures carry concrete reasons. Boolean approval, fixed AST variants, fixture goals, independent assertions and pass criteria are unchanged. Full suite: 113 passed, two Windows symlink skips (115 total). Fresh native tag trials: 2 of two passed; exact outcomes and hashes are in docs/evaluation-v1.9.1.json. Production agent behavior is unchanged; intermittent repair reliability remains open.
+
+## V1.9.2 failed-check context
+
+V1.9.2 removes obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. The new regression fails before the fix and passes after it. Full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on the exact final source. This addresses the reproduced stale-patch trigger, not general repair reliability.

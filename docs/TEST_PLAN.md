@@ -1,12 +1,12 @@
 # Test plan
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Preserve meaningful correctness/safety tests; do not delete tests to improve code-size metrics. Infrastructure and real-model evaluations answer different questions.
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.9.1 Windows run has 115 tests: 113 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.9.2 Windows run has 116 tests: 114 passed and two symlink-fixture skips. Native Tk and junction checks pass; teardown callback diagnostics and manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -161,3 +161,7 @@ Compatible trials use the existing Ollama server through /v1/chat/completions, w
 V1.9.1 is an evaluator diagnostics patch, not a repair-loop improvement. Restricted invoice/tag results now distinguish independent checks that passed, failed, or did not run because the fixture was untrusted. Approval denials and final trust failures carry concrete reasons. Boolean approval, fixed AST variants, fixture goals, independent assertions and pass criteria are unchanged. Full suite: 113 passed, two Windows symlink skips (115 total). Fresh native tag trials: 2 of two passed; exact outcomes and hashes are in docs/evaluation-v1.9.1.json. Production agent behavior is unchanged; intermittent repair reliability remains open.
 
 The fixture approval functions optionally collect rejection reasons without changing their Boolean return. Results retain independent_pass for compatibility and add independent_check_status (passed, failed, not_run_untrusted_fixture), approval_denials and final_trust_reasons. These diagnostics are evaluator output, not extra model instructions. Rejection reports the first violated condition; it is not an exhaustive audit or proof the rejected implementation is behaviorally incorrect. Unit coverage reproduces the extra-temporary-variable AST rejection and proves subprocess execution is skipped for untrusted trials.
+
+## V1.9.2 failed-check context
+
+V1.9.2 removes obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. The new regression fails before the fix and passes after it. Full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on the exact final source. This addresses the reproduced stale-patch trigger, not general repair reliability.

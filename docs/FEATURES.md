@@ -1,6 +1,6 @@
 # Feature inventory
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 IDs refer to [PRD](PRD.md) and [flows](USER_FLOWS.md). P0 is essential current use; P1 is a V1 improvement.
 
@@ -29,3 +29,7 @@ V1.4.2 (R02/R06): current-source prompts after edits/failed checks, explicit not
 V1.9.0: local compatible generation now forwards the existing state schema; evaluator backend/endpoint options allow testing configured loopback runtimes. Narrow real Ollama compatible-protocol tag/invoice acceptance is recorded in evaluation-v1.9.0.json. Other compatible servers and general reliability remain unaccepted; permission and resource boundaries are unchanged.
 
 V1.9.1 evaluator diagnostics report the first failed trust condition and whether independent checks ran. This tooling does not change the production repair loop. Rejected recovery experiments were removed; intermittent native repair remains open. Latest suite and acceptance scope: [handover](../HANDOVER.md).
+
+## V1.9.2 failed-check context
+
+V1.9.2 removes obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. The new regression fails before the fix and passes after it. Full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on the exact final source. This addresses the reproduced stale-patch trigger, not general repair reliability.

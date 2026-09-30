@@ -1,22 +1,17 @@
 # Current handover
 
-Current release: **V1.9.1 preview**, reviewed 2026-09-30. Full Windows suite: **113 passed, two symlink skips (115 total)**. Both V1.9.1 native tag trials passed; intermittent native repair remains unresolved. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
+Current release candidate: **V1.9.2 preview**, 2026-09-30. Start Agent.cmd opens Start V1.9.2.cmd. Publication follows release CI; the final chat reports its outcome.
 
-Start Agent.cmd opens Start V1.9.1.cmd. Source commit 8faece3 and tag v1.9.1 are published. [Release CI](https://github.com/SourikGhosh09/sourik-code-agent/actions/runs/36614142137) passed. Later documentation commits do not change the tested runtime. The current local source package is dist/sourik-code-agent-v1.9.1-preview.zip; runtime/models/raw evaluations stay out of Git.
+V1.9.2 removes obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. The new regression fails before the fix and passes after it. Full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on the exact final source. This addresses the reproduced stale-patch trigger, not general repair reliability.
 
-## Implemented and validated scope
+## Diagnosis and evidence
 
-- Python/Tk/SQLite local desktop, bounded tools, explicit command approvals, checkpoint recovery, repository indexing, memory and deterministic simplicity policy.
-- Background startup discovery and settings snapshots; keyboard shortcuts and improved settings layout. Full manual accessibility acceptance is still open.
-- Read-only setup checks for local endpoints/model IDs. Compatible generation forwards state schemas; only Ollama's compatible protocol has real inference evidence.
-- V1.9.1 evaluator reports denial reasons and distinguishes failed independent checks from checks not run on untrusted fixtures. Production repair logic and approval rules were not changed.
+The V1.9.0 native failure was reconstructed from its first two recorded model actions in a fresh trusted fixture. Three identical-input probes repeated the stale normalization patch. Removing only the trailing failed-check diff fields made all three probes target the remaining catalog repair. The historical full wire request was not saved; this is a reconstructed-state comparison. Probe responses were not executed. Exact request/source/model hashes and all final task outcomes: [V1.9.2 evidence](docs/evaluation-v1.9.2.json).
 
-## Evidence and remaining repair work
+Earlier rejected recovery prompts remain separate historical evidence in [candidate report](docs/evaluation-v1.9.1-candidates.json); cleanup is complete and no approval remains pending. Their three AST-contract failures do not prove incorrect functional output. No broader claim follows from the new narrow fixture results.
 
-Latest [native tag results](docs/evaluation-v1.9.1.json), [compatible trials and native failure](docs/evaluation-v1.9.0.json), and [rejected recovery experiments](docs/evaluation-v1.9.1-candidates.json) retain exact hashes. Historical calculator/invoice acceptance remains bounded to its fixtures and source versions.
+## Architecture and remaining work
 
-Two experimental recovery prompts were rejected and removed with explicit user approval. Cleanup is complete; there is no pending restore approval or candidate code. A local backup remains under .runtime/rejected-v1.9.1-candidate-backup.zip. Three failed candidate trials violated the expression-only AST contract; static inspection suggests equivalent redundant code, but it was not executed and is not independently verified. The V1.9.0 native trial that repeatedly patched normalization.py while catalog.py stayed wrong is a separate genuine repair failure.
+Python/Tk/SQLite, local-only model adapters, deterministic simplicity policy, background discovery, keyboard navigation, scoped indexing, memory and recovery remain unchanged. No dependencies or database migration. Commands still require approval and have user OS rights; there is no OS sandbox or hard resource cap. Fixture approval must never be reused for arbitrary projects.
 
-Next: capture a genuine failing repair state and compare behavior under controlled inputs before another recovery change. Preserve every outcome; do not loosen fixture approval to obtain a pass. Manual startup/approval/recovery journeys, screen-reader/scaling, clean-machine setup, physical pressure and OS isolation remain separate roadmap items.
-
-No new dependencies, database migration, paid API or mandatory cloud service. Commands have user OS rights; no OS sandbox or hard resource caps. Read current source, PROJECT_LOG.txt and original specs before work. Historical checkpoints belong in the log, changelog and versioned evidence, not current-status claims.
+Next: validate another representative real project and retain any intermittent failures. Full manual startup/approval/recovery journeys, screen-reader/scaling, clean-machine setup, other compatible servers, physical pressure and OS isolation remain open. Runtime/models/raw evaluations and the rejected-candidate backup stay local. Original specs and prior evidence remain preserved.

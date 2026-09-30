@@ -1,6 +1,6 @@
 # Security policy
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Local desktop preview, not a sandboxed service. Approved commands have user OS rights and may access files/network outside the project. File guards/checkpoints/redaction reduce specific risks; they do not guarantee isolation or full recovery.
 

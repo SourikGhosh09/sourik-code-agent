@@ -1,2 +1,2 @@
 @echo off
-call "%~dp0Start V1.9.1.cmd"
+call "%~dp0Start V1.9.2.cmd"

@@ -1,6 +1,6 @@
 # User flows
 
-Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 No sign-in exists. OS access to the desktop/project is the current access boundary. Stored notes never grant permission.
 
@@ -43,4 +43,6 @@ V1.4.2 F02: successful edits and failed checks refresh the model context with cu
 
 V1.4.2 retesting: after an edit, an already-used verification command may be proposed automatically. The usual approval prompt appears again; denying it does not verify the task. An explicit Preserve ... tests clause also prevents file-tool edits/deletes/moves of recognized existing tests, including moves of their containing directory. This does not constrain an approved command at the OS level.
 
-Current launch uses Start Agent.cmd / Start V1.9.1.cmd. Read-only setup checks accept backend/endpoint/model without saving UI settings. Compatible model settings require an exact advertised ID and a server supporting schema response_format; automatic model memory selection is an Ollama capability. V1.9.1 diagnostic fields belong to the developer evaluator, not a new desktop permission or user workflow.
+Current launch uses Start Agent.cmd / Start V1.9.2.cmd. Read-only setup checks accept backend/endpoint/model without saving UI settings. Compatible model settings require an exact advertised ID and a server supporting schema response_format; automatic model memory selection is an Ollama capability. V1.9.1 diagnostic fields belong to the developer evaluator, not a new desktop permission or user workflow.
+
+V1.9.2: nonzero-exit check feedback omits diff and diff_truncated from the model-facing simplicity review. Current file evidence, failing output, counts and findings remain. Recorded simplicity events and successful verification/final review retain full bounded diffs. This prevents obsolete removed lines from being reintroduced after the recovery context refresh. Permissions, evaluator approval and completion gates are unchanged.
