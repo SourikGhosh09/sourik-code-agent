@@ -1,5 +1,7 @@
 # User flows
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 No sign-in exists. OS access to the desktop/project is the current access boundary. Stored notes never grant permission.
 
 ## F01 - Launch and select (R01,R05,R07,R08)
@@ -35,8 +37,10 @@ V1.1.1 F02 recovery detail: an unchanged write keeps the current file/revision, 
 
 V1.2.0 F01/F02/F05 detail: project, goal and settings are captured when Run is clicked. Edits while Preparing apply to the next Run. A slow check does not enable a second startup. On discovery error, Run becomes available again and the error is shown. Stop may wait for the current discovery call to return; no agent task/command starts from a cancelled result. Closing during discovery need not wait for the call. A new project folder may already have been created; cancellation does not remove it. During an active agent task, close still requests Stop and asks the user to close again after the task ends.
 
-V1.3.0 F02 inspection: common generated/ignored paths are filtered using root and nested project rules before ranking. Python files related through local relative imports are prioritized by actual candidate path. Existing cached metadata refreshes automatically; no settings or migration action is required. Ignore rules do not replace direct-file access checks. User-run Windows/Ollama validation is deferred for now.
+V1.3.0 F02 inspection: common generated/ignored paths are filtered using root and nested project rules before ranking. Python files related through local relative imports are prioritized by actual candidate path. Existing cached metadata refreshes automatically; no settings or migration action is required. Ignore rules do not replace direct-file access checks. Native automated and recorded Ollama checks have since run; full user-run manual journeys remain deferred.
 
 V1.4.2 F02: successful edits and failed checks refresh the model context with current source. After approved verification, completion uses the existing final review and result flow. There is no new user approval shortcut or automatic claim of completion from passing tests alone.
 
 V1.4.2 retesting: after an edit, an already-used verification command may be proposed automatically. The usual approval prompt appears again; denying it does not verify the task. An explicit Preserve ... tests clause also prevents file-tool edits/deletes/moves of recognized existing tests, including moves of their containing directory. This does not constrain an approved command at the OS level.
+
+Current launch uses Start Agent.cmd / Start V1.9.1.cmd. Read-only setup checks accept backend/endpoint/model without saving UI settings. Compatible model settings require an exact advertised ID and a server supporting schema response_format; automatic model memory selection is an Ollama capability. V1.9.1 diagnostic fields belong to the developer evaluator, not a new desktop permission or user workflow.

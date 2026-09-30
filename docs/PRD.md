@@ -1,6 +1,8 @@
 # Product requirements
 
-Current-state specification, 2026-09-25. Original requirements remain under specs/ with precedence defined by [the master](../specs/00_MASTER_PROJECT_PACK.txt). Status follows repository code and evidence.
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
+Current-state specification, reviewed 2026-09-30 for V1.9.1. Original requirements remain under specs/ with precedence defined by [the master](../specs/00_MASTER_PROJECT_PACK.txt). Status follows repository code and evidence.
 
 ## Vision, users and scope
 
@@ -23,7 +25,7 @@ Goals: useful autonomy, understandable progress, replaceable local models, safe 
 
 Use bounded scans/context, one worker per app instance, explicit errors and redacted logs. Command approval is not OS isolation. SQLite/checkpoints may contain private material and require local access protection. Keyboard/screen-reader accessibility is required quality but awaits full validation. No hard resource or latency guarantees exist.
 
-MVP/V0 covers small-project creation/repair with tests, permissions, history and recovery. V1 adds repository evidence, memory, preferences and simplicity checks. Post-MVP work includes broader acceptance, responsive discovery, fuller indexing and isolation. Plugins, advanced workers and trained models are later roadmap phases. Web hosting, accounts and mobile clients are out of current scope.
+MVP/V0 covers small-project creation/repair with tests, permissions, history and recovery. V1 adds repository evidence, memory, preferences and simplicity checks. Background discovery and scoped ignore/import indexing are implemented. Remaining work includes broader acceptance, fuller indexing and isolation. Plugins, advanced workers and trained models are later roadmap phases. Web hosting, accounts and mobile clients are out of current scope.
 
 Success requires meaningful verification of requested behavior without weakened tests or bypassed approval. Four calculator cases establish a narrow slice, not broad reliability/efficiency. Assumption: local Windows desktop is the initial target. Open: benchmark projects, OS/hardware matrix, packaging/license, isolation mechanism and later plugin trust. Documentation templates do not require new application features.
 

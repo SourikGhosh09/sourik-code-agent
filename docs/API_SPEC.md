@@ -1,5 +1,7 @@
 # Communication contracts
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 No application REST API, public server, accounts or hosted backend exists. The desktop calls Python objects and receives task events through a queue. SQLite is local. Do not invent pagination, filtering or role-based endpoints.
 
 ## Local model boundary
@@ -40,3 +42,7 @@ V1.8.0 validates the backend name and adds read-only compatible model discovery.
 ## V1.9.0 schema forwarding
 
 The compatible adapter sends response_format.type=json_schema and json_schema={name: agent_response, schema: existing response_schema}. No schema is rewritten and no silent JSON-object fallback occurs on provider errors. Calls without response_schema retain json_object. Runtime validation, completion gates, approvals and loopback/proxy/redirect restrictions remain independent of server enforcement. The server must implement this schema format; tested with local Ollama only. See [Ollama structured outputs](https://docs.ollama.com/capabilities/structured-outputs). Compatible num_thread/num_ctx enforcement and authentication are not implemented.
+
+## V1.9.1 evaluator reporting
+
+Restricted invoice/tag results retain independent_pass and add independent_check_status: passed, failed or not_run_untrusted_fixture. approval_denials records first-failure reasons encountered during task commands; final_trust_reasons records the final fixture check. Optional reasons collection does not change approval Booleans. evaluation_approval_denied is emitted by the evaluator to its local output/events list, not injected into the model prompt or stored as a new production event contract. The pass expression, fixture contents and allowed variants are unchanged.

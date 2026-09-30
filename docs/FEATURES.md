@@ -1,5 +1,7 @@
 # Feature inventory
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 IDs refer to [PRD](PRD.md) and [flows](USER_FLOWS.md). P0 is essential current use; P1 is a V1 improvement.
 
 | Feature/status | Value, priority, requirement/flow | Acceptance, edges and testing | Dependencies |
@@ -12,7 +14,7 @@ IDs refer to [PRD](PRD.md) and [flows](USER_FLOWS.md). P0 is essential current u
 | Simplicity/current heuristics | Avoid excess; P1; R06/F02 | Inspect unread targets, flag deps/layers/growth, allow justification, never budget-block test commands; 13 tests and no-change model case | Existing map/tools/diff |
 | Desktop feedback/preview | Understand work; P0; R07/F01-F05 | Show progress/errors and exact approval args; Tk tests; full accessibility journey pending | Tk |
 
-Post-MVP: multi-file acceptance (R02), nonblocking discovery (R07), richer pressure handling (R05), fuller ignore/import behavior (R01), stronger isolation (R03). See [tasks](../TASKS.md). Later/optional roadmap: plugin installation, advanced workers and training; no interfaces or delivery dates are committed. No cloud/billing/authentication feature is implied.
+Implemented preview increments include background discovery, scoped ignore/import handling and narrow invoice/tag acceptance. Remaining: broad multi-file reliability (R02), manual desktop acceptance (R07), physical-pressure handling (R05), fuller ignore/import semantics (R01), stronger isolation (R03). See [tasks](../TASKS.md). Later/optional roadmap: plugin installation, advanced workers and training; no interfaces or delivery dates are committed. No cloud/billing/authentication feature is implied.
 
 V1.1.1 repair increment (R02/R06): repeated unchanged writes trigger current-file recovery; successful verification clears stale failure evidence. Budget messages identify estimates as counts, not remaining work, and keep explanations in JSON. Inspection/testing remain available after a budget gate. Four new scripted regressions cover these paths, bounded stopping and verification preservation. Model-level improvement is unverified; REPAIR-001 stays open.
 
@@ -25,3 +27,5 @@ V1.4.1 recovery correction (R02): repeated-failure recovery now keeps the origin
 V1.4.2 (R02/R06): current-source prompts after edits/failed checks, explicit not-executed feedback for withheld actions and a verified finish action address repeated repairs and completion loops. Task diff review and all verification/approval gates remain. These changes do not enforce arbitrary natural-language file-preservation rules as an OS boundary.
 
 V1.9.0: local compatible generation now forwards the existing state schema; evaluator backend/endpoint options allow testing configured loopback runtimes. Narrow real Ollama compatible-protocol tag/invoice acceptance is recorded in evaluation-v1.9.0.json. Other compatible servers and general reliability remain unaccepted; permission and resource boundaries are unchanged.
+
+V1.9.1 evaluator diagnostics report the first failed trust condition and whether independent checks ran. This tooling does not change the production repair loop. Rejected recovery experiments were removed; intermittent native repair remains open. Latest suite and acceptance scope: [handover](../HANDOVER.md).

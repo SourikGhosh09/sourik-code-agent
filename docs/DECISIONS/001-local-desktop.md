@@ -1,5 +1,7 @@
 # 001 - Preserve the local desktop architecture
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 Status: Accepted; records current implementation. Date: 2026-09-25.
 
 Context: The user wants an owned local agent without paid API requirements; Python/Tk/SQLite code already works.

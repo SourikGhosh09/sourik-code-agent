@@ -1,6 +1,12 @@
-# V1 preview: available for comparison
+# V1 preview status
 
-Validated on 2026-09-19. This is the first testable V1 increment, not full phase-2 acceptance or a broad coding benchmark. The preserved V0 remains available independently.
+Current release: **V1.9.1 preview**, reviewed 2026-09-30. Full Windows suite: **113 passed, two symlink skips (115 total)**. Both V1.9.1 native tag trials passed; intermittent native repair remains unresolved. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
+
+Use Start Agent.cmd or Start V1.9.1.cmd. Old V0/V1 launchers and local release copies were removed; historical source remains in Git. See [handover](../HANDOVER.md), [changelog](../CHANGELOG.md) and [latest evidence](evaluation-v1.9.1.json).
+
+## Historical first V1 increment (2026-09-19)
+
+The following describes that earlier snapshot, not current launcher availability or current test totals.
 
 ## What is implemented
 
@@ -9,7 +15,7 @@ Validated on 2026-09-19. This is the first testable V1 increment, not full phase
 - Quality/Speed preference, optional thread/context targets and periodic available-RAM backoff between model calls. These are runtime targets, not OS-enforced caps.
 - Recent projects, inspectable task history and loading a prior request into a fresh task.
 - Durable after-change fingerprints, conflict detection and explicit confirmation before recovery overwrites later edits.
-- Separate Start V0.cmd and Start V1.cmd launchers. Start Agent.cmd starts V1.
+- At that historical snapshot, separate V0/V1 launchers existed; current distribution uses only the versioned current launcher.
 
 ## Evidence
 
@@ -27,12 +33,6 @@ Exact source hash, model digest, timings and runtime envelopes: [evaluation-v1.j
 
 Desktop controls were exercised through Tk tests. A full manual GUI session has not been claimed. The calculator evaluations do not establish broad repository, language or framework reliability; the clutter case tests retrieval in a small synthetic repository, not large-project engineering.
 
-## Comparing versions
+## Current remaining work
 
-Use Start V0.cmd and Start V1.cmd with separate copies of a small project. Do not run both against the same folder. For a speed comparison, run sequentially because both use the same local model server. Auto + Quality is recommended in V1; Speed and Eco may select the less reliable 3B model.
-
-The V0 snapshot lives under releases/v0-462a311 and is excluded from Git. It is reproducible from local Git commit 462a311 using git archive. Local runtime and models are shared; neither launcher changes system model settings.
-
-## Remaining V1 work
-
-Per-project resource overrides, nonblocking hardware/model startup, richer memory editing and error/fix retrieval, fuller ignore/import semantics, broader multi-file/language evaluation, and GPU-pressure handling remain unfinished. CPU/context controls and RAM backoff do not enforce RAM/VRAM limits or prevent every OOM. Commands require approval and run with the user's Windows rights; there is no OS sandbox. Plugin installation, multi-agent workers and training remain later roadmap phases.
+Background discovery and scoped ignore/import handling are implemented. Richer memory editing/error retrieval, fuller language semantics, physical RAM/VRAM pressure acceptance, manual accessibility, clean-machine distribution and stronger OS isolation remain unfinished. CPU/context targets and RAM backoff are not hard caps. Plugin installation, advanced workers and training are later roadmap phases. For comparisons, use historical Git revisions in separate disposable project copies and run sequentially against the local server.

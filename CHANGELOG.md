@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.9.1 - 2026-09-30 (preview)
+
+- Report concrete fixture approval rejections and independent checks that passed, failed or were not run. Approval and pass criteria are unchanged.
+- 113 tests passed, two skipped; both fresh native tag trials and release CI passed. This is a diagnostics patch, not a demonstrated repair-reliability improvement.
+- Preserve rejected prompt experiments separately; their code was removed. No dependencies added.
+
+## 1.9.0 - 2026-09-29 (preview)
+
+- Forward state-dependent schemas through the local compatible adapter; add evaluator backend/endpoint options.
+- 111 tests passed, two skipped. Four compatible tag/invoice trials passed through local Ollama; native tag trials had one pass and one failure.
+- Compatible providers other than Ollama and general repair reliability remain unverified.
+
 ## 1.8.0 - 2026-09-29 (preview)
 
 - Add explicit endpoint/backend/model options to read-only setup checks.

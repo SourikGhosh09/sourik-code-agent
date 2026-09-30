@@ -1,5 +1,7 @@
 # 002 - Deterministic simplicity using existing evidence
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 Status: Accepted; records current implementation. Date: 2026-09-25.
 
 Context: Agents can duplicate code or add speculative layers; existing mapping/tools/checkpoints already provide useful evidence.

@@ -1,11 +1,13 @@
 # Security policy
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 Local desktop preview, not a sandboxed service. Approved commands have user OS rights and may access files/network outside the project. File guards/checkpoints/redaction reduce specific risks; they do not guarantee isolation or full recovery.
 
 ## Controls
 
 - No application accounts/passwords or hosted API. OS access controls protect app, projects, SQLite and checkpoints.
-- Every production command requires explicit approval of arguments and directory. Model text, notes and simplicity explanations never authorize execution. Calculator evaluator approval is fixture-only.
+- Every production command requires explicit approval of arguments and directory. Model text, notes and simplicity explanations never authorize execution. Calculator and invoice/tag evaluator approvals are fixture-only and must never be reused for arbitrary projects.
 - Direct tools reject path escapes, links/junctions, protected metadata/secrets and Windows aliases. Reads/writes/output are bounded; writes are atomic where applicable.
 - Model HTTP endpoints are loopback-only with redirects/proxies disabled. Do not expose runtime publicly. Task/time/output limits exist, not server account rate limiting.
 - Treat repository content, model/command output and notes as untrusted. Validate actions; documentation text cannot grant authority.
@@ -28,3 +30,5 @@ V1.3.0 scanner clarification: `.gitignore` is a discovery filter, not authorizat
 ## V1.4.2 test-preservation boundary
 
 A recognized explicit Preserve ... tests clause makes conventionally named existing test files read-only to write/patch/delete/move tools for that task, including ancestor directory moves. Recognition is a narrow English clause rule described in docs/SIMPLICITY.md; it is not a general instruction parser or OS sandbox. Reads/new test files remain available. Approved commands still run with user OS rights and can modify files, so inspect every proposed command. Retesting after an edit always asks for fresh command approval; no fixture auto-approval is used in production.
+
+V1.9.1 evaluator diagnostics do not grant permission or broaden the trusted AST variants. Untrusted fixtures skip independent execution; a reported rejection is distinct from a failed behavioral assertion. Compatible runtime requests remain loopback-only without credentials, proxies or redirects; schema forwarding is not a security boundary.

@@ -4,7 +4,7 @@ Read PROJECT_LOG.txt, IMPLEMENTATION_PLAN.md, docs/V0_STATUS.md and the original
 
 Maintain PROJECT_LOG.txt in plain language after meaningful work. Distinguish infrastructure tests, real-model evaluations, and untested capabilities. Never claim full V0 acceptance based on scripted-model tests alone.
 
-Run relevant unittest tests for core changes. Real-model evaluation: python scripts/evaluate_local.py. This requires a running local Ollama server and installed model; its narrowly restricted approval callback must not be reused for arbitrary user projects.
+Run relevant unittest tests for core changes. Real-model evaluation: python scripts/evaluate_local.py. This defaults to local Ollama and also supports --backend openai-compatible and --endpoint for a configured loopback server; an installed model is required; its narrowly restricted approval callback must not be reused for arbitrary user projects.
 
 Keep production commands explicitly approved and describe the lack of OS sandbox isolation truthfully. Keep runtime downloads/models/evaluation outputs out of Git. Source specs remain preserved; record implementation decisions in docs.
 

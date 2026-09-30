@@ -1,5 +1,7 @@
 # V0 thin-slice acceptance: passed
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 Verified on 2026-09-19 with local **qwen2.5-coder:7b**. This passes the documented small-project demonstration, not a broad coding-quality benchmark or production-security certification.
 
 | Check | Evidence |
@@ -12,7 +14,7 @@ Verified on 2026-09-19 with local **qwen2.5-coder:7b**. This passes the document
 | Desktop | Window construction, task failure display and runtime-readiness waiting tested; Auto selection confirmed against installed models |
 | Regression suite | 28 tests passed; one real symbolic-link fixture skipped because Windows denied link creation; real junction boundary tests passed |
 
-Latest measured task times: 72.82 seconds for new-project creation and 10.96 seconds for repair. These include runtime conditions and are not controlled speed comparisons.
+At this historical V0 checkpoint, measured task times: 72.82 seconds for new-project creation and 10.96 seconds for repair. These include runtime conditions and are not controlled speed comparisons.
 
 Machine-readable results: [evaluation-v0.json](evaluation-v0.json). Original run: `evaluation-results\20260919-144653`. Model digest and exact agent-code digest are recorded in both reports.
 

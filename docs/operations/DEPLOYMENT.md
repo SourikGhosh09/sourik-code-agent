@@ -1,5 +1,7 @@
 # Local deployment
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 Requires a desktop, Python >=3.12 with Tk, writable project storage and separately installed local model runtime/model. Windows is the verified preview environment. No provider, domain, HTTPS certificate, hosted database or background-job service is needed. Keep inference on loopback.
 
 ## Install and verify
@@ -33,6 +35,6 @@ The setup check defaults to http://127.0.0.1:11434. V1.8.0 accepts --endpoint, -
 
 V1.5.0 was checked from a fresh source copy on the existing Windows host without copying .runtime or models. Its existing server supplied model discovery. A genuinely clean computer, packaged installation and manual desktop journeys remain unvalidated; DIST-001 stays open.
 
-V1.8.0 compatible discovery uses GET /v1/models, not chat generation. A server requiring authentication or lacking this endpoint can fail discovery; no credential support is added. Tests use a local HTTP fixture; a real compatible runtime and clean computer remain unvalidated.
+V1.8.0 compatible discovery uses GET /v1/models, not chat generation. A server requiring authentication or lacking this endpoint can fail discovery; no credential support is added. Discovery was initially tested with a local HTTP fixture. Later V1.9.0 inference trials used Ollama's compatible API; other compatible implementations and a clean computer remain unvalidated.
 
 V1.9.0 adds actual compatible inference evidence using the existing local Ollama server. Use the same endpoint/backend/model settings in the UI and evaluator; the evaluator does not change saved settings. Compatible servers must support JSON-schema response_format. No new runtime download, API key or dependency is required. Other server implementations and clean-machine acceptance remain open. See ../evaluation-v1.9.0.json.

@@ -1,5 +1,7 @@
 # Sourik Code Agent
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 Repository: https://github.com/SourikGhosh09/sourik-code-agent (private).
 
 A local-first desktop coding agent that inspects projects, makes bounded changes, runs approved tests, and repairs failures.

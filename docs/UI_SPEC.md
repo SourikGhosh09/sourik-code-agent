@@ -1,6 +1,8 @@
 # Desktop UI specification
 
-Tk desktop, initially 1000x760 with 780x600 minimum. Product name is Sourik Code Agent; the window title shows Sourik Code Agent - V1.8.0 preview from the application version. No new visual branding or web/mobile interface is specified.
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
+Tk desktop, initially 1000x760 with 780x600 minimum. Product name is Sourik Code Agent; the window title shows Sourik Code Agent - V1.9.1 preview from the application version. No new visual branding or web/mobile interface is specified.
 
 | Surface/flow | Purpose and controls | States and interactions |
 |---|---|---|
@@ -15,7 +17,7 @@ Keep primary actions clear, advanced settings disclosed, failures understandable
 
 Task work and hardware/model discovery use workers and the existing event queue. During discovery the window stays available, duplicate Run is disabled, Stop cancels the pending handoff and close cancels timers/discards late results. Error dialogs restore Run for retry. UI inputs are captured before discovery; later edits are for the next request. Project history/database access, preferences and initial agent setup remain synchronous. Model loading can take time; Stop is not immediate during a model request. Desktop resizing is supported; mobile behavior is out of scope. Tk construction and selected failure states are tested, but screen-reader, focus order, scaling and full keyboard approval/recovery journeys remain manual validation in [tasks](../TASKS.md).
 
-V1.2.0 has 11 automated startup checks, including a display-free Tcl event-loop check with paused discovery. Full native Tk layout/interaction tests and manual Windows keyboard/screen-reader/scale journeys remain pending. Existing controls/layout are retained.
+V1.2.0 has 11 automated startup checks, including a display-free Tcl event-loop check with paused discovery. Later native layout/navigation tests were added in V1.7.0 and teardown checks in V1.7.1. Full manual Windows keyboard/screen-reader/scaling journeys remain pending.
 
 ## V1.7.0 keyboard controls
 

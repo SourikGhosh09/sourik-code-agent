@@ -1,5 +1,7 @@
 # Data model
 
+Documentation reviewed 2026-09-30 against V1.9.1. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+
 Source: local_agent/storage.py and checkpoint code in tools.py. Each project's .agent/state.sqlite uses SQLite WAL; this is the existing schema, not a proposed hosted database.
 
 | Table | Columns and SQLite types | Keys/relationships |
