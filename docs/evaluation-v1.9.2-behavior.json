@@ -1,0 +1,117 @@
+{
+  "purpose": "Less-guided tag repair; synthetic fixture, not real-project acceptance",
+  "goal": "Repair this tag catalog project. Inspect the repository and run its existing tests first. Tags should compare without regard to case across Unicode text, ignore surrounding whitespace, and appear once in the order they were first encountered. Preserve validation, public functions, README and existing tests. Reuse existing modules; add no files or dependencies. Only python -m unittest discover is approved. This controlled evaluation permits only expression repairs in the existing functions; execution is restricted to pre-reviewed fixture variants, so other implementations may be rejected.",
+  "harness_digest": "c8fe844c2fb29949277d339d85247433079d53ecfc764da57d34d56b10394a73",
+  "approval_policy": "Unchanged approve_tags fixed AST variants; no arbitrary-project approval",
+  "date": "2026-09-30",
+  "release": "1.9.2-preview",
+  "commit": "225af133dabcb5134184842668c3583842cfa413",
+  "results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "not_run_untrusted_fixture",
+      "approval_denials": [
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py"
+      ],
+      "final_trust_reasons": [
+        "untrusted_ast: normalization.py"
+      ],
+      "observed_failure": true,
+      "simplicity_reviews": 16,
+      "changed_files": [
+        "normalization.py"
+      ],
+      "trusted_fixture_only": false,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 52.5,
+      "final_sources": {
+        "normalization.py": "from validation import validate_tag\n\ndef normalize_tag(tag):\n    validate_tag(tag)\n    return tag.strip().lower().casefold()\n",
+        "catalog.py": "from normalization import normalize_tag\n\ndef unique_tags(tags):\n    normalized = [normalize_tag(tag) for tag in tags]\n    return sorted(set(normalized))\n"
+      }
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "17d5ce318771aea89616c8f619f9df0e5dfb7b7e65e9330c6305a52264876533",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "not_run_untrusted_fixture",
+      "approval_denials": [
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py",
+        "untrusted_ast: normalization.py"
+      ],
+      "final_trust_reasons": [
+        "untrusted_ast: normalization.py"
+      ],
+      "observed_failure": true,
+      "simplicity_reviews": 16,
+      "changed_files": [
+        "normalization.py"
+      ],
+      "trusted_fixture_only": false,
+      "config": {
+        "num_thread": 10,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 44.11,
+      "final_sources": {
+        "normalization.py": "from validation import validate_tag\n\ndef normalize_tag(tag):\n    validate_tag(tag)\n    return tag.strip().lower().casefold()\n",
+        "catalog.py": "from normalization import normalize_tag\n\ndef unique_tags(tags):\n    normalized = [normalize_tag(tag) for tag in tags]\n    return sorted(set(normalized))\n"
+      }
+    }
+  ],
+  "harness_source": "\"\"\"Local investigation: less-guided requests, unchanged trusted evaluator.\"\"\"\nimport hashlib\nimport json\nfrom pathlib import Path\nimport sys\nimport time\nfrom unittest.mock import patch\n\nROOT = Path(__file__).resolve().parents[1]\nsys.path.insert(0, str(ROOT))\nfrom scripts import evaluate_local as evaluation\n\ngoal = ('Repair this tag catalog project. Inspect the repository and run its existing tests first. '\n        'Tags should compare without regard to case across Unicode text, ignore surrounding whitespace, '\n        'and appear once in the order they were first encountered. '\n        'Preserve validation, public functions, README and existing tests. '\n        'Reuse existing modules; add no files or dependencies. '\n        'Only python -m unittest discover is approved. '\n        'This controlled evaluation permits only expression repairs in the existing functions; '\n        'execution is restricted to pre-reviewed fixture variants, so other implementations may be rejected.')\nbase = ROOT/'evaluation-results'/('behavior-'+time.strftime('%Y%m%d-%H%M%S'))\nbase.mkdir()\nmodel = evaluation.LocalModel('qwen2.5-coder:7b')\nmodel_digest = next((m.get('digest') for m in model.installed_models()\n                     if m.get('name') == model.model), None)\ncode_digest = hashlib.sha256(b''.join(p.name.encode()+p.read_bytes()\n                                    for p in sorted((ROOT/'local_agent').glob('*.py')))).hexdigest()\noriginal_run = evaluation.Agent.run\ndef run(agent, ignored_goal):\n    return original_run(agent, goal)\nmetadata = {'purpose':'Less-guided tag repair; synthetic fixture, not real-project acceptance',\n            'goal':goal, 'harness_digest':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),\n            'approval_policy':'Unchanged approve_tags fixed AST variants; no arbitrary-project approval'}\n(base/'investigation.json').write_text(json.dumps(metadata, indent=2), encoding='utf-8')\nprint('OUTPUT', base, flush=True)\nwith patch.object(evaluation.Agent, 'run', run):\n    result = evaluation.evaluate_multifile(base, model, model.model, model_digest, code_digest, suite='tags')\nraise SystemExit(result)\n",
+  "conclusion": "Both less-guided trials exhausted the step budget. Final normalization AST was not trusted, so independent checks did not run. Catalog remained unchanged. These synthetic trials are confounded by fixed-variant approval and do not establish general coding accuracy.",
+  "infrastructure": {
+    "command": "python -m unittest tests.test_evaluation",
+    "passed": 11
+  }
+}

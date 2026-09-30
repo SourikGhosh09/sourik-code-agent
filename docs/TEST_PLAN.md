@@ -165,3 +165,7 @@ The fixture approval functions optionally collect rejection reasons without chan
 ## V1.9.2 failed-check context
 
 V1.9.2 removes obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. The new regression fails before the fix and passes after it. Full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on the exact final source. This addresses the reproduced stale-patch trigger, not general repair reliability.
+
+## Less-guided baseline - 2026-09-30
+
+Two V1.9.2 native 7B tag trials used behavior descriptions without exact repair expressions. The existing fixture, approval rules and assertions were unchanged. Both hit the step limit, preserved protected files, and left an untrusted normalization AST; independent checks were not run. Catalog remained unchanged. Fixed-variant rejection confounds broad accuracy conclusions. All 11 evaluator tests passed; full suite was not rerun because production and evaluator source were unchanged. Exact request, investigation harness and all results are preserved in [evidence](evaluation-v1.9.2-behavior.json). No new release or broader acceptance.

@@ -35,7 +35,9 @@ Plugins, advanced workers and training remain later original roadmap phases, not
 - [x] EVAL-002 - V1.9.1 rejection diagnostics and independent-check status. Approval rules and pass criteria unchanged; tests prove untrusted code is not executed.
 - [x] Candidate cleanup - Rejected recovery code removed with explicit approval; backup and all evidence preserved. No approval remains pending.
 
-V1.9.2 final-source trials passed; prior intermittent failures remain recorded. Narrow REPAIR-001 invoice acceptance does not close REPAIR-002 or general coding reliability. See [handover](HANDOVER.md), [current evidence](docs/evaluation-v1.9.1.json), [candidate evidence](docs/evaluation-v1.9.1-candidates.json) and PROJECT_LOG.txt for dated history. User-deferred manual testing remains pending without blocking independent development.
+V1.9.2 final-source trials passed; prior intermittent failures remain recorded. Narrow REPAIR-001 invoice acceptance does not establish general coding reliability. See [handover](HANDOVER.md), [current evidence](docs/evaluation-v1.9.2.json), [candidate evidence](docs/evaluation-v1.9.1-candidates.json) and PROJECT_LOG.txt for dated history. User-deferred manual testing remains pending without blocking independent development.
 
 
 Next: broader representative real-project acceptance, plus the independent manual/clean-machine/physical-pressure gates above.
+
+- [ ] EVAL-003 - Less-guided acceptance. Initial two tag trials failed at the step limit and ended outside trusted AST variants; independent checks did not run. Preserve the [baseline](docs/evaluation-v1.9.2-behavior.json), separate approval recovery from coding accuracy, and retain command restrictions. No general-project acceptance claim.
