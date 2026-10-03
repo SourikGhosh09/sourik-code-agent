@@ -1,8 +1,8 @@
 # Current handover
 
-Current candidate: **V1.10.0 preview**, 2026-10-03. Start Agent.cmd opens Start V1.10.0.cmd. Previous published release: V1.9.2; publication status is recorded below after verification.
+Published release: **V1.10.0 preview**, 2026-10-03, tested commit 20b274c and tag v1.10.0. Start Agent.cmd opens Start V1.10.0.cmd. [Hosted release CI passed](https://github.com/SourikGhosh09/sourik-code-agent/actions/runs/37089341731). Full local suite: 116 passed, two Windows symlink skips (118 total); both guided tag trials passed with Custom set to 12 threads and 8192 context tokens. Choose AI power -> Custom to edit these targets. Current source ZIP: dist/sourik-code-agent-v1.10.0-preview.zip.
 
-V1.9.2 removes obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. The new regression fails before the fix and passes after it. Full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on the exact final source. This addresses the reproduced stale-patch trigger, not general repair reliability.
+The earlier V1.9.2 checkpoint removed obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. Its regression failed before the fix and passed after it. That checkpoint's full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on that exact source. This addresses the reproduced stale-patch trigger, not general repair reliability.
 
 ## Diagnosis and evidence
 

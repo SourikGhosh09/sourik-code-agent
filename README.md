@@ -69,11 +69,11 @@ Assumption: Windows remains the primary preview target; other platforms need val
 
 Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.10.0.cmd. Historical V0/V1 labels remain in their original evidence.
 
-## Updating to V1.9.2
+## Updating to V1.10.0
 
 1. Close the agent and extract this ZIP into a separate folder. Keep your current app folder, project folders and their `.agent` data. The ZIP contains source, not Ollama or models.
 2. When you are ready to test later, start your existing Ollama server. Open PowerShell in the extracted project folder and run `python scripts/start_local_runtime.py --check`, then `python -m unittest discover -v`. The setup check explains any missing requirements.
-3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.9.2 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
+3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.10.0 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
 
 To repeat the separate repair benchmark, run `python scripts/evaluate_local.py qwen2.5-coder:7b --multifile`. It creates two disposable invoice projects under `evaluation-results`. Both must report `passed: true`; retain results/events if either fails. Setup readiness alone does not establish coding reliability.
 
