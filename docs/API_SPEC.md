@@ -1,6 +1,6 @@
 # Communication contracts
 
-Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-10-03 against V1.10.0. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 No application REST API, public server, accounts or hosted backend exists. The desktop calls Python objects and receives task events through a queue. SQLite is local. Do not invent pagination, filtering or role-based endpoints.
 
@@ -48,3 +48,9 @@ The compatible adapter sends response_format.type=json_schema and json_schema={n
 Restricted invoice/tag results retain independent_pass and add independent_check_status: passed, failed or not_run_untrusted_fixture. approval_denials records first-failure reasons encountered during task commands; final_trust_reasons records the final fixture check. Optional reasons collection does not change approval Booleans. evaluation_approval_denied is emitted by the evaluator to its local output/events list, not injected into the model prompt or stored as a new production event contract. The pass expression, fixture contents and allowed variants are unchanged.
 
 V1.9.2: nonzero-exit check feedback omits diff and diff_truncated from the model-facing simplicity review. Current file evidence, failing output, counts and findings remain. Recorded simplicity events and successful verification/final review retain full bounded diffs. This prevents obsolete removed lines from being reintroduced after the recovery context refresh. Permissions, evaluator approval and completion gates are unchanged.
+
+## Custom PC power — V1.10.0
+
+V1.10.0 adds Custom AI power using the existing CPU-thread and context fields. Custom permits 1 through the detected logical CPU count and 2048–16384 context tokens; blanks use half the logical CPUs (at least one) and 8192 tokens. Other presets retain their caps. Speed caps context at 4096. Low-memory startup caps context at 4096; existing between-turn pressure backoff may lower targets to two threads and 2048 tokens. Custom retains one worker and 40 steps. These targets are forwarded to Ollama; compatible servers manage their own thread/context settings. No hard CPU, RAM or GPU limits or OS sandbox are provided. No dependencies, new settings keys or database migration.
+
+Choose **Custom** in AI power to reveal Resource settings. Enter CPU threads and context tokens, then start a task. Settings are saved on successful startup; edits during a run apply to the next task. Selection opens the fields and moves keyboard focus to CPU threads.

@@ -48,7 +48,8 @@ class App:
         controls.pack(fill='x',pady=12)
         ttk.Label(controls,text='AI power').pack(side='left')
         self.power = tk.StringVar(value='Auto')
-        ttk.Combobox(controls,textvariable=self.power,values=['Auto','Eco','Balanced','High'],state='readonly',width=12).pack(side='left',padx=8)
+        self.power_picker = ttk.Combobox(controls,textvariable=self.power,values=['Auto','Eco','Balanced','High','Custom'],state='readonly',width=12)
+        self.power_picker.pack(side='left',padx=8)
         self.preference = tk.StringVar(value='Quality')
         ttk.Combobox(controls,textvariable=self.preference,values=['Quality','Speed'],state='readonly',width=9).pack(side='left')
         self.run_button = ttk.Button(controls,text='Run task (Ctrl+Enter)',command=self.run)
@@ -81,11 +82,18 @@ class App:
             if targets.winfo_manager(): targets.pack_forget()
             else: targets.pack(fill='x')
         ttk.Button(advanced_shell,text='Resource settings',command=toggle_resources).pack(anchor='w')
-        ttk.Label(targets,text='CPU threads').pack(side='left')
-        ttk.Entry(targets,textvariable=self.cpu_target,width=6).pack(side='left',padx=5)
-        ttk.Label(targets,text='Context tokens').pack(side='left')
-        ttk.Entry(targets,textvariable=self.context_target,width=8).pack(side='left',padx=5)
-        ttk.Label(targets,text='Blank = Auto. Runtime targets, not hard memory caps.').pack(side='left')
+        ttk.Label(targets,text='CPU threads').grid(row=0,column=0,sticky='w')
+        cpu_entry = ttk.Entry(targets,textvariable=self.cpu_target,width=6)
+        cpu_entry.grid(row=0,column=1,sticky='w',padx=5)
+        ttk.Label(targets,text='Context tokens (2048–16384)').grid(row=1,column=0,sticky='w')
+        ttk.Entry(targets,textvariable=self.context_target,width=8).grid(row=1,column=1,sticky='w',padx=5)
+        ttk.Label(targets,text='Custom: use your targets; blanks use Balanced defaults. Other modes cap targets.\nSpeed and low memory may reduce targets. Ollama only; not hard CPU/RAM/GPU limits.',wraplength=620).grid(row=2,column=0,columnspan=2,sticky='w',pady=4)
+        def show_custom(event=None):
+            if self.power.get() == 'Custom':
+                targets.pack(fill='x')
+                if event is not None:
+                    cpu_entry.focus_set()
+        self.power_picker.bind('<<ComboboxSelected>>',show_custom)
         self.status = tk.StringVar(value='Ready · Choose a project to begin')
         ttk.Label(frame,textvariable=self.status,font=('Segoe UI',12,'bold')).pack(anchor='w',pady=12)
         notebook = ttk.Notebook(frame)
@@ -132,6 +140,7 @@ class App:
                 self.project_picker.configure(values=self.recent_projects)
             except (ValueError,OSError):
                 pass
+        show_custom()
         self.refresh_timer = window.after(200,self.refresh_project)
         window.protocol('WM_DELETE_WINDOW',self.close)
         self.poll_timer = window.after(100,self.poll)

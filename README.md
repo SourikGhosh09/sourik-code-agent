@@ -1,12 +1,12 @@
 # Sourik Code Agent
 
-Documentation reviewed 2026-09-30 against V1.9.2. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-10-03 against V1.10.0. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Repository: https://github.com/SourikGhosh09/sourik-code-agent (private).
 
 A local-first desktop coding agent that inspects projects, makes bounded changes, runs approved tests, and repairs failures.
 
-Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.9.2 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
+Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.10.0 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
 
 ## Setup and commands
 
@@ -28,11 +28,11 @@ python scripts/evaluate_local.py qwen2.5-coder:7b --tags
 
 The evaluation commands need Ollama and the model. Their fixture-only approval callbacks must never be reused for arbitrary projects. Compilation checks syntax; it is not an installer build. CI runs infrastructure tests without downloading models and cannot certify model quality.
 
-`Start V1.9.2.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
+`Start V1.10.0.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
 
 ## Capabilities and limits
 
-Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. V1.3.0 adds scoped ignore rules and more accurate local Python import context, while retaining background startup discovery. Current Windows validation: **108 passed, two symlink-fixture skips (110 total)**, including native Tk and junction checks. V1.4.0 adds read-only resource diagnostics using existing telemetry. Three actual host snapshots and a separate simulated low-memory sequence are recorded in [V1.4.0 evidence](docs/evaluation-v1.4.0.json). Actual RAM stayed above the backoff threshold; this is a baseline, not stress/inference acceptance. Manual accessibility and broader real-model acceptance remain pending.
+Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. V1.3.0 adds scoped ignore rules and more accurate local Python import context, while retaining background startup discovery. Current Windows validation: **116 passed, two symlink-fixture skips (118 total)**, including native Tk and junction checks. V1.4.0 adds read-only resource diagnostics using existing telemetry. Three actual host snapshots and a separate simulated low-memory sequence are recorded in [V1.4.0 evidence](docs/evaluation-v1.4.0.json). Actual RAM stayed above the backoff threshold; this is a baseline, not stress/inference acceptance. Manual accessibility and broader real-model acceptance remain pending.
 
 Commands run with your OS rights: **there is no OS sandbox or network isolation**. Resource settings are targets, not hard CPU/RAM/VRAM caps. Scans/context are bounded; JS/TS indexing and simplicity checks are heuristic. Hardware/model discovery runs in the background; project history/database access and initial agent setup remain synchronous. Broader multi-file/language reliability, pressure handling, plugins and model training remain unfinished.
 
@@ -67,7 +67,7 @@ Assumption: Windows remains the primary preview target; other platforms need val
 
 ## Version naming
 
-Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.9.2.cmd. Historical V0/V1 labels remain in their original evidence.
+Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.10.0.cmd. Historical V0/V1 labels remain in their original evidence.
 
 ## Updating to V1.9.2
 
@@ -145,3 +145,9 @@ V1.9.1 is an evaluator diagnostics patch, not a repair-loop improvement. Restric
 ## V1.9.2 repair context
 
 V1.9.2 removes obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. The new regression fails before the fix and passes after it. Full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on the exact final source. This addresses the reproduced stale-patch trigger, not general repair reliability. See [exact evidence](docs/evaluation-v1.9.2.json).
+
+## Custom PC power — V1.10.0
+
+V1.10.0 adds Custom AI power using the existing CPU-thread and context fields. Custom permits 1 through the detected logical CPU count and 2048–16384 context tokens; blanks use half the logical CPUs (at least one) and 8192 tokens. Other presets retain their caps. Speed caps context at 4096. Low-memory startup caps context at 4096; existing between-turn pressure backoff may lower targets to two threads and 2048 tokens. Custom retains one worker and 40 steps. These targets are forwarded to Ollama; compatible servers manage their own thread/context settings. No hard CPU, RAM or GPU limits or OS sandbox are provided. No dependencies, new settings keys or database migration.
+
+Choose **Custom** in AI power to reveal Resource settings. Enter CPU threads and context tokens, then start a task. Settings are saved on successful startup; edits during a run apply to the next task. Selection opens the fields and moves keyboard focus to CPU threads.

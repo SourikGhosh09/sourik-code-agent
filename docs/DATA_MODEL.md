@@ -1,6 +1,6 @@
 # Data model
 
-Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-10-03 against V1.10.0. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Source: local_agent/storage.py and checkpoint code in tools.py. Each project's .agent/state.sqlite uses SQLite WAL; this is the existing schema, not a proposed hosted database.
 
@@ -23,3 +23,9 @@ Other persisted data: checkpoint manifests/original bytes and expected-after has
 V1.3.0: repository_index.digest includes a parser revision (`index-v2`, NUL separator, raw bytes) before hashing. Existing rows are re-described on the next scan and reused thereafter; no SQLite table migration is required. Python import strings retain relative dots and from-import candidates. Ignored files are removed alongside deleted files when the disposable index is replaced. Verified-memory evidence format is unchanged; a changed scan set can make earlier evidence stale without deleting notes/history.
 
 V1.4.3 checkpoint folders retain a timestamp prefix and add an atomically generated unique suffix. Existing timestamp-only folders and manifests still load; no stored-data migration is required.
+
+## Custom PC power — V1.10.0
+
+V1.10.0 adds Custom AI power using the existing CPU-thread and context fields. Custom permits 1 through the detected logical CPU count and 2048–16384 context tokens; blanks use half the logical CPUs (at least one) and 8192 tokens. Other presets retain their caps. Speed caps context at 4096. Low-memory startup caps context at 4096; existing between-turn pressure backoff may lower targets to two threads and 2048 tokens. Custom retains one worker and 40 steps. These targets are forwarded to Ollama; compatible servers manage their own thread/context settings. No hard CPU, RAM or GPU limits or OS sandbox are provided. No dependencies, new settings keys or database migration.
+
+Choose **Custom** in AI power to reveal Resource settings. Enter CPU threads and context tokens, then start a task. Settings are saved on successful startup; edits during a run apply to the next task. Selection opens the fields and moves keyboard focus to CPU threads.

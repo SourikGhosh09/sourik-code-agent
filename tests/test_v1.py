@@ -117,6 +117,27 @@ class V1(unittest.TestCase):
         with self.assertRaises(ValueError): preference_profile(hardware,cpu=0)
         with self.assertRaises(ValueError): preference_profile(hardware,context=1)
 
+    def test_custom_power_honors_targets_and_retains_backoff(self):
+        hardware = {'threads':16, 'available':8*1024**3}
+        custom = preference_profile(hardware,'Custom',cpu=16,context=16384)
+        self.assertEqual((custom['num_thread'],custom['num_ctx'],custom['max_steps'],custom['workers']), (16,16384,40,1))
+        self.assertEqual(preference_profile(hardware,'High',cpu=16)['num_thread'],12)
+        default = preference_profile(hardware,'Custom')
+        self.assertEqual((default['num_thread'],default['num_ctx']), (8,8192))
+        self.assertEqual(preference_profile(hardware,'Custom','Speed',context=16384)['num_ctx'],4096)
+        low = {**hardware,'available':1024**3}
+        self.assertEqual(preference_profile(low,'Custom',context=16384)['num_ctx'],4096)
+        adjusted = pressure_adjust(custom,low)
+        self.assertEqual((adjusted['num_thread'],adjusted['num_ctx']), (2,2048))
+        for value in (0,17,True,1.5):
+            with self.subTest(cpu=value), self.assertRaises(ValueError):
+                preference_profile(hardware,'Custom',cpu=value)
+        for value in (2047,16385,True,4096.5):
+            with self.subTest(context=value), self.assertRaises(ValueError):
+                preference_profile(hardware,'Custom',context=value)
+        with self.assertRaisesRegex(ValueError,'power'):
+            preference_profile(hardware,'Unknown')
+
     def test_recovery_refuses_later_edits_after_reopen(self):
         source = self.root/'app.py'
         source.write_text('original')

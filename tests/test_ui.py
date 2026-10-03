@@ -195,6 +195,9 @@ class Startup(unittest.TestCase):
 
     def test_running_task_uses_snapshot_and_preserves_new_ui_settings(self):
         import json
+        self.app.power.set('Custom')
+        self.app.cpu_target.set('2')
+        self.app.context_target.set('6144')
         self.detect.side_effect = self.slow_check
         original = self.app.project.get()
         self.app.run()
@@ -203,6 +206,7 @@ class Startup(unittest.TestCase):
         self.app.goal.set('A different task')
         self.app.model.set('next-model')
         self.app.cpu_target.set('not an integer')
+        self.app.power.set('Eco')
         self.finish_discovery()
         # Windows temp paths may use an 8.3 alias; startup stores canonical paths.
         expected_root = Path(original).expanduser().resolve()
@@ -213,7 +217,12 @@ class Startup(unittest.TestCase):
         saved = json.loads(self.app.settings.read_text())
         self.assertEqual(saved['project'], str(expected_root))
         self.assertEqual(saved['model'], 'manual-model')
-        self.assertEqual(saved['cpu_target'], '')
+        self.assertEqual(saved['cpu_target'], '2')
+        self.assertEqual(saved['power'], 'Custom')
+        self.assertEqual(saved['context_target'], '6144')
+        config = self.agent_type.call_args.args[2]
+        self.assertEqual((config['num_thread'],config['num_ctx']), (2,6144))
+        self.assertEqual(self.app.power.get(), 'Eco')
 
     def test_invalid_numeric_setting_does_not_start_discovery(self):
         self.app.cpu_target.set('wrong')
@@ -329,6 +338,17 @@ class KeyboardLayout(unittest.TestCase):
         goal.event_generate('<Shift-Tab>')
         self.window.update()
         self.assertEqual(self.window.focus_get(), self.app.project_picker.tk_focusNext())
+
+    def test_custom_power_reveals_keyboard_accessible_targets(self):
+        self.window.focus_force()
+        self.app.power.set('Custom')
+        self.app.power_picker.event_generate('<<ComboboxSelected>>')
+        self.window.update()
+        settings = next(w for w in self.widgets(self.window)
+                        if w.winfo_class() == 'TLabelframe' and w.cget('text') == 'Resource targets (optional)')
+        self.assertEqual(settings.winfo_manager(), 'pack')
+        self.assertLessEqual(settings.winfo_reqwidth(), settings.winfo_width())
+        self.assertEqual(str(self.window.focus_get().cget('textvariable')), str(self.app.cpu_target))
 
     def test_shortcuts_use_existing_actions(self):
         self.window.geometry('1000x900')

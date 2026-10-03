@@ -137,3 +137,7 @@
 ### Security
 
 Earlier implementation history remains in PROJECT_LOG.txt and is not reconstructed here.
+
+## V1.10.0 preview — 2026-10-03
+
+Added Custom AI power with explicit CPU-thread/context targets, Balanced defaults, existing backoff, saved settings and keyboard-accessible fields. No dependencies or approval changes.

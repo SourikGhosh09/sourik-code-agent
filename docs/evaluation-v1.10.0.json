@@ -1,0 +1,73 @@
+{
+  "version": "1.10.0-preview",
+  "date": "2026-10-03",
+  "scope": "Guided trusted tag trials with Custom power: up to 12 threads and 8192 context. Not less-guided acceptance or a hard resource cap.",
+  "harness_source": "import hashlib\nimport json\nfrom pathlib import Path\nimport sys\nimport time\nfrom unittest.mock import patch\n\nROOT = Path(__file__).resolve().parents[1]\nsys.path.insert(0,str(ROOT))\nfrom scripts import evaluate_local as evaluation\noriginal = evaluation.preference_profile\ndef custom(hardware, power):\n    return original(hardware, 'Custom', cpu=min(12,hardware['threads']), context=8192)\nbase = ROOT/'evaluation-results'/('custom-'+time.strftime('%Y%m%d-%H%M%S'))\nbase.mkdir()\nmodel = evaluation.LocalModel('qwen2.5-coder:7b')\ndigest = next((m.get('digest') for m in model.installed_models() if m.get('name')==model.model),None)\ncode = hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in sorted((ROOT/'local_agent').glob('*.py')))).hexdigest()\nprint('OUTPUT',base,flush=True)\nwith patch.object(evaluation,'preference_profile',custom):\n    status = evaluation.evaluate_multifile(base,model,model.model,digest,code,suite='tags')\nreport = {'version':'1.10.0-preview','date':'2026-10-03','scope':'Guided trusted tag trials with Custom power: up to 12 threads and 8192 context. Not less-guided acceptance or a hard resource cap.',\n          'harness_source':Path(__file__).read_text(encoding='utf-8'),\n          'harness_digest':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),\n          'results':json.loads((base/'results.json').read_text(encoding='utf-8'))}\n(ROOT/'docs/evaluation-v1.10.0.json').write_text(json.dumps(report,indent=2)+'\\n',encoding='utf-8')\nraise SystemExit(status)\n",
+  "harness_digest": "cc876835e5d98bb24f81da0ce583e8cdd38d3a009e00086de36238b0dfd661a5",
+  "results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "25155ca0c54ae97b47311e9da6b1ac0a9d9f9b8a235e226f1de05c8928b5d9c8",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 12,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 45.32
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "25155ca0c54ae97b47311e9da6b1ac0a9d9f9b8a235e226f1de05c8928b5d9c8",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 12,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 11.9
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 Current release: **V1.9.2 preview**, reviewed 2026-09-30. Full Windows suite: **114 passed, two symlink skips (116 total)**. V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
 
-Use Start Agent.cmd or Start V1.9.2.cmd. Old V0/V1 launchers and local release copies were removed; historical source remains in Git. See [handover](../HANDOVER.md), [changelog](../CHANGELOG.md) and [latest evidence](evaluation-v1.9.1.json).
+Use Start Agent.cmd or Start V1.10.0.cmd. Old V0/V1 launchers and local release copies were removed; historical source remains in Git. See [handover](../HANDOVER.md), [changelog](../CHANGELOG.md) and [latest evidence](evaluation-v1.9.1.json).
 
 ## Historical first V1 increment (2026-09-19)
 
@@ -36,3 +36,9 @@ Desktop controls were exercised through Tk tests. A full manual GUI session has 
 ## Current remaining work
 
 Background discovery and scoped ignore/import handling are implemented. Richer memory editing/error retrieval, fuller language semantics, physical RAM/VRAM pressure acceptance, manual accessibility, clean-machine distribution and stronger OS isolation remain unfinished. CPU/context targets and RAM backoff are not hard caps. Plugin installation, advanced workers and training are later roadmap phases. For comparisons, use historical Git revisions in separate disposable project copies and run sequentially against the local server.
+
+## Custom PC power — V1.10.0
+
+V1.10.0 adds Custom AI power using the existing CPU-thread and context fields. Custom permits 1 through the detected logical CPU count and 2048–16384 context tokens; blanks use half the logical CPUs (at least one) and 8192 tokens. Other presets retain their caps. Speed caps context at 4096. Low-memory startup caps context at 4096; existing between-turn pressure backoff may lower targets to two threads and 2048 tokens. Custom retains one worker and 40 steps. These targets are forwarded to Ollama; compatible servers manage their own thread/context settings. No hard CPU, RAM or GPU limits or OS sandbox are provided. No dependencies, new settings keys or database migration.
+
+Choose **Custom** in AI power to reveal Resource settings. Enter CPU threads and context tokens, then start a task. Settings are saved on successful startup; edits during a run apply to the next task. Selection opens the fields and moves keyboard focus to CPU threads.

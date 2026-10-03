@@ -66,3 +66,7 @@ V1.9.1 is an evaluator diagnostics patch, not a repair-loop improvement. Restric
 ## V1.9.2 failed-check context
 
 V1.9.2 removes obsolete diff text from failed-check model feedback while preserving current source, failure output and review metadata. Full diffs remain in recorded events, the Changes view and successful verification/final review. The new regression fails before the fix and passes after it. Full suite: 114 passed, two symlink skips (116 total). Four native tag trials, two native invoice trials and two compatible tag trials passed on the exact final source. This addresses the reproduced stale-patch trigger, not general repair reliability.
+
+## V1.10.0 Custom PC power
+
+V1.10.0 adds Custom AI power using the existing CPU-thread and context fields. Custom permits 1 through the detected logical CPU count and 2048–16384 context tokens; blanks use half the logical CPUs (at least one) and 8192 tokens. Other presets retain their caps. Speed caps context at 4096. Low-memory startup caps context at 4096; existing between-turn pressure backoff may lower targets to two threads and 2048 tokens. Custom retains one worker and 40 steps. These targets are forwarded to Ollama; compatible servers manage their own thread/context settings. No hard CPU, RAM or GPU limits or OS sandbox are provided. No dependencies, new settings keys or database migration.

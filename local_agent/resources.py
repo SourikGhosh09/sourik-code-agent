@@ -28,6 +28,12 @@ def detect(root):
 
 
 def profile(hardware, power='Balanced', cpu=None, context=None):
+    if power == 'Custom':
+        threads = cpu if cpu is not None else max(1, hardware['threads'] // 2)
+        window = context if context is not None else 8192
+        if hardware.get('available') and hardware['available'] < 2 * 1024**3:
+            window = min(window, 4096)
+        return dict(num_thread=max(1, min(threads, hardware['threads'])), num_ctx=window, max_steps=40, workers=1)
     fraction, window, steps = {'Auto': (.5, 8192, 40), 'Eco': (.25, 4096, 24), 'Balanced': (.5, 8192, 40), 'High': (.75, 16384, 60)}[power]
     if hardware.get('available') and hardware['available'] < 2 * 1024**3:
         window = min(window, 4096)
@@ -57,11 +63,13 @@ def choose_model(hardware, models, power='Auto'):
 
 
 def preference_profile(hardware, power='Auto', preference='Quality', cpu=None, context=None):
+    if power not in ('Auto', 'Eco', 'Balanced', 'High', 'Custom'):
+        raise ValueError('Choose Auto, Eco, Balanced, High or Custom power.')
     if preference not in ('Quality', 'Speed'):
         raise ValueError('Choose Quality or Speed.')
-    if cpu is not None and not 1 <= cpu <= hardware['threads']:
+    if cpu is not None and (type(cpu) is not int or not 1 <= cpu <= hardware['threads']):
         raise ValueError('CPU thread target must fit this computer.')
-    if context is not None and not 2048 <= context <= 16384:
+    if context is not None and (type(context) is not int or not 2048 <= context <= 16384):
         raise ValueError('Context target must be between 2048 and 16384.')
     config = profile(hardware, power, cpu=cpu, context=context)
     if preference == 'Speed':

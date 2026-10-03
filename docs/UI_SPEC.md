@@ -1,8 +1,8 @@
 # Desktop UI specification
 
-Documentation reviewed 2026-09-30 against V1.9.2. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-10-03 against V1.10.0. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
-Tk desktop, initially 1000x760 with 780x600 minimum. Product name is Sourik Code Agent; the window title shows Sourik Code Agent - V1.9.2 preview from the application version. No new visual branding or web/mobile interface is specified.
+Tk desktop, initially 1000x760 with 780x600 minimum. Product name is Sourik Code Agent; the window title shows Sourik Code Agent - V1.10.0 preview from the application version. No new visual branding or web/mobile interface is specified.
 
 | Surface/flow | Purpose and controls | States and interactions |
 |---|---|---|
@@ -32,3 +32,9 @@ V1.2.0 has 11 automated startup checks, including a display-free Tcl event-loop 
 Run/Stop buttons show their shortcuts. Native dialogs retain their own keyboard handling; shortcuts never approve commands or recovery. Model/server fields use separate expanding rows beneath Auto model/backend.
 
 Native tests check horizontal settings/control fit at 780x600 with Tk scaling 2.0. Output-tab keyboard tests use 1000x900 so panes are visible at that scale. Full vertical fit at every scale, screen-reader support and manual approval/recovery journeys remain unvalidated. UI-002 remains open.
+
+## Custom PC power — V1.10.0
+
+V1.10.0 adds Custom AI power using the existing CPU-thread and context fields. Custom permits 1 through the detected logical CPU count and 2048–16384 context tokens; blanks use half the logical CPUs (at least one) and 8192 tokens. Other presets retain their caps. Speed caps context at 4096. Low-memory startup caps context at 4096; existing between-turn pressure backoff may lower targets to two threads and 2048 tokens. Custom retains one worker and 40 steps. These targets are forwarded to Ollama; compatible servers manage their own thread/context settings. No hard CPU, RAM or GPU limits or OS sandbox are provided. No dependencies, new settings keys or database migration.
+
+Choose **Custom** in AI power to reveal Resource settings. Enter CPU threads and context tokens, then start a task. Settings are saved on successful startup; edits during a run apply to the next task. Selection opens the fields and moves keyboard focus to CPU threads.
