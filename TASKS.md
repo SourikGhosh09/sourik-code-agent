@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Current version: **V1.11.0 preview**, reviewed 2026-10-03. Full Windows suite: **118 passed, two symlink skips (120 total)**. Custom power and two guided local-model trials passed; broader repair limitations remain open. V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
+Current version: **V1.11.0 preview**, published 2026-10-03 with successful hosted CI. Full Windows suite: **118 passed, two symlink skips (120 total)**. The audited UI changes and Custom power are implemented. Three of four guided local-model trials passed; the initial HTTP 500 remains recorded and the repeat pair passed. V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
 
 Statuses follow code/evidence, not roadmap promises. References: [PRD](docs/PRD.md), [testing](docs/TEST_PLAN.md), original specification precedence.
 
@@ -35,7 +35,7 @@ Plugins, advanced workers and training remain later original roadmap phases, not
 - [x] EVAL-002 - V1.9.1 rejection diagnostics and independent-check status. Approval rules and pass criteria unchanged; tests prove untrusted code is not executed.
 - [x] Candidate cleanup - Rejected recovery code removed with explicit approval; backup and all evidence preserved. No approval remains pending.
 
-V1.9.2 final-source trials passed; prior intermittent failures remain recorded. Narrow REPAIR-001 invoice acceptance does not establish general coding reliability. See [handover](HANDOVER.md), [current evidence](docs/evaluation-v1.9.2.json), [candidate evidence](docs/evaluation-v1.9.1-candidates.json) and PROJECT_LOG.txt for dated history. User-deferred manual testing remains pending without blocking independent development.
+V1.9.2 final-source trials passed; prior intermittent failures remain recorded. Narrow REPAIR-001 invoice acceptance does not establish general coding reliability. See [handover](HANDOVER.md), [V1.9.2 evidence](docs/evaluation-v1.9.2.json), [candidate evidence](docs/evaluation-v1.9.1-candidates.json) and PROJECT_LOG.txt for dated history. User-deferred manual testing remains pending without blocking independent development.
 
 
 Next: broader representative real-project acceptance, plus the independent manual/clean-machine/physical-pressure gates above.

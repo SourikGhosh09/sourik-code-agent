@@ -1,6 +1,6 @@
 # Current handover
 
-Current candidate: **V1.11.0 preview**, 2026-10-03. Start Agent.cmd opens Start V1.11.0.cmd. Published predecessor: V1.10.0 at 20b274c, tag v1.10.0, successful hosted CI. V1.11.0 publication awaits final diff/CI; do not confuse local verification with hosted acceptance.
+Published release: **V1.11.0 preview**, 2026-10-03. Start Agent.cmd opens Start V1.11.0.cmd. Tested source: b425e312f20a55c57f37b1b8bb5ef991c3250e86, tag v1.11.0. [GitHub CI passed](https://github.com/SourikGhosh09/sourik-code-agent/actions/runs/37140619076). The current source ZIP includes final publication notes; its code and evaluator hashes match all four recorded model trials.
 
 V1.11.0 implements the audited desktop redesign: compact light workspace, clear project/priority/backend labels, visible recovery, readable results and a separate nonmodal Settings window. Custom focuses CPU threads; Back/Escape/close withdraw Settings without stopping work. Internal event/view names, saved keys, approvals and runtime controls are unchanged. No dependency or database migration.
 
