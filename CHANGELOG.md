@@ -141,3 +141,8 @@ Earlier implementation history remains in PROJECT_LOG.txt and is not reconstruct
 ## V1.10.0 preview — 2026-10-03
 
 Added Custom AI power with explicit CPU-thread/context targets, Balanced defaults, existing backoff, saved settings and keyboard-accessible fields. No dependencies or approval changes.
+
+## V1.11.0 preview — 2026-10-03
+
+V1.11.0 implements the audited desktop redesign: compact light workspace, clear project/priority/backend labels, visible recovery, readable results and a separate nonmodal Settings window. Custom focuses CPU threads; Back/Escape/close withdraw Settings without stopping work. Internal event/view names, saved keys, approvals and runtime controls are unchanged. No dependency or database migration.
+Fixed observed vertical clipping at the supported minimum window/text scale, added explicit field labels, shorter display tabs and empty-state guidance. Settings Escape returns to the task. Native regressions and full suite pass; manual accessibility and broader repair acceptance remain open.

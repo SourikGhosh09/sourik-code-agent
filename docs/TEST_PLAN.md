@@ -1,12 +1,12 @@
 # Test plan
 
-Documentation reviewed 2026-10-03 against V1.10.0. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-10-03 against V1.11.0. [Current status](../HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Preserve meaningful correctness/safety tests; do not delete tests to improve code-size metrics. Infrastructure and real-model evaluations answer different questions.
 
 ## Commands and recorded evidence
 
-- python -m unittest discover -v: current V1.10.0 Windows run has 118 tests: 116 passed and two symlink-fixture skips. Native Tk and junction checks pass; earlier teardown callback diagnostics and pending manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
+- python -m unittest discover -v: current V1.11.0 Windows run has 120 tests: 118 passed and two symlink-fixture skips. Native Tk and junction checks pass; earlier teardown callback diagnostics and pending manual UI checks remain documented below. Historical platform results are retained in their versioned sections.
 - python -m compileall -q local_agent scripts tests: syntax/bytecode compilation, not type checking or an installer build.
 - python scripts/evaluate_local.py qwen2.5-coder:7b --simplicity: requires local Ollama/model; four calculator cases passed independent assertions. [Exact source/model evidence](evaluation-simplicity.json).
 
@@ -177,3 +177,7 @@ The four follow-up trials ran on September 30 and were collected after an approv
 ## V1.10.0 Custom power
 
 Full local suite: 116 passed, two Windows symlink skips (118 total). Custom requests can exceed preset thread caps, remain within detected CPU/context bounds, reject invalid types/ranges and retain Speed/pressure reductions. Native Tk checks cover field reveal, focus and minimum-width layout. Startup tests cover saved Custom values and edits during discovery. Initial full run caught outdated package metadata; corrected before the passing run. Real-model evidence is reported separately in evaluation-v1.10.0.json. No physical-pressure or hard resource-cap acceptance claim.
+
+## Audited UI — V1.11.0
+
+V1.11.0 implements the audited desktop redesign: compact light workspace, clear project/priority/backend labels, visible recovery, readable results and a separate nonmodal Settings window. Custom focuses CPU threads; Back/Escape/close withdraw Settings without stopping work. Internal event/view names, saved keys, approvals and runtime controls are unchanged. No dependency or database migration. See [design and verification](UI_DESIGN.md).

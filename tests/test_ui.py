@@ -350,6 +350,30 @@ class KeyboardLayout(unittest.TestCase):
         self.assertLessEqual(settings.winfo_reqwidth(), settings.winfo_width())
         self.assertEqual(str(self.window.focus_get().cget('textvariable')), str(self.app.cpu_target))
 
+    def test_small_workspace_keeps_output_and_recovery_visible(self):
+        for text in ('Undo task changes','Restore checkpoint…'):
+            button = next(w for w in self.widgets(self.window)
+                          if w.winfo_class() == 'TButton' and w.cget('text') == text)
+            self.assertTrue(button.winfo_ismapped(), text)
+            bottom = button.winfo_rooty()-self.window.winfo_rooty()+button.winfo_height()
+            self.assertLessEqual(bottom,self.window.winfo_height(),text)
+        self.assertGreaterEqual(self.app.views['Progress'].winfo_height(),70)
+
+    def test_settings_fit_and_escape_returns_without_stopping_task(self):
+        self.app.power.set('Custom')
+        self.app.power_picker.event_generate('<<ComboboxSelected>>')
+        self.window.update()
+        settings = self.app.settings_window
+        for widget in self.widgets(settings):
+            self.assertTrue(widget.winfo_ismapped())
+            bottom = widget.winfo_rooty()-settings.winfo_rooty()+widget.winfo_height()
+            self.assertLessEqual(bottom,settings.winfo_height())
+        with patch.object(self.app,'stop') as stop:
+            settings.event_generate('<Escape>')
+            self.window.update()
+            stop.assert_not_called()
+        self.assertFalse(settings.winfo_ismapped())
+
     def test_shortcuts_use_existing_actions(self):
         self.window.geometry('1000x900')
         self.window.update()

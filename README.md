@@ -1,12 +1,12 @@
 # Sourik Code Agent
 
-Documentation reviewed 2026-10-03 against V1.10.0. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
+Documentation reviewed 2026-10-03 against V1.11.0. [Current status](HANDOVER.md) governs present acceptance; dated checkpoints below are historical evidence.
 
 Repository: https://github.com/SourikGhosh09/sourik-code-agent (private).
 
 A local-first desktop coding agent that inspects projects, makes bounded changes, runs approved tests, and repairs failures.
 
-Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.10.0 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
+Built for the owner and people seeking approachable coding assistance without mandatory paid inference APIs. Current status: **V1.11.0 preview**, with verified V0 calculator acceptance and a deterministic Simplicity Engine. This is not broad coding-reliability or production-security acceptance.
 
 ## Setup and commands
 
@@ -28,11 +28,11 @@ python scripts/evaluate_local.py qwen2.5-coder:7b --tags
 
 The evaluation commands need Ollama and the model. Their fixture-only approval callbacks must never be reused for arbitrary projects. Compilation checks syntax; it is not an installer build. CI runs infrastructure tests without downloading models and cannot certify model quality.
 
-`Start V1.10.0.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
+`Start V1.11.0.cmd` and `Start Agent.cmd` also support the original Windows machine's portable runtime under `.runtime/`. A fresh clone contains no runtime/models. Only the current V1 build is kept locally. The obsolete V0 launcher and release copies were removed; historical source remains in Git. See [deployment](docs/operations/DEPLOYMENT.md).
 
 ## Capabilities and limits
 
-Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. V1.3.0 adds scoped ignore rules and more accurate local Python import context, while retaining background startup discovery. Current Windows validation: **116 passed, two symlink-fixture skips (118 total)**, including native Tk and junction checks. V1.4.0 adds read-only resource diagnostics using existing telemetry. Three actual host snapshots and a separate simulated low-memory sequence are recorded in [V1.4.0 evidence](docs/evaluation-v1.4.0.json). Actual RAM stayed above the backoff threshold; this is a baseline, not stress/inference acceptance. Manual accessibility and broader real-model acceptance remain pending.
+Implemented: project mapping, planning, guarded file tools, approved commands, test/repair loops, checkpoints, conflict-aware recovery, local history/memory, resource targets and minimal-change checks. V1.3.0 adds scoped ignore rules and more accurate local Python import context, while retaining background startup discovery. Current Windows validation: **118 passed, two symlink-fixture skips (120 total)**, including native Tk and junction checks. V1.4.0 adds read-only resource diagnostics using existing telemetry. Three actual host snapshots and a separate simulated low-memory sequence are recorded in [V1.4.0 evidence](docs/evaluation-v1.4.0.json). Actual RAM stayed above the backoff threshold; this is a baseline, not stress/inference acceptance. Manual accessibility and broader real-model acceptance remain pending.
 
 Commands run with your OS rights: **there is no OS sandbox or network isolation**. Resource settings are targets, not hard CPU/RAM/VRAM caps. Scans/context are bounded; JS/TS indexing and simplicity checks are heuristic. Hardware/model discovery runs in the background; project history/database access and initial agent setup remain synchronous. Broader multi-file/language reliability, pressure handling, plugins and model training remain unfinished.
 
@@ -67,17 +67,17 @@ Assumption: Windows remains the primary preview target; other platforms need val
 
 ## Version naming
 
-Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.10.0.cmd. Historical V0/V1 labels remain in their original evidence.
+Starting with **V1.1.0**, releases use MAJOR.MINOR.PATCH: major for breaking changes, minor for compatible features, patch for compatible fixes. Preview status remains explicit until broader acceptance. The application exposes local_agent.__version__; pyproject metadata must match it. Release tags use v1.1.0-style names; packaged source ZIPs include the version. Start Agent.cmd always opens the current version; the named launcher is Start V1.11.0.cmd. Historical V0/V1 labels remain in their original evidence.
 
-## Updating to V1.10.0
+## Updating to V1.11.0
 
 1. Close the agent and extract this ZIP into a separate folder. Keep your current app folder, project folders and their `.agent` data. The ZIP contains source, not Ollama or models.
 2. When you are ready to test later, start your existing Ollama server. Open PowerShell in the extracted project folder and run `python scripts/start_local_runtime.py --check`, then `python -m unittest discover -v`. The setup check explains any missing requirements.
-3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.10.0 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
+3. Open `Start Agent.cmd` (or run `python -m local_agent`). Confirm the title says V1.11.0 preview and try a disposable project copy. Reuse your existing installed model; another model download is unnecessary if it is already installed.
 
 To repeat the separate repair benchmark, run `python scripts/evaluate_local.py qwen2.5-coder:7b --multifile`. It creates two disposable invoice projects under `evaluation-results`. Both must report `passed: true`; retain results/events if either fails. Setup readiness alone does not establish coding reliability.
 
-During startup, the status shows **Preparing**. Run is disabled until startup/task completion; Stop cancels task handoff after the current check returns. Closing during discovery exits the window without starting a task later. Changes you type into settings while preparing apply to the next run. If preparation fails, correct the settings and press Run again. There is no visual redesign in this increment.
+During startup, the status shows **Preparing**. Run is disabled until startup/task completion; Stop cancels task handoff after the current check returns. Closing during discovery exits the window without starting a task later. Changes you type into settings while preparing apply to the next run. If preparation fails, correct the settings and press Run again. Model and Resource settings open the same separate window; Escape there returns to the task without stopping it.
 
 Repository context now understands common rooted/nested ignore patterns and relative Python imports, helping it omit generated files and find the related local modules. Existing cached import metadata refreshes automatically. This is a documented subset, not complete Git or Python import resolution; see [architecture](docs/ARCHITECTURE.md). Direct file permissions and command approvals are unchanged.
 
@@ -151,3 +151,7 @@ V1.9.2 removes obsolete diff text from failed-check model feedback while preserv
 V1.10.0 adds Custom AI power using the existing CPU-thread and context fields. Custom permits 1 through the detected logical CPU count and 2048–16384 context tokens; blanks use half the logical CPUs (at least one) and 8192 tokens. Other presets retain their caps. Speed caps context at 4096. Low-memory startup caps context at 4096; existing between-turn pressure backoff may lower targets to two threads and 2048 tokens. Custom retains one worker and 40 steps. These targets are forwarded to Ollama; compatible servers manage their own thread/context settings. No hard CPU, RAM or GPU limits or OS sandbox are provided. No dependencies, new settings keys or database migration.
 
 Choose **Custom** in AI power to reveal Resource settings. Enter CPU threads and context tokens, then start a task. Settings are saved on successful startup; edits during a run apply to the next task. Selection opens the fields and moves keyboard focus to CPU threads.
+
+## Audited UI — V1.11.0
+
+V1.11.0 implements the audited desktop redesign: compact light workspace, clear project/priority/backend labels, visible recovery, readable results and a separate nonmodal Settings window. Custom focuses CPU threads; Back/Escape/close withdraw Settings without stopping work. Internal event/view names, saved keys, approvals and runtime controls are unchanged. No dependency or database migration. See [design and verification](docs/UI_DESIGN.md).

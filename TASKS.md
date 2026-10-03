@@ -1,6 +1,6 @@
 # Implementation roadmap
 
-Current version: **V1.10.0 preview**, reviewed 2026-10-03. Full Windows suite: **116 passed, two symlink skips (118 total)**. Custom power and two guided local-model trials passed; broader repair limitations remain open. V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
+Current version: **V1.11.0 preview**, reviewed 2026-10-03. Full Windows suite: **118 passed, two symlink skips (120 total)**. Custom power and two guided local-model trials passed; broader repair limitations remain open. V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
 
 Statuses follow code/evidence, not roadmap promises. References: [PRD](docs/PRD.md), [testing](docs/TEST_PLAN.md), original specification precedence.
 
@@ -45,3 +45,9 @@ Next: broader representative real-project acceptance, plus the independent manua
 EVAL-003 investigation update (2026-10-01): denial-detail comparison 0/2, pre-fixed-normalization control 0/2; all final independent checks skipped as untrusted. Missing rejection detail alone is not a demonstrated fix. See [comparison](docs/evaluation-v1.9.2-denial-comparison.json). Keep EVAL-003 open and establish separately reviewed execution or validated isolation before general behavioral acceptance. No production prompt change adopted.
 
 - [x] RESOURCE-002 — V1.10.0 Custom power: explicit thread/context targets with validation, saved startup snapshots and existing pressure backoff. Automated checks pass; hard limits and physical-pressure/manual accessibility acceptance remain open.
+
+## Audited UI — V1.11.0
+
+V1.11.0 implements the audited desktop redesign: compact light workspace, clear project/priority/backend labels, visible recovery, readable results and a separate nonmodal Settings window. Custom focuses CPU threads; Back/Escape/close withdraw Settings without stopping work. Internal event/view names, saved keys, approvals and runtime controls are unchanged. No dependency or database migration. See [design and verification](docs/UI_DESIGN.md).
+
+- [x] UI-003 — V1.11.0 audit/design and native layout fixes. Full local suite: 118 passed, two skips. Guided model regression: 3/4 passed, initial server error retained; repeat pair passed. UI-002 manual accessibility acceptance remains open.

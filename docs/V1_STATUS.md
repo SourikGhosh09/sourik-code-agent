@@ -1,8 +1,8 @@
 # V1 preview status
 
-Current release: **V1.10.0 preview**, reviewed 2026-10-03. Full Windows suite: **116 passed, two symlink skips (118 total)**. Both guided native tag trials passed with Custom power at 12 threads and 8192 context tokens. Earlier V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
+Current release: **V1.11.0 preview**, reviewed 2026-10-03. Full Windows suite: **118 passed, two symlink skips (120 total)**. Both guided native tag trials passed with Custom power at 12 threads and 8192 context tokens. Earlier V1.9.2 passed four native tag, two invoice and two compatible tag trials after correcting the reproduced obsolete-diff trigger; broader reliability remains unaccepted. V1.9.0 compatible tag/invoice trials passed through local Ollama only. Other compatible servers, broad reliability, manual accessibility, clean-machine setup and physical memory-pressure acceptance remain open.
 
-Use Start Agent.cmd or Start V1.10.0.cmd. Old V0/V1 launchers and local release copies were removed; historical source remains in Git. See [handover](../HANDOVER.md), [changelog](../CHANGELOG.md) and [latest evidence](evaluation-v1.10.0.json).
+Use Start Agent.cmd or Start V1.11.0.cmd. Old V0/V1 launchers and local release copies were removed; historical source remains in Git. See [handover](../HANDOVER.md), [changelog](../CHANGELOG.md) and [latest evidence](evaluation-v1.11.0.json).
 
 ## Historical first V1 increment (2026-09-19)
 
@@ -42,3 +42,7 @@ Background discovery and scoped ignore/import handling are implemented. Richer m
 V1.10.0 adds Custom AI power using the existing CPU-thread and context fields. Custom permits 1 through the detected logical CPU count and 2048–16384 context tokens; blanks use half the logical CPUs (at least one) and 8192 tokens. Other presets retain their caps. Speed caps context at 4096. Low-memory startup caps context at 4096; existing between-turn pressure backoff may lower targets to two threads and 2048 tokens. Custom retains one worker and 40 steps. These targets are forwarded to Ollama; compatible servers manage their own thread/context settings. No hard CPU, RAM or GPU limits or OS sandbox are provided. No dependencies, new settings keys or database migration.
 
 Choose **Custom** in AI power to reveal Resource settings. Enter CPU threads and context tokens, then start a task. Settings are saved on successful startup; edits during a run apply to the next task. Selection opens the fields and moves keyboard focus to CPU threads.
+
+## Audited UI — V1.11.0
+
+V1.11.0 implements the audited desktop redesign: compact light workspace, clear project/priority/backend labels, visible recovery, readable results and a separate nonmodal Settings window. Custom focuses CPU threads; Back/Escape/close withdraw Settings without stopping work. Internal event/view names, saved keys, approvals and runtime controls are unchanged. No dependency or database migration. See [design and verification](UI_DESIGN.md).

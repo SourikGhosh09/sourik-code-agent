@@ -1,0 +1,157 @@
+{
+  "version": "1.11.0-preview",
+  "date": "2026-10-03",
+  "scope": "Native UI release; unchanged guided tag fixture. Three of four trials passed; initial HTTP 500 before model response retained. Later pair passed. Not broad repair, physical-pressure or manual accessibility acceptance.",
+  "harness_source": "import hashlib\nimport json\nfrom pathlib import Path\nimport sys\nimport time\nfrom unittest.mock import patch\n\nROOT = Path(__file__).resolve().parents[1]\nsys.path.insert(0,str(ROOT))\nfrom scripts import evaluate_local as evaluation\noriginal = evaluation.preference_profile\ndef custom(hardware, power):\n    return original(hardware, 'Custom', cpu=min(12,hardware['threads']), context=8192)\nbase = ROOT/'evaluation-results'/('custom-'+time.strftime('%Y%m%d-%H%M%S'))\nbase.mkdir()\nmodel = evaluation.LocalModel('qwen2.5-coder:7b')\ndigest = next((m.get('digest') for m in model.installed_models() if m.get('name')==model.model),None)\ncode = hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in sorted((ROOT/'local_agent').glob('*.py')))).hexdigest()\nprint('OUTPUT',base,flush=True)\nwith patch.object(evaluation,'preference_profile',custom):\n    status = evaluation.evaluate_multifile(base,model,model.model,digest,code,suite='tags')\nreport = {'version':'1.11.0-preview','date':'2026-10-03','scope':'Guided trusted tag trials with Custom power: up to 12 threads and 8192 context. Not less-guided acceptance or a hard resource cap.',\n          'harness_source':Path(__file__).read_text(encoding='utf-8'),\n          'harness_digest':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),\n          'results':json.loads((base/'results.json').read_text(encoding='utf-8'))}\n(ROOT/'docs/evaluation-v1.11.0.json').write_text(json.dumps(report,indent=2)+'\\n',encoding='utf-8')\nraise SystemExit(status)\n",
+  "harness_digest": "4c83071f3149ac14fde1b68c64468a4f0e9ef1f9b917a2f7dfac25db9ac05a5f",
+  "results": [
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "9bb8db1279a6ba6f39a35d2e2ea5be55e0abdc549fc49d3ae25fe9eb9c0e08f5",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "FAILED",
+      "passed": false,
+      "independent_pass": false,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "failed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": false,
+      "simplicity_reviews": 0,
+      "changed_files": [],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 12,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 4.53
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "9bb8db1279a6ba6f39a35d2e2ea5be55e0abdc549fc49d3ae25fe9eb9c0e08f5",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 12,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 19.59
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-1",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "9bb8db1279a6ba6f39a35d2e2ea5be55e0abdc549fc49d3ae25fe9eb9c0e08f5",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 12,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 12.29
+    },
+    {
+      "suite_version": "tags-1",
+      "case": "tags-2",
+      "model": "qwen2.5-coder:7b",
+      "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+      "code_digest": "9bb8db1279a6ba6f39a35d2e2ea5be55e0abdc549fc49d3ae25fe9eb9c0e08f5",
+      "evaluator_digest": "0e4f4b6e9b342c12a9de535345acba38fd5bc85331f9df32b76ccf1e34b3bd43",
+      "backend": "ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "state": "COMPLETED",
+      "passed": true,
+      "independent_pass": true,
+      "tests_and_validation_preserved": true,
+      "independent_check_status": "passed",
+      "approval_denials": [],
+      "final_trust_reasons": [],
+      "observed_failure": true,
+      "simplicity_reviews": 5,
+      "changed_files": [
+        "normalization.py",
+        "catalog.py"
+      ],
+      "trusted_fixture_only": true,
+      "config": {
+        "num_thread": 12,
+        "num_ctx": 8192,
+        "max_steps": 40,
+        "workers": 1,
+        "monitor_resources": true
+      },
+      "seconds": 11.83
+    }
+  ],
+  "infrastructure": {
+    "total": 120,
+    "passed": 118,
+    "skipped": 2,
+    "focused_ui_and_resources": 28
+  },
+  "trial_groups": [
+    {
+      "output": "evaluation-results/custom-20261003-225325",
+      "indices": [
+        0,
+        1
+      ]
+    },
+    {
+      "output": "evaluation-results/custom-20261003-225421",
+      "indices": [
+        2,
+        3
+      ]
+    }
+  ],
+  "server_error": "Initial trial failed with HTTP Error 500: Internal Server Error before any model response or edit. Root cause unconfirmed; local server.log inspected was old and does not explain this event. No runtime restart or production retry change."
+}
